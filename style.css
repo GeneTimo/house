@@ -81,6 +81,26 @@ body {
   text-align: center;
 }
 
+@keyframes heroLineIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-line {
+  display: block;
+  opacity: 0;
+  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.hero-line:nth-child(1) { animation-delay: 0s; }
+.hero-line:nth-child(2) { animation-delay: 0.15s; }
+
 .hero-subtitle {
   margin-top: calc(var(--base) * 56 / 1440);
   font-family: "futura-pt", sans-serif;
@@ -91,6 +111,8 @@ body {
   letter-spacing: 0;
   color: #fafafa;
   text-align: center;
+  opacity: 0;
+  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.3s forwards;
 }
 
 .contact-btn {
@@ -110,6 +132,8 @@ body {
   text-align: center;
   text-decoration: none;
   cursor: pointer;
+  opacity: 0;
+  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.45s forwards;
   transition: background-color 0.5s ease, color 0.5s ease;
 }
 
