@@ -1,32 +1,94 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>House of ROI</title>
   <link rel="stylesheet" href="https://use.typekit.net/xjk1jkt.css">
-  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --base: min(100vw, 1440px);
+    }
+
+    body {
+      background-color: #000000;
+      min-height: 100vh;
+    }
+
+    .stub {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 120px;
+      gap: 64px;
+    }
+
+    @keyframes stubIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .stub-logo {
+      width: calc(var(--base) * 5 / 100);
+      height: auto;
+      opacity: 0;
+      animation: stubIn 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    }
+
+    .stub-text-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .stub-headline {
+      font-family: "futura-pt", sans-serif;
+      font-weight: 300;
+      font-style: normal;
+      font-size: 40px;
+      line-height: 100%;
+      letter-spacing: 0.2em;
+      color: #fafafa;
+      text-align: center;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: stubIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.2s forwards;
+    }
+
+    .stub-tagline {
+      font-family: "futura-pt", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+      font-size: 14px;
+      line-height: 100%;
+      letter-spacing: 0.32em;
+      color: #fafafa;
+      text-align: center;
+      opacity: 0;
+      animation: stubIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.35s forwards;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <img class="logo" src="assets/logo_house_of_roi.svg" alt="House of ROI">
-
-    <nav class="nav">
-      <a href="#" class="nav-link">SERVICES</a>
-      <a href="#" class="nav-link">CLIENTS</a>
-      <a href="#" class="nav-link">RULES OF THE HOUSE</a>
-      <a href="#" class="nav-link">PROOF</a>
-      <a href="#" class="nav-link">IN MEDIA</a>
-    </nav>
-
-    <section class="hero">
-      <h1 class="hero-title">
-        <span class="hero-line">Digital Marketing and Growth Media</span>
-        <span class="hero-line">as a Financial Obsession</span>
-      </h1>
-      <p class="hero-subtitle">Media, data and AI deployed with investment-grade rigor and a clear mandate:<br>growth objectives achieved at the highest level of capital efficiency.</p>
-      <a href="#" class="contact-btn">CONTACT</a>
-    </section>
+  <div class="stub">
+    <img class="stub-logo" src="assets/logo_house_of_roi.svg" alt="House of ROI">
+    <div class="stub-text-group">
+      <p class="stub-headline">Coming late Q2&rsquo;26</p>
+      <p class="stub-tagline">by invitation only</p>
+    </div>
   </div>
 </body>
 </html>
