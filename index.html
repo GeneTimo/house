@@ -41,13 +41,14 @@
     }
 
     .stub-logo {
-      width: calc(var(--base) * 5 / 100);
+      width: 15vw;
       height: auto;
       opacity: 0;
       animation: stubIn 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
     }
 
     .stub-text-group {
+      --headline-size: clamp(18px, 5.625vw, 36px);
       position: fixed;
       top: 50%;
       left: 50%;
@@ -55,19 +56,21 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 32px;
+      gap: var(--headline-size);
+      width: 90vw;
     }
 
     .stub-headline {
       font-family: "futura-pt", sans-serif;
       font-weight: 300;
       font-style: normal;
-      font-size: 40px;
+      font-size: var(--headline-size);
       line-height: 100%;
       letter-spacing: 0.2em;
       color: #fafafa;
       text-align: center;
       text-transform: uppercase;
+      white-space: nowrap;
       opacity: 0;
       animation: stubIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.2s forwards;
     }
@@ -76,14 +79,40 @@
       font-family: "futura-pt", sans-serif;
       font-weight: 400;
       font-style: normal;
-      font-size: 14px;
+      font-size: clamp(14px, 3.594vw, 23px);
       line-height: 100%;
       letter-spacing: 0.32em;
       color: #fafafa;
       text-align: center;
       text-transform: uppercase;
+      white-space: nowrap;
       opacity: 0;
       animation: stubIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.35s forwards;
+    }
+
+    @media (min-width: 640px) {
+      .stub-text-group {
+        --headline-size: 36px;
+        width: auto;
+      }
+
+      .stub-tagline {
+        font-size: 23px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .stub-logo {
+        width: calc(var(--base) * 5 / 100);
+      }
+
+      .stub-text-group {
+        --headline-size: 40px;
+      }
+
+      .stub-tagline {
+        font-size: 14px;
+      }
     }
   </style>
 </head>

@@ -1,3 +1,12 @@
+/* Breakpoints (mobile-first)
+   < 640px   mobile (base)
+   ≥ 640px   sm  — large phones / small tablets
+   ≥ 768px   md  — iPad portrait
+   ≥ 1024px  lg  — laptops / iPad landscape
+   ≥ 1280px  xl  — desktop
+   ≥ 1536px  2xl — large monitors
+*/
+
 * {
   margin: 0;
   padding: 0;
