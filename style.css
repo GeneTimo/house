@@ -13,13 +13,67 @@
   box-sizing: border-box;
 }
 
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Scroll-reveal initial state — applied only when JS is available,
+   so content stays visible if scripts fail to load. */
+.js [data-reveal],
+.js [data-reveal-item] {
+  opacity: 0;
+}
+
 :root {
   --base: min(100vw, 1440px);
+
+  /* Theme colors — dark by default */
+  --bg: #000000;
+  --fg: #fafafa;
+  --placeholder: #1a1a1a;
+
+  /* Only paint property we still animate per-element is text color (small
+     area). The full-page background flip is done via the GPU-composited
+     .theme-bg opacity crossfade, not background-color. */
+  --theme-transition: color 1s ease;
+}
+
+/* Inverted (light) theme — toggled on scroll into the three-column section */
+body.theme-light {
+  --bg: #f4f3ef;
+  --fg: #0a0a0a;
+  --placeholder: #e6e5e0;
 }
 
 body {
   background-color: #000000;
   min-height: 100vh;
+}
+
+/* Fixed full-screen light layer, crossfaded via opacity (composited on the
+   GPU = zero repaint). The dark base is the body background underneath. */
+.theme-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: #f4f3ef;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+}
+
+body.theme-light .theme-bg {
+  opacity: 1;
 }
 
 .container {
@@ -50,9 +104,10 @@ body {
   font-size: calc(var(--base) * 14 / 1440);
   line-height: 110%;
   letter-spacing: 0.3em;
-  color: #fafafa;
+  color: var(--fg);
   text-decoration: none;
   padding-bottom: calc(var(--base) * 4 / 1440);
+  transition: var(--theme-transition);
 }
 
 .nav-link::after {
@@ -62,7 +117,7 @@ body {
   bottom: 0;
   width: 100%;
   height: 1px;
-  background-color: #fafafa;
+  background-color: var(--fg);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.5s ease;
@@ -80,14 +135,15 @@ body {
 }
 
 .hero-title {
-  font-family: "futura-pt", sans-serif;
+  font-family: Georgia, "Times New Roman", Times, serif;
   font-weight: 400;
   font-style: normal;
   font-size: calc(var(--base) * 4.5 / 100);
-  line-height: 100%;
+  line-height: 120%;
   letter-spacing: 0;
-  color: #fafafa;
+  color: var(--fg);
   text-align: center;
+  transition: var(--theme-transition);
 }
 
 @keyframes heroLineIn {
@@ -118,17 +174,18 @@ body {
   font-size: 18px;
   line-height: 150%;
   letter-spacing: 0;
-  color: #fafafa;
+  color: var(--fg);
   text-align: center;
   opacity: 0;
   animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.3s forwards;
+  transition: var(--theme-transition);
 }
 
 .contact-btn {
   margin-top: calc(var(--base) * 56 / 1440);
   display: inline-block;
   padding: calc(var(--base) * 24 / 1440) calc(var(--base) * 32 / 1440);
-  border: 1px solid #fafafa;
+  border: 1px solid var(--fg);
   border-radius: 999px;
   background: transparent;
   font-family: "futura-pt", sans-serif;
@@ -137,16 +194,249 @@ body {
   font-size: calc(var(--base) * 14 / 1440);
   line-height: 100%;
   letter-spacing: 0.3em;
-  color: #fafafa;
+  color: var(--fg);
   text-align: center;
   text-decoration: none;
   cursor: pointer;
   opacity: 0;
   animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.45s forwards;
-  transition: background-color 0.5s ease, color 0.5s ease;
+  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.7s ease;
 }
 
 .contact-btn:hover {
-  background-color: #fafafa;
-  color: #000000;
+  background-color: var(--fg);
+  color: var(--bg);
+}
+
+.ticker {
+  margin-top: calc(var(--base) * 104 / 1440);
+  width: 100%;
+  overflow: hidden;
+  padding: calc(var(--base) * 24 / 1440) 0;
+  opacity: 0;
+  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.6s forwards;
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: tickerScroll 40s linear infinite;
+}
+
+.ticker-item {
+  flex-shrink: 0;
+  padding: 0 calc(var(--base) * 40 / 1440);
+  font-family: "futura-pt", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: calc(var(--base) * 14 / 1440);
+  line-height: 100%;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--fg);
+  white-space: nowrap;
+  transition: var(--theme-transition);
+}
+
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.efficiency {
+  width: 100%;
+  background-color: transparent;
+  padding: calc(var(--base) * 160 / 1440) 0 calc(var(--base) * 64 / 1440);
+}
+
+.efficiency-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 calc(var(--base) * 80 / 1440);
+  display: grid;
+  grid-template-columns: 1fr 1.7fr;
+  gap: calc(var(--base) * 32 / 1440);
+  align-items: start;
+}
+
+.efficiency-label {
+  margin-top: calc(var(--base) * 12 / 1440);
+  font-family: "futura-pt", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: calc(var(--base) * 18 / 1440);
+  line-height: 150%;
+  letter-spacing: 0;
+  /* Dark-theme color. The light-theme color is a cloned overlay (.theme-overlay-text)
+     crossfaded via opacity — paint-free, see the JS that builds the clones. */
+  color: #fafafa;
+}
+
+.efficiency-title {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: calc(var(--base) * 48 / 1440);
+  line-height: 115%;
+  letter-spacing: 0;
+  color: #fafafa;
+}
+
+.insights {
+  width: 100%;
+  background-color: transparent;
+  padding: calc(var(--base) * 40 / 1440) 0 calc(var(--base) * 120 / 1440);
+}
+
+.insights-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 calc(var(--base) * 80 / 1440);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: calc(var(--base) * 40 / 1440);
+}
+
+.insight-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  /* Dark-theme placeholder (barely lighter than black). */
+  background-color: #1a1a1a;
+}
+
+/* Light-theme placeholder fades in over the dark one via opacity (composited,
+   no per-frame repaint). */
+.insight-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: #e6e5e0;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+body.theme-light .insight-image::after {
+  opacity: 1;
+}
+
+.insight-title {
+  margin-top: calc(var(--base) * 32 / 1440);
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: calc(var(--base) * 28 / 1440);
+  line-height: 120%;
+  letter-spacing: 0;
+  color: #fafafa;
+}
+
+.insight-text {
+  margin-top: calc(var(--base) * 20 / 1440);
+  font-family: "futura-pt", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: calc(var(--base) * 16 / 1440);
+  line-height: 150%;
+  letter-spacing: 0;
+  color: #fafafa;
+}
+
+/* xl — desktop */
+@media (min-width: 1280px) {
+  .hero-title {
+    font-size: 4rem;
+  }
+}
+
+/* Footer — its own dark zone (below the inversion area), modelled on the
+   stella-test footer: logo left, link columns right, copyright below. */
+.footer {
+  width: 100%;
+  background-color: #0a0a0a;
+  padding: calc(var(--base) * 64 / 1440) calc(var(--base) * 80 / 1440)
+    calc(var(--base) * 32 / 1440);
+}
+
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--base) * 56 / 1440);
+}
+
+.footer-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: calc(var(--base) * 48 / 1440);
+}
+
+.footer-logo {
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.footer-logo img {
+  height: calc(var(--base) * 40 / 1440);
+  width: auto;
+  display: block;
+}
+
+.footer-nav {
+  display: flex;
+  gap: calc(var(--base) * 64 / 1440);
+  flex-shrink: 0;
+}
+
+.footer-nav-col {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--base) * 16 / 1440);
+}
+
+.footer-link {
+  font-family: "futura-pt", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: calc(var(--base) * 14 / 1440);
+  line-height: 110%;
+  letter-spacing: 0.3em;
+  color: #fafafa;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.footer-link:hover {
+  opacity: 0.6;
+}
+
+.footer-copy {
+  font-family: "futura-pt", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: calc(var(--base) * 13 / 1440);
+  line-height: 150%;
+  letter-spacing: 0.1em;
+  color: rgba(250, 250, 250, 0.5);
+}
+
+/* Light-theme copy of a flip-zone text block, stacked exactly over the original
+   and crossfaded via opacity (composited, frame-perfect, zero repaint). Built
+   by JS as a clone of each text element. Placed last so it overrides the
+   original typography classes the clone still carries (same specificity). */
+.theme-overlay-text {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  color: #0a0a0a;
+  opacity: 0;
+  transition: opacity 1s ease;
+  pointer-events: none;
+}
+
+body.theme-light .theme-overlay-text {
+  opacity: 1;
 }

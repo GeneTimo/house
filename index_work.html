@@ -4,10 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>House of ROI</title>
+  <script>document.documentElement.classList.add('js');</script>
   <link rel="stylesheet" href="https://use.typekit.net/xjk1jkt.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="theme-bg" aria-hidden="true"></div>
   <div class="container">
     <img class="logo" src="assets/logo_house_of_roi.svg" alt="House of ROI">
 
@@ -28,5 +30,171 @@
       <a href="#" class="contact-btn">CONTACT</a>
     </section>
   </div>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="ticker-item">Digital Growth. Financial Discipline.</span>
+      <span class="ticker-item">Digital Growth. Financial Discipline.</span>
+      <span class="ticker-item">Digital Growth. Financial Discipline.</span>
+      <span class="ticker-item">Digital Growth. Financial Discipline.</span>
+      <span class="ticker-item">Digital Growth. Financial Discipline.</span>
+      <span class="ticker-item">Digital Growth. Financial Discipline.</span>
+    </div>
+  </div>
+
+  <section class="efficiency">
+    <div class="efficiency-inner">
+      <p class="efficiency-label" data-reveal>Engineered for<br>Capital Efficiency.</p>
+      <h2 class="efficiency-title" data-reveal>Media budgets are investment capital. We treat them accordingly.</h2>
+    </div>
+  </section>
+
+  <section class="insights">
+    <div class="insights-inner" data-reveal-group>
+      <article class="insight" data-reveal-item>
+        <div class="insight-image"></div>
+        <h3 class="insight-title">Institutional Marketing Discipline</h3>
+        <p class="insight-text">House of ROI operates at the intersection of winning strategy and sophisticated execution. We build performance engines that deliver structural value — combining campaign mastery with structured oversight designed to protect and scale return.</p>
+      </article>
+      <article class="insight" data-reveal-item>
+        <div class="insight-image"></div>
+        <h3 class="insight-title">Private Equity Logic for Digital Growth</h3>
+        <p class="insight-text">Growth capital is deployed with rigorous unit economics, structured testing, independent analysis protected from vendor-supplied materials and platform sales narratives, disciplined optimization across the full digital landscape.</p>
+      </article>
+      <article class="insight" data-reveal-item>
+        <div class="insight-image"></div>
+        <h3 class="insight-title">Investment-Grade Rigor</h3>
+        <p class="insight-text">Every channel, every campaign, every dollar deployed defends its position with performance data. Our reporting answers the CFO's question: What did this capital drive? We don't manage marketing expenses; we manage media investment.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <a href="#" class="footer-logo" aria-label="House of ROI">
+          <img src="assets/logo_house_of_roi.svg" alt="House of ROI">
+        </a>
+        <nav class="footer-nav" aria-label="Footer">
+          <ul class="footer-nav-col">
+            <li><a href="#" class="footer-link">SERVICES</a></li>
+            <li><a href="#" class="footer-link">CLIENTS</a></li>
+            <li><a href="#" class="footer-link">RULES OF THE HOUSE</a></li>
+          </ul>
+          <ul class="footer-nav-col">
+            <li><a href="#" class="footer-link">PROOF</a></li>
+            <li><a href="#" class="footer-link">IN MEDIA</a></li>
+          </ul>
+        </nav>
+      </div>
+      <p class="footer-copy">© 2026 House of ROI. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Invert the whole page to a light theme while the three-column
+    // section is in view. The flip is smooth via CSS transitions.
+    (function () {
+      var section = document.querySelector('.insights');
+      if (!section) return;
+
+      // Paint-free text inversion: for every flip-zone text block, stack a
+      // dark-coloured clone exactly over the original and crossfade it via
+      // opacity. Opacity is composited and interpolated per-frame, so the text
+      // recolours perfectly in sync with the background — unlike a color
+      // transition (repaints) or mix-blend-mode (recomputes with lag).
+      var FLIP_TEXT = '.efficiency-label, .efficiency-title, .insight-title, .insight-text';
+      document.querySelectorAll(FLIP_TEXT).forEach(function (el) {
+        // Clone BEFORE touching el's inline style, otherwise the clone would
+        // inherit position:relative inline and that would beat the overlay's
+        // position:absolute class rule (inline wins on specificity).
+        var clone = el.cloneNode(true);
+        if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
+        clone.classList.add('theme-overlay-text');
+        clone.setAttribute('aria-hidden', 'true');
+        // Strip reveal hooks so the clone isn't picked up as its own trigger.
+        clone.removeAttribute('data-reveal');
+        clone.removeAttribute('data-reveal-item');
+        el.appendChild(clone);
+      });
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          document.body.classList.toggle('theme-light', entry.isIntersecting);
+        });
+      }, {
+        // Fires soon after the section enters: its top must rise ~10% of the
+        // viewport height above the bottom edge.
+        rootMargin: '0px 0px -10% 0px',
+        threshold: 0
+      });
+
+      observer.observe(section);
+    })();
+  </script>
+
+  <!-- Smooth scroll (Lenis) + scroll-reveal animations (GSAP ScrollTrigger) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script defer src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+  <script>
+    window.addEventListener('load', function () {
+      var reveals = document.querySelectorAll('[data-reveal], [data-reveal-item]');
+
+      // Graceful fallback: if GSAP failed to load, just show everything.
+      if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+        reveals.forEach(function (el) { el.style.opacity = 1; el.style.transform = 'none'; });
+        return;
+      }
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      // --- Smooth scroll via Lenis, driven by the GSAP ticker (skip on touch) ---
+      var isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+      if (!isTouch && typeof Lenis !== 'undefined') {
+        var lenis = new Lenis({ lerp: 0.1, smoothWheel: true, smoothTouch: false });
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+        gsap.ticker.lagSmoothing(0);
+      }
+
+      // --- Single-element reveals: fade + slide up when entering the viewport ---
+      gsap.utils.toArray('[data-reveal]').forEach(function (el) {
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 85%',
+          once: true,
+          onEnter: function () {
+            // fromTo so the slide-up works without a transform in the CSS base,
+            // and clearProps removes the leftover transform afterwards — a
+            // lingering transform would create a stacking context and break the
+            // mix-blend-mode theme inversion.
+            gsap.fromTo(el,
+              { opacity: 0, y: 30 },
+              { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', clearProps: 'transform' }
+            );
+          }
+        });
+      });
+
+      // --- Grouped reveals: items cascade in with a stagger ---
+      gsap.utils.toArray('[data-reveal-group]').forEach(function (group) {
+        var items = group.querySelectorAll('[data-reveal-item]');
+        ScrollTrigger.create({
+          trigger: group,
+          start: 'top 85%',
+          once: true,
+          onEnter: function () {
+            gsap.fromTo(items,
+              { opacity: 0, y: 30 },
+              { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.12, clearProps: 'transform' }
+            );
+          }
+        });
+      });
+
+      ScrollTrigger.refresh();
+    });
+  </script>
 </body>
 </html>
