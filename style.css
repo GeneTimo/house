@@ -349,6 +349,99 @@ body.theme-light .insight-image::after {
   }
 }
 
+/* Comparison section — a black rounded box (always dark) sitting on the light
+   themed page, with two parallel columns compared row-by-row. */
+.compare {
+  max-width: 1280px;
+  margin: 0 auto;
+  /* Same side padding as .insights-inner / .efficiency-inner so the box edges
+     line up with the content (columns) above. */
+  padding: 0 calc(var(--base) * 80 / 1440) calc(var(--base) * 120 / 1440);
+}
+
+.compare-box {
+  /* Optical compensation: a dark box on a light page reads smaller than it is,
+     so widen it 10% beyond the content line (5% bleed each side), kept centred. */
+  width: 110%;
+  margin-left: -5%;
+  background-color: #000000;
+  border-radius: calc(var(--base) * 32 / 1440);
+  padding: calc(var(--base) * 120 / 1440);
+}
+
+.compare-inner {
+  max-width: calc(var(--base) * 936 / 1440);
+  margin: 0 auto;
+}
+
+.compare-intro {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-size: calc(var(--base) * 30 / 1440);
+  line-height: 135%;
+  letter-spacing: 0;
+  color: #fafafa;
+  margin-bottom: calc(var(--base) * 128 / 1440);
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: calc(var(--base) * 96 / 1440);
+  row-gap: calc(var(--base) * 48 / 1440);
+  align-items: start;
+}
+
+.compare-col-title {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-size: calc(var(--base) * 24 / 1440);
+  line-height: 120%;
+  letter-spacing: 0;
+  color: #fafafa;
+  padding-bottom: calc(var(--base) * 16 / 1440);
+  border-bottom: 1px solid rgba(250, 250, 250, 0.15);
+}
+
+.compare-point-title {
+  font-family: "futura-pt", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: calc(var(--base) * 18 / 1440);
+  line-height: 130%;
+  letter-spacing: 0;
+  color: #fafafa;
+  margin-bottom: calc(var(--base) * 12 / 1440);
+}
+
+.compare-point-text {
+  font-family: "futura-pt", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: calc(var(--base) * 16 / 1440);
+  line-height: 150%;
+  letter-spacing: 0;
+  /* Right (House of ROI) column — brighter/full presence. */
+  color: rgba(250, 250, 250, 0.8);
+}
+
+/* Left (Conventional) column — muted so it recedes and the right column reads
+   as the advantage. Dimmed via colour, not opacity, so the reveal animation
+   (which animates opacity) doesn't override it. The grid order is
+   left, right, left, right… so odd children are the left column. */
+.compare-grid > .compare-col-title:nth-child(odd) {
+  color: rgba(250, 250, 250, 0.62);
+  border-bottom-color: rgba(250, 250, 250, 0.12);
+}
+
+.compare-grid > .compare-point:nth-child(odd) .compare-point-title {
+  color: rgba(250, 250, 250, 0.62);
+}
+
+.compare-grid > .compare-point:nth-child(odd) .compare-point-text {
+  color: rgba(250, 250, 250, 0.5);
+}
+
 /* Footer — its own dark zone (below the inversion area), modelled on the
    stella-test footer: logo left, link columns right, copyright below. */
 .footer {

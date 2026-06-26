@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>House of ROI</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <script>document.documentElement.classList.add('js');</script>
   <link rel="stylesheet" href="https://use.typekit.net/xjk1jkt.css">
   <link rel="stylesheet" href="style.css">
@@ -69,6 +70,64 @@
     </div>
   </section>
 
+  <section class="compare">
+    <div class="compare-box">
+      <div class="compare-inner">
+      <p class="compare-intro" data-reveal>The standard agency model is an assembly line designed to process budgets. House of ROI is structured to generate business efficiencies and goal accomplishment.</p>
+
+      <div class="compare-grid" data-reveal-group data-reveal-cols="2">
+        <h3 class="compare-col-title" data-reveal-item>The Conventional Agency Model</h3>
+        <h3 class="compare-col-title" data-reveal-item>House of ROI Approach</h3>
+
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Budget Deployment Focused.</h4>
+          <p class="compare-point-text">Primary objective is exhausting allocated spend according to plan, regardless of real-time performance.</p>
+        </div>
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Mandate-Driven.</h4>
+          <p class="compare-point-text">Optimization governed strictly by business objectives — from awareness to acquisition and retention.</p>
+        </div>
+
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Process-Driven Structure.</h4>
+          <p class="compare-point-text">Layered account management and junior execution teams. The senior professionals who pitch rarely do the work.</p>
+        </div>
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Principal-Led Implementation.</h4>
+          <p class="compare-point-text">Direct access to practice leadership. Minimal layers between capital allocation and decision-making. Clients know who is managing their budget.</p>
+        </div>
+
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Vendor Pleasing.</h4>
+          <p class="compare-point-text">Recommendations shaped by platform sales relationships and self-referential industry best practices.</p>
+        </div>
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Vendor Independence.</h4>
+          <p class="compare-point-text">Zero reliance on platform sales narratives. We operate on an independent, structural understanding of platform algorithms to protect the client's capital, not the provider's relationship.</p>
+        </div>
+
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">"Set-and-Forget" Autopilot.</h4>
+          <p class="compare-point-text">Heavy dependence on platform automation black boxes with limited oversight or intervention.</p>
+        </div>
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Dynamic Intervention.</h4>
+          <p class="compare-point-text">Rigorous human oversight combining automation with manual precision and ongoing monitoring to maintain control over the campaign's performance output.</p>
+        </div>
+
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Marketing as Expense.</h4>
+          <p class="compare-point-text">Managed as sunk cost with minimal accountability for capital efficiency and execution quality.</p>
+        </div>
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Marketing as Investment.</h4>
+          <p class="compare-point-text">Digital media managed as growth asset with real-time accountability and optimization.</p>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-top">
@@ -95,8 +154,10 @@
     // Invert the whole page to a light theme while the three-column
     // section is in view. The flip is smooth via CSS transitions.
     (function () {
-      var section = document.querySelector('.insights');
-      if (!section) return;
+      // Light theme stays on while either the three-column section OR the
+      // comparison section is in view.
+      var sections = document.querySelectorAll('.insights, .compare');
+      if (!sections.length) return;
 
       // Paint-free text inversion: for every flip-zone text block, stack a
       // dark-coloured clone exactly over the original and crossfade it via
@@ -118,18 +179,24 @@
         el.appendChild(clone);
       });
 
+      // Track which trigger sections are currently in view; the light theme is
+      // on as long as at least one of them is — so scrolling from the columns
+      // straight into the comparison box stays light with no flicker.
+      var active = new Set();
       var observer = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
-          document.body.classList.toggle('theme-light', entry.isIntersecting);
+          if (entry.isIntersecting) active.add(entry.target);
+          else active.delete(entry.target);
         });
+        document.body.classList.toggle('theme-light', active.size > 0);
       }, {
-        // Fires soon after the section enters: its top must rise ~10% of the
+        // Fires soon after a section enters: its top must rise ~10% of the
         // viewport height above the bottom edge.
         rootMargin: '0px 0px -10% 0px',
         threshold: 0
       });
 
-      observer.observe(section);
+      sections.forEach(function (s) { observer.observe(s); });
     })();
   </script>
 
@@ -180,6 +247,12 @@
       // --- Grouped reveals: items cascade in with a stagger ---
       gsap.utils.toArray('[data-reveal-group]').forEach(function (group) {
         var items = group.querySelectorAll('[data-reveal-item]');
+        var cols = parseInt(group.getAttribute('data-reveal-cols'), 10) || 1;
+        // With multiple columns (e.g. the comparison grid) stagger by ROW only,
+        // so items on the same line appear synchronously and rows cascade down.
+        var stagger = cols > 1
+          ? { grid: [Math.ceil(items.length / cols), cols], axis: 'y', each: 0.15, from: 0 }
+          : 0.12;
         ScrollTrigger.create({
           trigger: group,
           start: 'top 85%',
@@ -187,7 +260,7 @@
           onEnter: function () {
             gsap.fromTo(items,
               { opacity: 0, y: 30 },
-              { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.12, clearProps: 'transform' }
+              { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: stagger, clearProps: 'transform' }
             );
           }
         });
