@@ -15,6 +15,7 @@
 
     :root {
       --base: min(100vw, 1440px);
+      --edge-gap: 120px;
     }
 
     body {
@@ -26,7 +27,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 120px;
+      padding-top: var(--edge-gap);
       gap: 64px;
     }
 
@@ -49,7 +50,7 @@
     }
 
     .stub-text-group {
-      --headline-size: clamp(18px, 5.625vw, 36px);
+      --headline-size: clamp(22px, 7.5vw, 40px);
       position: fixed;
       top: 50%;
       left: 50%;
@@ -80,7 +81,7 @@
       font-family: "futura-pt", sans-serif;
       font-weight: 400;
       font-style: normal;
-      font-size: clamp(14px, 3.594vw, 23px);
+      font-size: calc(var(--headline-size) * 0.5);
       line-height: 100%;
       letter-spacing: 0.32em;
       color: #fafafa;
@@ -89,6 +90,44 @@
       white-space: nowrap;
       opacity: 0;
       animation: stubIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.35s forwards;
+    }
+
+    .stub-socials {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: var(--edge-gap);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      opacity: 0;
+      animation: stubIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.5s forwards;
+    }
+
+    .stub-social {
+      display: inline-flex;
+      transition: opacity 0.2s ease;
+    }
+
+    .stub-social img {
+      height: 17.6px;
+      width: auto;
+      display: block;
+    }
+
+    .stub-social--linkedin img {
+      height: 19.36px;
+    }
+
+    .stub-social:hover {
+      opacity: 0.6;
+    }
+
+    @media (max-width: 639px) {
+      .stub-socials {
+        bottom: calc(13vh + env(safe-area-inset-bottom, 0px));
+      }
     }
 
     @media (min-width: 640px) {
@@ -124,6 +163,14 @@
       <p class="stub-headline">Coming soon</p>
       <p class="stub-tagline">by invitation only</p>
     </div>
+  </div>
+  <div class="stub-socials">
+    <a class="stub-social" href="mailto:inquiries@thehouseofroi.com" aria-label="Email">
+      <img src="images/email.svg" alt="Email">
+    </a>
+    <a class="stub-social stub-social--linkedin" href="https://www.linkedin.com/company/the-house-of-roi" target="_blank" rel="noopener" aria-label="LinkedIn">
+      <img src="images/linkedin-svgrepo-com.svg" alt="LinkedIn">
+    </a>
   </div>
 </body>
 </html>
