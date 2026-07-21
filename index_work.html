@@ -6,6 +6,12 @@
   <title>House of ROI</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <script>document.documentElement.classList.add('js');</script>
+  <script>
+    // Always land on top on reload/navigation — don't let the browser
+    // restore whatever scroll position the page was at before.
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.addEventListener('pageshow', function () { window.scrollTo(0, 0); });
+  </script>
   <link rel="stylesheet" href="https://use.typekit.net/xjk1jkt.css">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -128,6 +134,56 @@
     </div>
   </section>
 
+  <section class="method">
+    <div class="method-inner">
+      <div class="method-content">
+        <h2 class="method-title" data-reveal>Our Method</h2>
+
+        <div class="method-list" data-reveal-group data-reveal-cols="2">
+          <div class="method-item" data-reveal-item>
+            <span class="method-number">01</span>
+            <div class="method-item-body">
+              <h3 class="method-item-title">Systems Thinking</h3>
+              <p class="method-item-text">Every decision made in context of the full market system — never a channel tactic in isolation.</p>
+            </div>
+          </div>
+
+          <div class="method-item" data-reveal-item>
+            <span class="method-number">02</span>
+            <div class="method-item-body">
+              <h3 class="method-item-title">Human + Machine Intelligence</h3>
+              <p class="method-item-text">AI accelerates the analysis. Every strategic call is made, and owned, by a human.</p>
+            </div>
+          </div>
+
+          <div class="method-item" data-reveal-item>
+            <span class="method-number">03</span>
+            <div class="method-item-body">
+              <h3 class="method-item-title">Full-Funnel Command</h3>
+              <p class="method-item-text">Awareness to acquisition — one system built for whatever the growth mandate requires.</p>
+            </div>
+          </div>
+
+          <div class="method-item" data-reveal-item>
+            <span class="method-number">04</span>
+            <div class="method-item-body">
+              <h3 class="method-item-title">Portfolio-Level Allocation</h3>
+              <p class="method-item-text">Budgets deployed and rebalanced across channels the way capital moves across a portfolio.</p>
+            </div>
+          </div>
+
+          <div class="method-item" data-reveal-item>
+            <span class="method-number">05</span>
+            <div class="method-item-body">
+              <h3 class="method-item-title">Continuous Optimization</h3>
+              <p class="method-item-text">No set-and-forget. Capital reallocated in real time as performance data arrives.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-top">
@@ -154,9 +210,10 @@
     // Invert the whole page to a light theme while the three-column
     // section is in view. The flip is smooth via CSS transitions.
     (function () {
-      // Light theme stays on while either the three-column section OR the
-      // comparison section is in view.
-      var sections = document.querySelectorAll('.insights, .compare');
+      // The light theme flips on at the top of the three-column section — see
+      // the boundary-crossing observer below for how down vs. up scrolling
+      // is handled differently past this point.
+      var sections = document.querySelectorAll('.insights');
       if (!sections.length) return;
 
       // Paint-free text inversion: for every flip-zone text block, stack a
@@ -179,24 +236,31 @@
         el.appendChild(clone);
       });
 
-      // Track which trigger sections are currently in view; the light theme is
-      // on as long as at least one of them is — so scrolling from the columns
-      // straight into the comparison box stays light with no flicker.
-      var active = new Set();
+      // Single boundary, not per-section tracking: the light theme flips on
+      // when scrolling DOWN past the top of .insights, and flips back off
+      // only when scrolling back UP above that same line — so it stays light
+      // all the way through .compare/.method going down (nothing below the
+      // boundary can turn it off), but going back up re-enters the hero
+      // section dark, at the same crossing point it left from.
+      var boundary = sections[0];
       var observer = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
-          if (entry.isIntersecting) active.add(entry.target);
-          else active.delete(entry.target);
+          if (entry.isIntersecting) {
+            document.body.classList.add('theme-light');
+          } else if (entry.boundingClientRect.top > 0) {
+            // Boundary is below the viewport again — we scrolled back up
+            // above it, not further down past it.
+            document.body.classList.remove('theme-light');
+          }
         });
-        document.body.classList.toggle('theme-light', active.size > 0);
       }, {
-        // Fires soon after a section enters: its top must rise ~10% of the
+        // Fires soon after the boundary enters: its top must rise ~10% of the
         // viewport height above the bottom edge.
         rootMargin: '0px 0px -10% 0px',
         threshold: 0
       });
 
-      sections.forEach(function (s) { observer.observe(s); });
+      observer.observe(boundary);
     })();
   </script>
 
