@@ -301,23 +301,43 @@ body.theme-light .theme-bg {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 10;
-  /* Dark-theme placeholder (barely lighter than black). */
-  background-color: #1a1a1a;
 }
 
-/* Light-theme placeholder fades in over the dark one via opacity (composited,
-   no per-frame repaint). */
-.insight-image::after {
-  content: "";
+.insight-icon {
   position: absolute;
-  inset: 0;
-  background-color: #e6e5e0;
-  opacity: 0;
-  transition: opacity 1s ease;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  /* Vertical-only auto margin: centers top/bottom while the left edge stays
+     pinned at 0, flush with the title/text left edge below it. */
+  margin: auto 0;
+  /* Height-capped (not width) since .insight-image is a wide 16:10 box —
+     each icon keeps its own cropped aspect ratio so it fills the box height
+     without overflowing it. */
+  height: 55%;
+  width: auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
-body.theme-light .insight-image::after {
-  opacity: 1;
+.insight-icon--compass {
+  aspect-ratio: 649 / 715;
+  background-image: url("assets/compass.png");
+  height: 63.5%;
+}
+
+.insight-icon--stairs {
+  aspect-ratio: 825 / 517;
+  background-image: url("assets/stairs.png");
+  height: 49.5%;
+}
+
+.insight-icon--pie {
+  aspect-ratio: 695 / 668;
+  height: 60.5%;
+  background-image: url("assets/pie-chart.png");
 }
 
 .insight-title {
