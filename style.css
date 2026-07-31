@@ -93,12 +93,15 @@ body.theme-light .theme-bg {
   margin-top: calc(var(--base) * 56 / 1440);
   display: flex;
   justify-content: center;
-  gap: calc(var(--base) * 48 / 1440);
 }
 
+/* Gap between links is padding, not flex `gap` — that way each link's
+   hoverable box extends to meet its neighbor exactly at the midpoint,
+   leaving no dead zone that would drop the whole nav back to full
+   opacity while the cursor travels between links. */
 .nav-link {
   position: relative;
-  font-family: "futura-pt", sans-serif;
+  font-family: "Jost", sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: calc(var(--base) * 14 / 1440);
@@ -106,7 +109,7 @@ body.theme-light .theme-bg {
   letter-spacing: 0.3em;
   color: var(--fg);
   text-decoration: none;
-  padding-bottom: calc(var(--base) * 4 / 1440);
+  padding: 0 calc(var(--base) * 24 / 1440) calc(var(--base) * 4 / 1440);
   transition: var(--theme-transition), opacity 0.3s ease;
 }
 
@@ -162,7 +165,7 @@ body.theme-light .theme-bg {
 
 .hero-subtitle {
   margin-top: calc(var(--base) * 56 / 1440);
-  font-family: "futura-pt", sans-serif;
+  font-family: "Jost", sans-serif;
   font-weight: 300;
   font-style: normal;
   font-size: 18px;
@@ -182,7 +185,7 @@ body.theme-light .theme-bg {
   border: 1px solid var(--fg);
   border-radius: 999px;
   background: transparent;
-  font-family: "futura-pt", sans-serif;
+  font-family: "Jost", sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: calc(var(--base) * 14 / 1440);
@@ -220,7 +223,7 @@ body.theme-light .theme-bg {
 .ticker-item {
   flex-shrink: 0;
   padding: 0 calc(var(--base) * 40 / 1440);
-  font-family: "futura-pt", sans-serif;
+  font-family: "Jost", sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: calc(var(--base) * 14 / 1440);
@@ -255,7 +258,7 @@ body.theme-light .theme-bg {
 
 .efficiency-label {
   margin-top: calc(var(--base) * 12 / 1440);
-  font-family: "futura-pt", sans-serif;
+  font-family: "Jost", sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: calc(var(--base) * 18 / 1440);
@@ -300,42 +303,15 @@ body.theme-light .theme-bg {
 .insight-icon {
   position: absolute;
   z-index: 1;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  /* Vertical-only auto margin: centers top/bottom while the left edge stays
-     pinned at 0, flush with the title/text left edge below it. */
-  margin: auto 0;
-  /* Height-capped (not width) since .insight-image is a wide 16:10 box —
-     each icon keeps its own cropped aspect ratio so it fills the box height
-     without overflowing it. */
-  height: 55%;
-  width: auto;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-}
-
-.insight-icon--compass {
-  aspect-ratio: 649 / 715;
-  background-image: url("assets/compass.png");
-  height: 63.5%;
-}
-
-.insight-icon--stairs {
-  aspect-ratio: 825 / 517;
-  background-image: url("assets/stairs.png");
-  height: 49.5%;
-}
-
-.insight-icon--pie {
-  aspect-ratio: 695 / 668;
-  height: 60.5%;
-  background-image: url("assets/pie-chart.png");
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--placeholder);
+  transition: var(--theme-transition), background-color 1s ease;
 }
 
 .insight-title {
-  margin-top: 0;
+  margin-top: calc(var(--base) * 24 / 1440);
   font-family: Georgia, "Times New Roman", Times, serif;
   font-weight: 400;
   font-style: normal;
@@ -347,7 +323,7 @@ body.theme-light .theme-bg {
 
 .insight-text {
   margin-top: calc(var(--base) * 20 / 1440);
-  font-family: "futura-pt", sans-serif;
+  font-family: "Jost", sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: calc(var(--base) * 16 / 1440);
@@ -418,7 +394,7 @@ body.theme-light .theme-bg {
 }
 
 .compare-point-title {
-  font-family: "futura-pt", sans-serif;
+  font-family: "Jost", sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: calc(var(--base) * 18 / 1440);
@@ -429,7 +405,7 @@ body.theme-light .theme-bg {
 }
 
 .compare-point-text {
-  font-family: "futura-pt", sans-serif;
+  font-family: "Jost", sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: calc(var(--base) * 16 / 1440);
@@ -456,11 +432,84 @@ body.theme-light .theme-bg {
   color: rgba(250, 250, 250, 0.5);
 }
 
-/* Our Method — no boxed container; sits directly on the page background.
-   .compare is tall enough that this section can still be reached while the
-   light theme is on, so every color here reads off var(--fg)/var(--bg)
-   instead of being hardcoded dark-theme white — it follows whichever theme
-   is currently active rather than assuming one. */
+/* Our Method — big single-column statement lines, each paired with a thin-
+   line icon (currentColor, so --theme-transition recolors it for free). No
+   boxed container; sits directly on the page background in the same
+   always-light-past-.insights zone as .compare/.method below. */
+.our-method {
+  width: 100%;
+  background-color: transparent;
+  padding: calc(var(--base) * 40 / 1440) 0 calc(var(--base) * 120 / 1440);
+}
+
+.our-method-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 calc(var(--base) * 80 / 1440);
+}
+
+.our-method-title {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: calc(var(--base) * 48 / 1440);
+  line-height: 115%;
+  letter-spacing: 0;
+  color: var(--fg);
+  text-align: center;
+  margin-bottom: calc(var(--base) * 64 / 1440);
+  transition: var(--theme-transition);
+}
+
+.our-method-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.our-method-item {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--base) * 40 / 1440);
+  padding: calc(var(--base) * 36 / 1440) 0;
+  border-top: 1px solid color-mix(in srgb, var(--fg) 15%, transparent);
+  transition: border-color 1s ease;
+}
+
+.our-method-item:first-child {
+  border-top: none;
+}
+
+.our-method-icon {
+  flex-shrink: 0;
+  width: calc(var(--base) * 72 / 1440);
+  height: calc(var(--base) * 72 / 1440);
+  stroke-width: 0.75;
+  color: color-mix(in srgb, var(--fg) 50%, transparent);
+  transition: var(--theme-transition);
+}
+
+.our-method-item-title {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  font-family: "Jost", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+  /* --method-fit-scale is computed in JS so the "Human + Machine
+     Intelligence" line spans the full row — every other line shares that
+     same factor so all five read at one identical size. */
+  font-size: calc(var(--base) * 56 / 1440 * var(--method-fit-scale, 1));
+  line-height: 112%;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  transition: var(--theme-transition);
+}
+
+/* Rules of the House — no boxed container; sits directly on the page
+   background. .compare is tall enough that this section can still be
+   reached while the light theme is on, so every color here reads off
+   var(--fg)/var(--bg) instead of being hardcoded dark-theme white — it
+   follows whichever theme is currently active rather than assuming one. */
 .method {
   width: 100%;
   background-color: transparent;
@@ -485,6 +534,7 @@ body.theme-light .theme-bg {
   line-height: 115%;
   letter-spacing: 0;
   color: var(--fg);
+  text-align: center;
   margin-bottom: calc(var(--base) * 96 / 1440);
   transition: var(--theme-transition);
 }
@@ -529,7 +579,7 @@ body.theme-light .theme-bg {
 .method-number {
   flex-shrink: 0;
   min-width: calc(var(--base) * 64 / 1440);
-  font-family: "futura-pt", sans-serif;
+  font-family: "Jost", sans-serif;
   font-weight: 300;
   font-size: calc(var(--base) * 40 / 1440);
   line-height: 100%;
@@ -550,7 +600,7 @@ body.theme-light .theme-bg {
 }
 
 .method-item-text {
-  font-family: "futura-pt", sans-serif;
+  font-family: "Jost", sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: calc(var(--base) * 16 / 1440);
@@ -609,7 +659,7 @@ body.theme-light .theme-bg {
 }
 
 .footer-link {
-  font-family: "futura-pt", sans-serif;
+  font-family: "Jost", sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: calc(var(--base) * 14 / 1440);
@@ -625,7 +675,7 @@ body.theme-light .theme-bg {
 }
 
 .footer-copy {
-  font-family: "futura-pt", sans-serif;
+  font-family: "Jost", sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: calc(var(--base) * 13 / 1440);
