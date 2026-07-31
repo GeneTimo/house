@@ -87,6 +87,8 @@ body.theme-light .theme-bg {
   padding-top: calc(var(--base) * 48 / 1440);
   width: calc(var(--base) * 5 / 100);
   height: auto;
+  opacity: 0;
+  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 .nav {
@@ -95,10 +97,11 @@ body.theme-light .theme-bg {
   justify-content: center;
 }
 
-/* Gap between links is padding, not flex `gap` — that way each link's
-   hoverable box extends to meet its neighbor exactly at the midpoint,
-   leaving no dead zone that would drop the whole nav back to full
-   opacity while the cursor travels between links. */
+/* Gap between links is padding, not flex `gap` — a larger, more forgiving
+   hoverable box per link. Behavior mirrors Thoma Bravo's header nav: each
+   link fades independently between a dimmed default and full brightness on
+   its own hover — no cross-link dimming, so there's nothing for one link's
+   hover state to interrupt on another. */
 .nav-link {
   position: relative;
   font-family: "Jost", sans-serif;
@@ -108,20 +111,44 @@ body.theme-light .theme-bg {
   line-height: 110%;
   letter-spacing: 0.3em;
   color: var(--fg);
+  opacity: 0.6;
   text-decoration: none;
   padding: 0 calc(var(--base) * 24 / 1440) calc(var(--base) * 4 / 1440);
   transition: var(--theme-transition), opacity 0.3s ease;
+  /* Same page-load entrance as the hero lines below, staggered left to
+     right. Fill mode "both", not just "forwards": the static opacity above
+     is 0.6 (its resting dimmed state), which doesn't match the animation's
+     0 starting point the way it does for the other hero elements (theirs
+     is a plain 0 either way) — with only "forwards", that mismatch showed
+     as the links flashing visible at 0.6 during animation-delay, then
+     snapping to 0 once the animation actually started. "both" applies the
+     from-keyframe during the delay too. Ends at 0.6, not 1 — a JS cleanup
+     (see script near the theme-flip logic) drops the animation once it
+     finishes, handing opacity back to the plain :hover rule below. Without
+     that, animation-fill-mode would keep "winning" the cascade over :hover
+     forever, since a filled animation outranks a normal rule. */
+  animation: navLinkIn 1s cubic-bezier(0.65, 0, 0.35, 1) both;
 }
 
-/* Hovering a link's own text dims the rest of the nav instead of
-   underlining — the gaps between links don't count as hover, only the
-   words themselves (:has targets the link, not the flex container). */
-.nav:has(.nav-link:hover) .nav-link {
-  opacity: 0.2;
-}
+.nav-link:nth-child(1) { animation-delay: 0.15s; }
+.nav-link:nth-child(2) { animation-delay: 0.22s; }
+.nav-link:nth-child(3) { animation-delay: 0.29s; }
+.nav-link:nth-child(4) { animation-delay: 0.36s; }
+.nav-link:nth-child(5) { animation-delay: 0.43s; }
 
-.nav:has(.nav-link:hover) .nav-link:hover {
+.nav-link:hover {
   opacity: 1;
+}
+
+@keyframes navLinkIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 0.6;
+    transform: translateY(0);
+  }
 }
 
 .hero {
@@ -160,8 +187,8 @@ body.theme-light .theme-bg {
   animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
-.hero-line:nth-child(1) { animation-delay: 0s; }
-.hero-line:nth-child(2) { animation-delay: 0.15s; }
+.hero-line:nth-child(1) { animation-delay: 0.55s; }
+.hero-line:nth-child(2) { animation-delay: 0.7s; }
 
 .hero-subtitle {
   margin-top: calc(var(--base) * 56 / 1440);
@@ -170,11 +197,11 @@ body.theme-light .theme-bg {
   font-style: normal;
   font-size: 18px;
   line-height: 150%;
-  letter-spacing: 0;
+  letter-spacing: 0.02em;
   color: var(--fg);
   text-align: center;
   opacity: 0;
-  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.3s forwards;
+  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.85s forwards;
   transition: var(--theme-transition);
 }
 
@@ -196,7 +223,7 @@ body.theme-light .theme-bg {
   text-decoration: none;
   cursor: pointer;
   opacity: 0;
-  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.45s forwards;
+  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) 1s forwards;
   transition: background-color 0.5s ease, color 0.5s ease, border-color 0.7s ease;
 }
 
@@ -211,7 +238,7 @@ body.theme-light .theme-bg {
   overflow: hidden;
   padding: calc(var(--base) * 24 / 1440) 0;
   opacity: 0;
-  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.6s forwards;
+  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) 1.15s forwards;
 }
 
 .ticker-track {
@@ -464,13 +491,17 @@ body.theme-light .theme-bg {
 .our-method-list {
   display: flex;
   flex-direction: column;
+  /* Clips the alternating slide-in animation so each line emerges from
+     behind the row edge instead of visibly overshooting it. */
+  overflow: hidden;
 }
 
 .our-method-item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: calc(var(--base) * 40 / 1440);
-  padding: calc(var(--base) * 36 / 1440) 0;
+  padding: calc(var(--base) * 28 / 1440) 0;
   border-top: 1px solid color-mix(in srgb, var(--fg) 15%, transparent);
   transition: border-color 1s ease;
 }
@@ -479,18 +510,102 @@ body.theme-light .theme-bg {
   border-top: none;
 }
 
+/* Title and description are two frames of one strip ("parented to the same
+   null", After-Effects-style): both keep their natural stacking order
+   inside .our-method-item-track, and ONE transform on the track slides the
+   whole strip — title rides down and out, description rides down into view
+   from above the window. .our-method-item-text is the fixed-height window
+   (overflow: hidden) that only ever shows one frame at a time; its height
+   drives the fit-to-width measurement, same role the title used to play
+   alone. A gentle synchronized opacity cross-fade rides along with the
+   slide so nothing gets a hard clip at the window edge. */
+.our-method-item-text {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  /* 1.3, not 1.12 (the title's line-height) — the window needs extra room
+     beyond the nominal line box so descenders (g, y, p) don't get hard-
+     clipped by this element's own overflow: hidden. */
+  --method-row-h: calc(var(--base) * 56 / 1440 * var(--method-fit-scale, 1) * 1.3);
+  height: var(--method-row-h);
+}
+
+.our-method-item-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  transform: translateY(calc(var(--method-row-h) * -1));
+  transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.our-method-item:hover .our-method-item-track,
+.our-method-item:focus-within .our-method-item-track {
+  transform: translateY(0);
+}
+
+.our-method-item-desc {
+  height: var(--method-row-h);
+  display: flex;
+  align-items: center;
+  max-width: calc(var(--base) * 520 / 1440);
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: calc(var(--base) * 17 / 1440);
+  line-height: 150%;
+  letter-spacing: 0;
+  color: color-mix(in srgb, var(--fg) 65%, var(--bg));
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.65, 0, 0.35, 1), var(--theme-transition);
+}
+
+.our-method-item:hover .our-method-item-desc,
+.our-method-item:focus-within .our-method-item-desc {
+  opacity: 1;
+}
+
+/* Hand-placed line breaks in the descriptions — deliberate, not natural
+   reflow — only hold on desktop (xl, ≥1280px); below that the text just
+   wraps on its own against the narrower max-width. */
+.desktop-break {
+  display: none;
+}
+
+@media (min-width: 1280px) {
+  .desktop-break {
+    display: inline;
+  }
+}
+
+.our-method-item:hover .our-method-item-title,
+.our-method-item:focus-within .our-method-item-title {
+  opacity: 0;
+}
+
+/* "Portfolio" only — at the title's -0.02em tracking, the r's arm crowds
+   straight into the t's stem. Loosens just that one pair without touching
+   tracking anywhere else in the word or the other four lines. */
+.kern-rt {
+  letter-spacing: 0.02em;
+}
+
 .our-method-icon {
   flex-shrink: 0;
   width: calc(var(--base) * 72 / 1440);
   height: calc(var(--base) * 72 / 1440);
   stroke-width: 0.75;
-  color: color-mix(in srgb, var(--fg) 50%, transparent);
+  /* Mixed against --bg, not "transparent" — that keeps the stroke fully
+     opaque, so overlapping segments at joints don't double-darken the way
+     a translucent stroke would where paths cross or meet. */
+  color: color-mix(in srgb, var(--fg) 50%, var(--bg));
   transition: var(--theme-transition);
 }
 
 .our-method-item-title {
-  flex: 1;
-  min-width: 0;
+  height: var(--method-row-h);
+  display: block;
   white-space: nowrap;
   font-family: "Jost", sans-serif;
   font-weight: 200;
@@ -502,7 +617,7 @@ body.theme-light .theme-bg {
   line-height: 112%;
   letter-spacing: -0.02em;
   color: var(--fg);
-  transition: var(--theme-transition);
+  transition: var(--theme-transition), opacity 0.6s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 /* Rules of the House — no boxed container; sits directly on the page
