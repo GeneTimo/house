@@ -459,6 +459,201 @@ body.theme-light .theme-bg {
   color: rgba(250, 250, 250, 0.5);
 }
 
+/* Three-pillar convergence diagram — an Euler/Venn-style trio of overlapping
+   circles sitting directly on the page background (same always-light zone
+   as .our-method/.method below). Outline-only, no fill, matching the thin-
+   line aesthetic of .our-method-icon. Each circle swaps its label for a
+   longer description on hover/focus — same title<->description crossfade
+   idiom as .our-method-item, just via opacity instead of a slide. */
+.pillars {
+  width: 100%;
+  background-color: transparent;
+  padding: 0 0 calc(var(--base) * 40 / 1440);
+}
+
+.pillars-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 calc(var(--base) * 80 / 1440);
+}
+
+.venn {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+}
+
+/* Diameter/position are hand-tuned so the three circles share one common
+   centre (where .venn-center sits) without any pair fully swallowing the
+   other — each circle's own centre stays equidistant (18% of the diagram)
+   from that shared point. */
+.venn-circle {
+  position: absolute;
+  width: 54%;
+  height: 54%;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--fg) 30%, transparent);
+  background-color: transparent;
+  /* Fades back to transparent smoothly on mouse-leave. Declaring this
+     only here isn't enough on its own — transition is a normal cascaded
+     property, so without an explicit override below, the :hover rule
+     would inherit this same duration and make the ENTER instant-vs-leave
+     asymmetry backwards (confirmed: it did). The :hover rule's explicit
+     0s below is what actually makes entering instant. */
+  transition: background-color 0.6s ease;
+}
+
+.venn-circle--marketing {
+  top: 32%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.venn-circle--financial {
+  top: 59%;
+  left: 34.4%;
+  transform: translate(-50%, -50%);
+}
+
+.venn-circle--machine {
+  top: 59%;
+  left: 65.6%;
+  transform: translate(-50%, -50%);
+}
+
+/* Hovered/focused circle rises above everything else in the diagram —
+   the other two circles' outlines and the shared logo — so it reads as a
+   solid opaque disc sitting on top, not a shape competing for the same
+   pixels. z-index 20 clears the logo's own 10, so it's covered too when
+   the hover circle's fill sweeps over the shared centre. Filled with a
+   hair darker than the page's own --bg (not a dark card, not a flat
+   match either): it reads as a faint grey disc blanking out whatever
+   sits underneath, distinguishable from the plain page background,
+   while the text below stays the same dark --fg as the rest of the page. */
+.venn-circle:hover,
+.venn-circle:focus-within {
+  z-index: 20;
+  border-color: transparent;
+  background-color: color-mix(in srgb, var(--fg) 2%, var(--bg));
+  transition: background-color 0s;
+  outline: none;
+}
+
+/* Title (idle state) is centred on the CENTROID of the circle's unique
+   region — the circle minus both of its overlaps with the other two, the
+   sliver you'd get if you cut those intersections away — not the circle's
+   own centre and not a simple edge anchor. Coordinates below are that
+   centroid in each circle's own 0–100% box, solved numerically (grid-
+   sampled the actual set-minus shape rather than eyeballed) since the
+   region isn't a simple lens or wedge. */
+.venn-circle-title {
+  position: absolute;
+  width: 60%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: calc(var(--base) * 18 / 1440);
+  line-height: 130%;
+  letter-spacing: 0;
+  color: var(--fg);
+}
+
+.venn-circle--marketing .venn-circle-title {
+  top: 30.1%;
+  left: 50%;
+}
+
+.venn-circle--financial .venn-circle-title {
+  top: 59.95%;
+  left: 32.77%;
+}
+
+.venn-circle--machine .venn-circle-title {
+  top: 59.95%;
+  left: 67.23%;
+}
+
+/* Description (hover/focus state) is centred in the circle instead, with
+   a generous inset off the rim — unlike the title, it no longer needs to
+   dodge the crossing lines: by the time it's visible, the hovered circle
+   has already filled solid and risen above its neighbours, so there's
+   nothing underneath it left to collide with. */
+.venn-circle-desc {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 22%;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: calc(var(--base) * 15 / 1440);
+  line-height: 150%;
+  letter-spacing: 0;
+  color: var(--fg);
+}
+
+.venn-circle:hover .venn-circle-title,
+.venn-circle:focus-within .venn-circle-title {
+  opacity: 0;
+}
+
+/* Entrance reuses heroLineIn — the same fade-up used for the hero
+   headline/subtitle/button — instead of a plain crossfade. The fill
+   above is instant, so this motion is the only thing the eye tracks on
+   hover-in. Leaving still just fades via the transition on the base
+   rule above (animation only ever plays on the way in). */
+.venn-circle:hover .venn-circle-desc,
+.venn-circle:focus-within .venn-circle-desc {
+  opacity: 1;
+  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+/* Shared meeting point of all three sets — no plate, just the mark sitting
+   directly on the page background. The logo file is a fixed light
+   (#FAFAFA) fill (shared with the header/footer, which need it light on
+   their dark backdrops), so brightness(0) forces it fully black here
+   instead — same effect as var(--fg)'s text color in this always-light
+   part of the page, without needing a second copy of the asset. Sits at
+   z-index 10, below a hovered circle's 20, so it's simply covered along
+   with everything else while that circle's fill sweeps over it. */
+.venn-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.venn-center img {
+  display: block;
+  width: calc(var(--base) * 64 / 1440);
+  height: auto;
+  filter: brightness(0);
+}
+
+/* Small screens: the diagram itself has less room to grow (capped by
+   viewport width, not the 640px desktop ceiling), so give text more of the
+   circle to wrap into and drop the description down a size. */
+@media (max-width: 639px) {
+  .venn-circle-title {
+    width: 78%;
+  }
+
+  .venn-circle-desc {
+    padding: 0 14%;
+    font-size: calc(var(--base) * 13 / 1440);
+    line-height: 140%;
+  }
+}
+
 /* Our Method — big single-column statement lines, each paired with a thin-
    line icon (currentColor, so --theme-transition recolors it for free). No
    boxed container; sits directly on the page background in the same
