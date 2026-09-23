@@ -325,16 +325,113 @@ body.theme-light .theme-bg {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 10;
+  overflow: hidden;
+  /* Fallback tone showing through any transparent area of the SVG (and
+     while its artwork is still a placeholder comment) — same role the old
+     flat .insight-icon background played. */
+  background-color: var(--placeholder);
+  transition: var(--theme-transition), background-color 1s ease;
 }
 
-.insight-icon {
+.insight-anim {
   position: absolute;
   z-index: 1;
   inset: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--placeholder);
+  display: block;
+}
+
+/* Per-shape hooks for the pasted-in vector artwork, e.g.:
+     .insight-anim--compass .needle { transform-origin: 240px 150px; }
+     .insight-anim--compass.is-in-view .needle { animation: compassSwing 3s ease-in-out infinite; }
+   Keep loops gated on .is-in-view (toggled by the ScrollTrigger hook below)
+   so nothing animates — and burns battery — off-screen. See stella.systems'
+   .stella-pulse / .flow-dots-march for the same pattern (CSS @keyframes on
+   inline SVG shapes, GSAP/ScrollTrigger only for the on-enter gating). */
+.insight-anim__art {
+  transform-box: fill-box;
+}
+
+/* --- "Investment-Grade Rigor" stat chart (graph-curve-line.svg + mockup) --- */
+
+.insight-chart {
+  --chart-marker-size: calc(var(--base) * 10 / 1440);
+  --chart-tooltip-gap: calc(var(--base) * 12 / 1440);
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.insight-chart__line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.insight-chart__path {
+  fill: none;
+  stroke: var(--fg);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: var(--theme-transition), stroke 1s ease;
+}
+
+.insight-chart__label {
+  position: absolute;
+  left: 4%;
+  top: 6%;
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-size: calc(var(--base) * 20 / 1440);
+  color: var(--fg);
+  /* Fixed-width digit glyphs — so as the number changes every frame, each
+     digit's own column stays put instead of the whole string re-kerning
+     (see the JS zero-padding in formatValue() for the other half of this:
+     keeping the digit COUNT fixed too, not just each digit's width). */
+  font-variant-numeric: tabular-nums;
+  transition: var(--theme-transition), color 1s ease;
+}
+
+/* Marker + tooltip are given the SAME left/top (the point on the curve,
+   read via path.getPointAtLength — see the script near </body>) — these two
+   transforms are what split one coordinate into "centered on the point" vs
+   "floating above it", so the JS only ever has one number to set per axis. */
+.insight-chart__marker {
+  position: absolute;
+  width: var(--chart-marker-size);
+  height: var(--chart-marker-size);
+  border-radius: 50%;
+  background-color: var(--fg);
+  transform: translate(-50%, -50%);
   transition: var(--theme-transition), background-color 1s ease;
+}
+
+.insight-chart__tooltip {
+  position: absolute;
+  /* Up from the point by half the marker (to clear its top edge) plus a
+     fixed gap, then its own full height (measured from the bottom, so a
+     wider/taller value string never pushes it further from the marker). */
+  transform: translate(-50%, calc(-100% - (var(--chart-marker-size) / 2) - var(--chart-tooltip-gap)));
+  padding: calc(var(--base) * 8 / 1440) calc(var(--base) * 14 / 1440);
+  border-radius: 999px; /* matches .contact-btn's pill shape */
+  /* JS locks a fixed px `width` (the widest the cycle's text ever gets) so
+     the pill stops resizing frame to frame — border-box so that width
+     includes this padding, matching the offsetWidth it was measured with. */
+  box-sizing: border-box;
+  text-align: center;
+  background-color: var(--fg);
+  color: var(--bg);
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-size: calc(var(--base) * 14 / 1440);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transition: var(--theme-transition), background-color 1s ease, color 1s ease;
 }
 
 .insight-title {
@@ -613,7 +710,9 @@ body.theme-light .theme-bg {
 .venn-circle:hover .venn-circle-desc,
 .venn-circle:focus-within .venn-circle-desc {
   opacity: 1;
-  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  /* Was 1s (too slow), then 0.4s (felt too clipped) — 0.6s matches the
+     fade+slide duration used for the card reveals elsewhere on the page. */
+  animation: heroLineIn 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 /* Shared meeting point of all three sets — no plate, just the mark sitting

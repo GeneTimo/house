@@ -61,17 +61,59 @@
   <section class="insights">
     <div class="insights-inner" data-reveal-group>
       <article class="insight" data-reveal-item>
-        <div class="insight-image"><div class="insight-icon insight-icon--compass"></div></div>
+        <div class="insight-image">
+          <!--
+            Vector-animation slot. viewBox is 480x300 (16:10, same ratio as
+            .insight-image) so artwork stays correctly proportioned at any
+            rendered size — draw at this scale, then paste the exported
+            <g>/<path> shapes from Figma/Illustrator inside .insight-anim__art.
+            Give any shape that should animate its own class and drive it
+            with a @keyframes block in style.css (see .insight-anim__art
+            comment there); .is-in-view is added automatically once the box
+            scrolls into view, so keyframes can gate on it instead of
+            running while off-screen.
+          -->
+          <svg class="insight-anim insight-anim--compass" data-anim viewBox="0 0 480 300" preserveAspectRatio="xMidYMid meet" role="img" aria-hidden="true">
+            <g class="insight-anim__art"><!-- compass artwork goes here --></g>
+          </svg>
+        </div>
         <h3 class="insight-title">Institutional Marketing Discipline</h3>
         <p class="insight-text">House of ROI operates at the intersection of winning strategy and sophisticated execution. We build performance engines that deliver structural value — combining campaign mastery with structured oversight designed to protect and scale return.</p>
       </article>
       <article class="insight" data-reveal-item>
-        <div class="insight-image"><div class="insight-icon insight-icon--stairs"></div></div>
+        <div class="insight-image">
+          <svg class="insight-anim insight-anim--stairs" data-anim viewBox="0 0 480 300" preserveAspectRatio="xMidYMid meet" role="img" aria-hidden="true">
+            <g class="insight-anim__art"><!-- stairs artwork goes here --></g>
+          </svg>
+        </div>
         <h3 class="insight-title">Private Equity Logic for Digital Growth</h3>
         <p class="insight-text">Growth capital is deployed with rigorous unit economics, structured testing, independent analysis protected from vendor-supplied materials and platform sales narratives, disciplined optimization across the full digital landscape.</p>
       </article>
       <article class="insight" data-reveal-item>
-        <div class="insight-image"><div class="insight-icon insight-icon--pie"></div></div>
+        <div class="insight-image">
+          <!--
+            Per graph-curve-line.svg + the mockup — the line's "d" is that
+            file's path, rescaled from its native 668x202 viewBox into this
+            card's local 480x300 one (same 16:10 space the compass/stairs
+            cards use). Box top = +100, box bottom = -100 (per spec), so any
+            point's value is 100 - (y / 300) * 200 — read straight off the
+            live curve via path.getPointAtLength() in the script at the
+            bottom of the page, not hand-placed. Marker + tooltip share one
+            left/top (set by JS every frame); CSS transforms below split them
+            apart (marker centers on the point, tooltip floats a fixed gap
+            above it) so a single coordinate update moves both correctly at
+            any position on the curve — see the ping-pong loop in the
+            "-2.15%" stat chart script near the closing </body>.
+          -->
+          <div class="insight-chart" data-anim>
+            <svg class="insight-chart__line" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <path class="insight-chart__path" d="M15.42,175.39 C86.91,258.06 135.60,234.24 186.00,202.39 C254.08,159.35 285.62,160.31 358.76,197.77 C432.75,235.68 445.79,103.86 466.65,103.07" />
+            </svg>
+            <span class="insight-chart__label">-2.15%</span>
+            <div class="insight-chart__marker" style="left: 56.8%; top: 56.6%;"></div>
+            <div class="insight-chart__tooltip" style="left: 56.8%; top: 56.6%;">-2.15%</div>
+          </div>
+        </div>
         <h3 class="insight-title">Investment-Grade<br>Rigor</h3>
         <p class="insight-text">Every channel, every campaign, every dollar deployed defends its position with performance data. Our reporting answers the CFO's question: What did this capital drive? We don't manage marketing expenses; we manage media investment.</p>
       </article>
@@ -217,6 +259,24 @@
             <div class="our-method-item-track">
               <p class="our-method-item-desc">No set-and-forget. Capital reallocated in<br class="desktop-break"> real time as performance data arrives.</p>
               <h3 class="our-method-item-title">Continuous Optimization</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- share-2 (Lucide): three linked nodes — cross-channel synergy,
+             not a single node/channel in isolation. -->
+        <div class="our-method-item" tabindex="0">
+          <svg class="our-method-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="18" cy="5" r="3"/>
+            <circle cx="6" cy="12" r="3"/>
+            <circle cx="18" cy="19" r="3"/>
+            <path d="M8.59 13.51 15.42 17.49"/>
+            <path d="M15.41 6.51 8.59 10.49"/>
+          </svg>
+          <div class="our-method-item-text">
+            <div class="our-method-item-track">
+              <p class="our-method-item-desc">Deep, current knowledge of how each platform's<br class="desktop-break"> algorithm actually behaves — deployed so every channel creates synergistic lift and actively reinforces the others.</p>
+              <h3 class="our-method-item-title">Cross-Channel Orchestration</h3>
             </div>
           </div>
         </div>
@@ -501,6 +561,157 @@
               { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', clearProps: 'transform' }
             );
           }
+        });
+      });
+
+      // --- "-2.15%" stat chart: marker + tooltip ping-pong along the real
+      // curve, forever, once the card is in view. The path is read via the
+      // SVG geometry API (getPointAtLength), not re-derived — so the marker
+      // is always exactly on the line at every progress value, not just at
+      // the one point we hand-measured for the static layout. Per spec: box
+      // top = +100, box bottom = -100 (the viewBox is 480x300 — see the HTML
+      // comment above the markup), so a point's value is a straight line
+      // interpolation of its y between those two.
+      function initStatChart(chart) {
+        var path = chart.querySelector('.insight-chart__path');
+        var marker = chart.querySelector('.insight-chart__marker');
+        var tooltip = chart.querySelector('.insight-chart__tooltip');
+        var label = chart.querySelector('.insight-chart__label');
+        if (!path || !marker || !tooltip || !label) return;
+
+        var VB_WIDTH = 480;
+        var VB_HEIGHT = 300;
+        var length = path.getTotalLength();
+
+        // Zero sits at the very bottom of the frame (y=300), so the curve
+        // — which never reaches that far down — reads strictly positive:
+        // value = 100 * (300 - y) / 300, i.e. just the box-top-is-+100
+        // reading with nothing below zero. Kept as ZERO_Y (rather than
+        // inlining 300) so the "above zero" formula below still reads the
+        // same as when zero was placed elsewhere (see git history for the
+        // 80/20 time-split placement this replaced). The "below zero"
+        // branch is dead code at ZERO_Y = VB_HEIGHT — y can't exceed the
+        // box it's drawn in — kept only so moving ZERO_Y off the bottom
+        // again later doesn't require rederiving it.
+        var ZERO_Y = VB_HEIGHT;
+
+        // Fixed "XX.XX%" shape — always 2 integer digits (zero-padded),
+        // dot, 2 decimals, percent — so no character ever appears/vanishes
+        // frame to frame (paired with font-variant-numeric: tabular-nums in
+        // CSS, so within that shape no digit's own column width jumps
+        // around either). value is never negative at ZERO_Y = VB_HEIGHT
+        // (see above), so there's no sign character to reserve a slot for.
+        function formatValue(value) {
+          var parts = Math.abs(value).toFixed(2).split('.');
+          if (parts[0].length < 2) parts[0] = '0' + parts[0];
+          return parts.join('.') + '%';
+        }
+
+        function render(t) {
+          var pt = path.getPointAtLength(t * length);
+          var leftPct = pt.x / VB_WIDTH * 100;
+          var topPct = pt.y / VB_HEIGHT * 100;
+
+          marker.style.left = leftPct + '%';
+          marker.style.top = topPct + '%';
+
+          var value = pt.y <= ZERO_Y
+            ? 100 * (ZERO_Y - pt.y) / ZERO_Y                 // above zero: 0 .. +100
+            : -100 * (pt.y - ZERO_Y) / (VB_HEIGHT - ZERO_Y); // below zero: 0 .. -100
+          var numText = formatValue(value);
+          tooltip.textContent = numText;
+          label.textContent = numText + ' ROAS'; // top-left: same number, plus a static suffix
+
+          // The path runs close to the card's left/right edges, closer than
+          // half the tooltip's own (text-dependent) width — centered at
+          // leftPct there would push it past .insight-image's overflow:
+          // hidden and clip the pill (and the "-" sign with it). Clamp in
+          // px, measured after the text above is set, so it stays fully
+          // inside the card at every point on the curve while still
+          // tracking the marker's true (unclamped) position vertically.
+          var chartWidth = chart.clientWidth;
+          var tooltipHalf = tooltip.offsetWidth / 2;
+          var idealLeft = (leftPct / 100) * chartWidth;
+          var clampedLeft = Math.min(Math.max(idealLeft, tooltipHalf), chartWidth - tooltipHalf);
+          tooltip.style.left = clampedLeft + 'px';
+          tooltip.style.top = topPct + '%';
+        }
+
+        // Waypoint sequence (progress along the curve, 0-1), each one held
+        // for a beat before the next leg — not a plain back-and-forth.
+        // WAYPOINTS[0] is also the resting position while off-screen/before
+        // the timeline starts. cubicBezier() is the same helper the Lenis
+        // scroll setup above builds its easing function with — reused here
+        // as CSS's own default `ease` curve, so no extra GSAP ease plugin is
+        // needed for it.
+        var WAYPOINTS = [0.20, 0.80, 0.50, 0.82, 0.20];
+        var TRAVEL_DURATION = 2;
+        var HOLD_DURATION = 1;
+        var travelEase = cubicBezier(0.25, 0.1, 0.25, 1);
+
+        // Lock the tooltip to one fixed width — the widest it's ever asked
+        // to be over the cycle — so it doesn't visibly resize every frame
+        // as the digit count / minus sign changes. Every travel leg only
+        // ever crosses progress values between WAYPOINTS' own min and max
+        // (easing changes speed, not which points on the path get visited),
+        // so sampling that single continuous range covers every value the
+        // cycle can actually produce — measured against the real rendered
+        // text (font, padding, everything) rather than a guessed px number.
+        (function lockTooltipWidth() {
+          var minT = Math.min.apply(null, WAYPOINTS);
+          var maxT = Math.max.apply(null, WAYPOINTS);
+          var widest = 0;
+          var STEPS = 400;
+          for (var i = 0; i <= STEPS; i++) {
+            var t = minT + (maxT - minT) * (i / STEPS);
+            var pt = path.getPointAtLength(t * length);
+            var value = pt.y <= ZERO_Y
+              ? 100 * (ZERO_Y - pt.y) / ZERO_Y
+              : -100 * (pt.y - ZERO_Y) / (VB_HEIGHT - ZERO_Y);
+            tooltip.textContent = formatValue(value);
+            widest = Math.max(widest, tooltip.offsetWidth);
+          }
+          tooltip.style.width = widest + 'px';
+        })();
+
+        render(WAYPOINTS[0]);
+
+        ScrollTrigger.create({
+          trigger: chart,
+          start: 'top 85%',
+          once: true,
+          onEnter: function () {
+            chart.classList.add('is-in-view');
+            var progress = { t: WAYPOINTS[0] };
+            var tl = gsap.timeline({ repeat: -1 });
+            for (var i = 0; i < WAYPOINTS.length - 1; i++) {
+              tl.to({}, { duration: HOLD_DURATION }); // hold at WAYPOINTS[i]
+              tl.to(progress, {
+                t: WAYPOINTS[i + 1],
+                duration: TRAVEL_DURATION,
+                ease: travelEase,
+                onUpdate: function () { render(progress.t); }
+              });
+            }
+          }
+        });
+      }
+      document.querySelectorAll('.insight-chart').forEach(initStatChart);
+
+      // --- Vector-animation gating: adds .is-in-view to each remaining
+      // [data-anim] SVG (the compass/stairs placeholders — the stat chart
+      // above already wires its own trigger) once it scrolls into frame, so
+      // its CSS @keyframes loops (defined in style.css, scoped per
+      // .insight-anim--* modifier) start on entrance instead of running
+      // continuously off-screen. Independent of the fade/slide-up reveal
+      // above — the box fades in and its artwork starts looping together,
+      // but are driven by separate triggers. ---
+      gsap.utils.toArray('[data-anim]:not(.insight-chart)').forEach(function (el) {
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 85%',
+          once: true,
+          onEnter: function () { el.classList.add('is-in-view'); }
         });
       });
 
