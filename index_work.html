@@ -63,19 +63,30 @@
       <article class="insight" data-reveal-item>
         <div class="insight-image">
           <!--
-            Vector-animation slot. viewBox is 480x300 (16:10, same ratio as
-            .insight-image) so artwork stays correctly proportioned at any
-            rendered size — draw at this scale, then paste the exported
-            <g>/<path> shapes from Figma/Illustrator inside .insight-anim__art.
-            Give any shape that should animate its own class and drive it
-            with a @keyframes block in style.css (see .insight-anim__art
-            comment there); .is-in-view is added automatically once the box
-            scrolls into view, so keyframes can gate on it instead of
-            running while off-screen.
+            Four horizontal slider tracks (480x300 viewBox, same local space
+            as the stat chart) with a thumb on each. A cursor (the supplied
+            Cursor.svg, inlined) flies to a thumb, drags it to a new value,
+            then moves to the next — see initSliders() near </body>, which
+            reuses the chart's cubicBezier ease and the same
+            "fly / hold / travel" rhythm. Thumb x-positions and the cursor's
+            x/y are set purely via inline style (left/top in %) every frame,
+            same technique as the chart's marker/tooltip.
           -->
-          <svg class="insight-anim insight-anim--compass" data-anim viewBox="0 0 480 300" preserveAspectRatio="xMidYMid meet" role="img" aria-hidden="true">
-            <g class="insight-anim__art"><!-- compass artwork goes here --></g>
-          </svg>
+          <div class="insight-sliders" data-anim>
+            <svg class="insight-sliders__lines" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <line class="insight-sliders__line" x1="30" y1="45" x2="450" y2="45" />
+              <line class="insight-sliders__line" x1="30" y1="115" x2="450" y2="115" />
+              <line class="insight-sliders__line" x1="30" y1="185" x2="450" y2="185" />
+              <line class="insight-sliders__line" x1="30" y1="255" x2="450" y2="255" />
+            </svg>
+            <div class="insight-sliders__thumb"></div>
+            <div class="insight-sliders__thumb"></div>
+            <div class="insight-sliders__thumb"></div>
+            <div class="insight-sliders__thumb"></div>
+            <svg class="insight-sliders__cursor" viewBox="0 0 25 29" aria-hidden="true">
+              <path d="M0.00530428 0.894335C-0.0719433 0.201224 0.713784 -0.252415 1.29013 0.152541L24.086 16.1694C24.6715 16.5808 24.4824 17.4814 23.7812 17.621L11.7163 20.0219C11.5291 20.0592 11.3614 20.1601 11.2423 20.3072L4.50378 28.6355C4.04893 29.1976 3.12984 28.9294 3.04978 28.2111L0.00530428 0.894335Z" fill="#cccccc" />
+            </svg>
+          </div>
         </div>
         <h3 class="insight-title">Institutional Marketing Discipline</h3>
         <p class="insight-text">House of ROI operates at the intersection of winning strategy and sophisticated execution. We build performance engines that deliver structural value — combining campaign mastery with structured oversight designed to protect and scale return.</p>
@@ -698,15 +709,120 @@
       }
       document.querySelectorAll('.insight-chart').forEach(initStatChart);
 
+      // --- "Institutional Marketing Discipline" sliders: a cursor visits
+      // each of the 4 thumbs in turn and drags it to a new value along its
+      // track. One full loop is 2 passes over the 4 sliders (8 drags) — one
+      // out to hand-picked "random" values, one back to each slider's
+      // original value — after which the timeline repeats forever.
+      // Reuses the stat chart's cubicBezier ease and its fly/settle rhythm;
+      // unlike the chart, position is driven by x/y (not a path length),
+      // since each thumb only ever moves horizontally along its own fixed
+      // line.
+      function initSliders(container) {
+        var lines = container.querySelectorAll('.insight-sliders__line');
+        var thumbs = container.querySelectorAll('.insight-sliders__thumb');
+        var cursor = container.querySelector('.insight-sliders__cursor');
+        if (!lines.length || !thumbs.length || !cursor) return;
+
+        var VB_WIDTH = 480;
+        var VB_HEIGHT = 300;
+        var LINE_X1 = 30;
+        var LINE_X2 = 450;
+        var LINE_Y = [45, 115, 185, 255]; // must match the <line> y1/y2 above
+
+        // Each slider's starting value (matches the static mockup) and the
+        // hand-picked "random" value the cursor drags it to on pass 1 —
+        // fractions (0-1) along the track, not generated at runtime, so the
+        // motion is reviewable/reproducible.
+        var SLIDERS = [
+          { initial: 0.37, target: 0.82 },
+          { initial: 0.69, target: 0.15 },
+          { initial: 0.55, target: 0.88 },
+          { initial: 0.16, target: 0.60 }
+        ];
+
+        function pointFor(i, frac) {
+          return { x: LINE_X1 + frac * (LINE_X2 - LINE_X1), y: LINE_Y[i] };
+        }
+        function placeThumb(i, frac) {
+          var p = pointFor(i, frac);
+          thumbs[i].style.left = (p.x / VB_WIDTH * 100) + '%';
+          thumbs[i].style.top = (p.y / VB_HEIGHT * 100) + '%';
+        }
+        function placeCursor(x, y) {
+          cursor.style.left = (x / VB_WIDTH * 100) + '%';
+          cursor.style.top = (y / VB_HEIGHT * 100) + '%';
+        }
+
+        SLIDERS.forEach(function (s, i) { placeThumb(i, s.initial); });
+        // The cursor rests on the LAST slider's thumb — which is exactly
+        // where the cycle ends, since pass 2's final drag returns that thumb
+        // to its initial value. A repeating GSAP timeline snaps its targets
+        // back to their recorded start values at the loop point, so resting
+        // anywhere else (the first slider, say) made the cursor teleport
+        // there instead of flying; ending where it starts makes that snap a
+        // no-op and the loop one continuous motion.
+        var LAST = SLIDERS.length - 1;
+        var restPoint = pointFor(LAST, SLIDERS[LAST].initial);
+        placeCursor(restPoint.x, restPoint.y);
+
+        var FLIGHT_DURATION = 0.6; // cursor travel between sliders, no thumb attached
+        var DRAG_DURATION = 1;     // dragging a thumb to its new value
+        var GRAB_PAUSE = 0.2;      // brief settle once the cursor reaches a thumb
+        var ease = cubicBezier(0.25, 0.1, 0.25, 1);
+
+        ScrollTrigger.create({
+          trigger: container,
+          start: 'top 85%',
+          once: true,
+          onEnter: function () {
+            container.classList.add('is-in-view');
+
+            var current = SLIDERS.map(function (s) { return s.initial; });
+            var cursorState = { x: restPoint.x, y: restPoint.y };
+            var tl = gsap.timeline({ repeat: -1 });
+
+            function runPass(targets) {
+              SLIDERS.forEach(function (s, i) {
+                var from = pointFor(i, current[i]);
+                var to = pointFor(i, targets[i]);
+
+                tl.to(cursorState, {
+                  x: from.x, y: from.y,
+                  duration: FLIGHT_DURATION,
+                  ease: ease,
+                  onUpdate: function () { placeCursor(cursorState.x, cursorState.y); }
+                });
+                tl.to({}, { duration: GRAB_PAUSE });
+                tl.to(cursorState, {
+                  x: to.x, y: to.y,
+                  duration: DRAG_DURATION,
+                  ease: ease,
+                  onUpdate: function () {
+                    placeCursor(cursorState.x, cursorState.y);
+                    thumbs[i].style.left = (cursorState.x / VB_WIDTH * 100) + '%';
+                  }
+                });
+                current[i] = targets[i];
+              });
+            }
+
+            runPass(SLIDERS.map(function (s) { return s.target; }));  // pass 1: out to the new values
+            runPass(SLIDERS.map(function (s) { return s.initial; })); // pass 2: back to the starting values
+          }
+        });
+      }
+      document.querySelectorAll('.insight-sliders').forEach(initSliders);
+
       // --- Vector-animation gating: adds .is-in-view to each remaining
-      // [data-anim] SVG (the compass/stairs placeholders — the stat chart
-      // above already wires its own trigger) once it scrolls into frame, so
-      // its CSS @keyframes loops (defined in style.css, scoped per
-      // .insight-anim--* modifier) start on entrance instead of running
+      // [data-anim] SVG (the stairs placeholder — the stat chart and the
+      // sliders above already wire their own triggers) once it scrolls into
+      // frame, so its CSS @keyframes loops (defined in style.css, scoped
+      // per .insight-anim--* modifier) start on entrance instead of running
       // continuously off-screen. Independent of the fade/slide-up reveal
       // above — the box fades in and its artwork starts looping together,
       // but are driven by separate triggers. ---
-      gsap.utils.toArray('[data-anim]:not(.insight-chart)').forEach(function (el) {
+      gsap.utils.toArray('[data-anim]:not(.insight-chart):not(.insight-sliders)').forEach(function (el) {
         ScrollTrigger.create({
           trigger: el,
           start: 'top 85%',

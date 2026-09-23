@@ -374,11 +374,10 @@ body.theme-light .theme-bg {
 
 .insight-chart__path {
   fill: none;
-  stroke: var(--fg);
+  stroke: #cccccc;
   stroke-width: 3;
   stroke-linecap: round;
   stroke-linejoin: round;
-  transition: var(--theme-transition), stroke 1s ease;
 }
 
 .insight-chart__label {
@@ -432,6 +431,49 @@ body.theme-light .theme-bg {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   transition: var(--theme-transition), background-color 1s ease, color 1s ease;
+}
+
+/* --- "Institutional Marketing Discipline" slider animation --- */
+
+.insight-sliders {
+  --slider-thumb-width: calc(var(--base) * 10 / 1440);
+  --slider-cursor-width: calc(var(--base) * 25 / 1440);
+  --slider-cursor-height: calc(var(--base) * 29 / 1440);
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.insight-sliders__lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.insight-sliders__line {
+  stroke: #cccccc;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.insight-sliders__thumb {
+  position: absolute;
+  width: var(--slider-thumb-width);
+  height: calc(var(--slider-thumb-width) * 2);
+  border-radius: calc(var(--slider-thumb-width) / 2);
+  background-color: var(--fg);
+  transform: translate(-50%, -50%);
+  transition: var(--theme-transition), background-color 1s ease;
+}
+
+.insight-sliders__cursor {
+  position: absolute;
+  z-index: 2;
+  width: var(--slider-cursor-width);
+  height: var(--slider-cursor-height);
 }
 
 .insight-title {
