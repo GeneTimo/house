@@ -74,10 +74,10 @@
           -->
           <div class="insight-sliders" data-anim>
             <svg class="insight-sliders__lines" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-              <line class="insight-sliders__line" x1="30" y1="45" x2="450" y2="45" />
-              <line class="insight-sliders__line" x1="30" y1="115" x2="450" y2="115" />
-              <line class="insight-sliders__line" x1="30" y1="185" x2="450" y2="185" />
-              <line class="insight-sliders__line" x1="30" y1="255" x2="450" y2="255" />
+              <line class="insight-sliders__line" x1="30" y1="72" x2="450" y2="72" />
+              <line class="insight-sliders__line" x1="30" y1="124" x2="450" y2="124" />
+              <line class="insight-sliders__line" x1="30" y1="176" x2="450" y2="176" />
+              <line class="insight-sliders__line" x1="30" y1="228" x2="450" y2="228" />
             </svg>
             <div class="insight-sliders__thumb"></div>
             <div class="insight-sliders__thumb"></div>
@@ -93,9 +93,69 @@
       </article>
       <article class="insight" data-reveal-item>
         <div class="insight-image">
-          <svg class="insight-anim insight-anim--stairs" data-anim viewBox="0 0 480 300" preserveAspectRatio="xMidYMid meet" role="img" aria-hidden="true">
-            <g class="insight-anim__art"><!-- stairs artwork goes here --></g>
-          </svg>
+          <!--
+            Scatter plot on a 21-unit grid spanning x 30..450 / y 45..255 of
+            the same 480x300 viewBox the other two cards are drawn in. The
+            dots' resting positions below are the mockup's own, measured off
+            it rather than eyeballed; the two trend states they cycle through
+            live in initScatter() near </body>.
+          -->
+          <div class="insight-scatter" data-anim>
+            <svg class="insight-scatter__grid" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <line class="insight-scatter__line" x1="30" y1="45" x2="30" y2="255" />
+              <line class="insight-scatter__line" x1="51" y1="45" x2="51" y2="255" />
+              <line class="insight-scatter__line" x1="72" y1="45" x2="72" y2="255" />
+              <line class="insight-scatter__line" x1="93" y1="45" x2="93" y2="255" />
+              <line class="insight-scatter__line" x1="114" y1="45" x2="114" y2="255" />
+              <line class="insight-scatter__line" x1="135" y1="45" x2="135" y2="255" />
+              <line class="insight-scatter__line" x1="156" y1="45" x2="156" y2="255" />
+              <line class="insight-scatter__line" x1="177" y1="45" x2="177" y2="255" />
+              <line class="insight-scatter__line" x1="198" y1="45" x2="198" y2="255" />
+              <line class="insight-scatter__line" x1="219" y1="45" x2="219" y2="255" />
+              <line class="insight-scatter__line" x1="240" y1="45" x2="240" y2="255" />
+              <line class="insight-scatter__line" x1="261" y1="45" x2="261" y2="255" />
+              <line class="insight-scatter__line" x1="282" y1="45" x2="282" y2="255" />
+              <line class="insight-scatter__line" x1="303" y1="45" x2="303" y2="255" />
+              <line class="insight-scatter__line" x1="324" y1="45" x2="324" y2="255" />
+              <line class="insight-scatter__line" x1="345" y1="45" x2="345" y2="255" />
+              <line class="insight-scatter__line" x1="366" y1="45" x2="366" y2="255" />
+              <line class="insight-scatter__line" x1="387" y1="45" x2="387" y2="255" />
+              <line class="insight-scatter__line" x1="408" y1="45" x2="408" y2="255" />
+              <line class="insight-scatter__line" x1="429" y1="45" x2="429" y2="255" />
+              <line class="insight-scatter__line" x1="450" y1="45" x2="450" y2="255" />
+              <line class="insight-scatter__line" x1="30" y1="45" x2="450" y2="45" />
+              <line class="insight-scatter__line" x1="30" y1="66" x2="450" y2="66" />
+              <line class="insight-scatter__line" x1="30" y1="87" x2="450" y2="87" />
+              <line class="insight-scatter__line" x1="30" y1="108" x2="450" y2="108" />
+              <line class="insight-scatter__line" x1="30" y1="129" x2="450" y2="129" />
+              <line class="insight-scatter__line" x1="30" y1="150" x2="450" y2="150" />
+              <line class="insight-scatter__line" x1="30" y1="171" x2="450" y2="171" />
+              <line class="insight-scatter__line" x1="30" y1="192" x2="450" y2="192" />
+              <line class="insight-scatter__line" x1="30" y1="213" x2="450" y2="213" />
+              <line class="insight-scatter__line" x1="30" y1="234" x2="450" y2="234" />
+              <line class="insight-scatter__line" x1="30" y1="255" x2="450" y2="255" />
+            </svg>
+            <div class="insight-scatter__dot" style="left: 15.417%; top: 70.667%;"></div>
+            <div class="insight-scatter__dot" style="left: 16.146%; top: 57.633%;"></div>
+            <div class="insight-scatter__dot" style="left: 21.188%; top: 70.667%;"></div>
+            <div class="insight-scatter__dot" style="left: 24.062%; top: 79.867%;"></div>
+            <div class="insight-scatter__dot" style="left: 41.062%; top: 74.367%;"></div>
+            <div class="insight-scatter__dot" style="left: 43.938%; top: 51.333%;"></div>
+            <div class="insight-scatter__dot" style="left: 46.833%; top: 60.567%;"></div>
+            <div class="insight-scatter__dot" style="left: 52.583%; top: 74.367%;"></div>
+            <div class="insight-scatter__dot" style="left: 55.479%; top: 60.567%;"></div>
+            <div class="insight-scatter__dot" style="left: 56.188%; top: 47.567%;"></div>
+            <div class="insight-scatter__dot" style="left: 59.083%; top: 24.5%;"></div>
+            <div class="insight-scatter__dot" style="left: 61.229%; top: 60.567%;"></div>
+            <div class="insight-scatter__dot" style="left: 61.958%; top: 33.733%;"></div>
+            <div class="insight-scatter__dot" style="left: 64.104%; top: 69.767%;"></div>
+            <div class="insight-scatter__dot" style="left: 67.729%; top: 47.567%;"></div>
+            <div class="insight-scatter__dot" style="left: 69.875%; top: 79%;"></div>
+            <div class="insight-scatter__dot" style="left: 70.604%; top: 33.733%;"></div>
+            <div class="insight-scatter__dot" style="left: 76.375%; top: 33.733%;"></div>
+            <div class="insight-scatter__dot" style="left: 79.25%; top: 42.933%;"></div>
+            <div class="insight-scatter__dot" style="left: 85.021%; top: 52.167%;"></div>
+          </div>
         </div>
         <h3 class="insight-title">Private Equity Logic for Digital Growth</h3>
         <p class="insight-text">Growth capital is deployed with rigorous unit economics, structured testing, independent analysis protected from vendor-supplied materials and platform sales narratives, disciplined optimization across the full digital landscape.</p>
@@ -118,9 +178,30 @@
           -->
           <div class="insight-chart" data-anim>
             <svg class="insight-chart__line" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-              <path class="insight-chart__path" d="M15.42,175.39 C86.91,258.06 135.60,234.24 186.00,202.39 C254.08,159.35 285.62,160.31 358.76,197.77 C432.75,235.68 445.79,103.86 466.65,103.07" />
+              <defs>
+                <!--
+                  Diagonal hatch under the curve, per the reference: lines
+                  leaning 30deg off vertical, tile width setting how tightly
+                  they pack. The line sits at the tile's CENTRE, not its edge
+                  — a stroke straddling x=0 would be half clipped away by the
+                  tile bounds and render at half thickness.
+                -->
+                <pattern id="insight-chart-hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+                  <line class="insight-chart__hatch" x1="7" y1="0" x2="7" y2="14" />
+                </pattern>
+              </defs>
+              <!--
+                The hatched area doesn't touch anything: it's the curve's own
+                path with every y pushed down 14 units, so the hatch keeps a
+                constant buffer below the line instead of butting against it,
+                and it stops at y=286 rather than 300 to leave air above the
+                bottom of the frame. Regenerate both offsets together if the
+                curve above ever changes.
+              -->
+              <path class="insight-chart__area" fill="url(#insight-chart-hatch)" d="M15.42,175.39 C86.92,258.06 135.62,234.24 186.01,202.39 C254.10,159.36 285.65,160.32 358.78,197.77 C432.82,235.69 466.65,118.44 466.65,118.44 L466.65,286 L15.42,286 Z" />
+              <path class="insight-chart__path" d="M15.42,161.39 C86.92,244.06 135.62,220.24 186.01,188.39 C254.10,145.36 285.65,146.32 358.78,183.77 C432.82,221.69 466.65,104.44 466.65,104.44" />
             </svg>
-            <span class="insight-chart__label">-2.15%</span>
+            <span class="insight-chart__label"><span class="insight-chart__label-value">-2.15%</span> RO<span class="insight-chart__label-kern">A</span>S</span>
             <div class="insight-chart__marker" style="left: 56.8%; top: 56.6%;"></div>
             <div class="insight-chart__tooltip" style="left: 56.8%; top: 56.6%;">-2.15%</div>
           </div>
@@ -587,8 +668,8 @@
         var path = chart.querySelector('.insight-chart__path');
         var marker = chart.querySelector('.insight-chart__marker');
         var tooltip = chart.querySelector('.insight-chart__tooltip');
-        var label = chart.querySelector('.insight-chart__label');
-        if (!path || !marker || !tooltip || !label) return;
+        var labelValue = chart.querySelector('.insight-chart__label-value');
+        if (!path || !marker || !tooltip || !labelValue) return;
 
         var VB_WIDTH = 480;
         var VB_HEIGHT = 300;
@@ -631,7 +712,7 @@
             : -100 * (pt.y - ZERO_Y) / (VB_HEIGHT - ZERO_Y); // below zero: 0 .. -100
           var numText = formatValue(value);
           tooltip.textContent = numText;
-          label.textContent = numText + ' ROAS'; // top-left: same number, plus a static suffix
+          labelValue.textContent = numText; // the " ROAS" suffix is static markup, not rewritten every frame
 
           // The path runs close to the card's left/right edges, closer than
           // half the tooltip's own (text-dependent) width — centered at
@@ -728,7 +809,7 @@
         var VB_HEIGHT = 300;
         var LINE_X1 = 30;
         var LINE_X2 = 450;
-        var LINE_Y = [45, 115, 185, 255]; // must match the <line> y1/y2 above
+        var LINE_Y = [72, 124, 176, 228]; // must match the <line> y1/y2 above
 
         // Each slider's starting value (matches the static mockup) and the
         // hand-picked "random" value the cursor drags it to on pass 1 —
@@ -814,15 +895,99 @@
       }
       document.querySelectorAll('.insight-sliders').forEach(initSliders);
 
-      // --- Vector-animation gating: adds .is-in-view to each remaining
-      // [data-anim] SVG (the stairs placeholder — the stat chart and the
-      // sliders above already wire their own triggers) once it scrolls into
-      // frame, so its CSS @keyframes loops (defined in style.css, scoped
-      // per .insight-anim--* modifier) start on entrance instead of running
-      // continuously off-screen. Independent of the fade/slide-up reveal
-      // above — the box fades in and its artwork starts looping together,
-      // but are driven by separate triggers. ---
-      gsap.utils.toArray('[data-anim]:not(.insight-chart):not(.insight-sliders)').forEach(function (el) {
+      // --- "Private Equity Logic for Digital Growth" scatter: 20 dots on
+      // the grid hold three states — the mockup's own random scatter, then
+      // two upward trends, the second tighter and steeper — and cycle
+      // scatter -> loose trend -> tight trend -> scatter, forever. Ending on
+      // the state it starts from is what keeps the repeat seamless. Dots are
+      // matched to target slots without preserving their left-to-right
+      // order, so paths cross and a rebuild reads as data reshuffling rather
+      // than sliding. Same cubicBezier ease as the other two cards; each dot
+      // sets off a beat after the one before it instead of the whole cloud
+      // moving as one block.
+      function initScatter(container) {
+        var dots = container.querySelectorAll('.insight-scatter__dot');
+        if (!dots.length) return;
+
+        var VB_WIDTH = 480;
+        var VB_HEIGHT = 300;
+
+        // [x, y] per dot in viewBox units, one array per state. STATES[0]
+        // mirrors the inline left/top in the markup above.
+        var STATES = [
+          [
+            [74, 212], [77.5, 172.9], [101.7, 212], [115.5, 239.6],
+            [197.1, 223.1], [210.9, 154], [224.8, 181.7], [252.4, 223.1],
+            [266.3, 181.7], [269.7, 142.7], [283.6, 73.5], [293.9, 181.7],
+            [297.4, 101.2], [307.7, 209.3], [325.1, 142.7], [335.4, 237],
+            [338.9, 101.2], [366.6, 101.2], [380.4, 128.8], [408.1, 156.5]
+          ],
+          [
+            [244.5, 120], [287.6, 117.1], [66.8, 212.6], [306, 121.5],
+            [37.9, 225.2], [125.3, 207.5], [190.3, 144.2], [398.8, 81.2],
+            [442.1, 89.2], [158.2, 193.2], [137, 173.5], [80.6, 211.6],
+            [232.1, 160], [429.8, 112.3], [357.3, 115.9], [378.3, 109.5],
+            [96.1, 199.9], [272.4, 114.8], [216.8, 186.5], [334.6, 134.4]
+          ],
+          [
+            [141, 188.7], [63.3, 224.5], [210.9, 162.8], [422.2, 76.8],
+            [401.3, 78.5], [171.5, 179], [100.7, 219.7], [437.3, 70.8],
+            [295.3, 122.8], [225.4, 153.3], [249.5, 151.2], [381.3, 91.5],
+            [272.7, 130], [357.2, 104.1], [314.6, 112], [118.3, 199.8],
+            [38.5, 234.9], [334.6, 114], [80.6, 216.3], [188.1, 171.6]
+          ]
+        ];
+
+        var HOLD_DURATION = 1;   // beat spent resting in each state
+        var MOVE_DURATION = 1.2; // one dot's travel between states
+        var DOT_STAGGER = 0.03;  // offset between neighbouring dots setting off
+        var ease = cubicBezier(0.25, 0.1, 0.25, 1);
+
+        var pos = STATES[0].map(function (p) { return { x: p[0], y: p[1] }; });
+        function renderAll() {
+          for (var i = 0; i < pos.length; i++) {
+            dots[i].style.left = (pos[i].x / VB_WIDTH * 100) + '%';
+            dots[i].style.top = (pos[i].y / VB_HEIGHT * 100) + '%';
+          }
+        }
+        renderAll();
+
+        ScrollTrigger.create({
+          trigger: container,
+          start: 'top 85%',
+          once: true,
+          onEnter: function () {
+            container.classList.add('is-in-view');
+
+            // One render pass for the whole cloud per frame, driven off the
+            // timeline rather than per-tween, since a staggered tween fans
+            // out into one sub-tween per dot.
+            var tl = gsap.timeline({ repeat: -1, onUpdate: renderAll });
+
+            [1, 2, 0].forEach(function (stateIndex) {
+              var target = STATES[stateIndex];
+              tl.to({}, { duration: HOLD_DURATION });
+              tl.to(pos, {
+                x: function (i) { return target[i][0]; },
+                y: function (i) { return target[i][1]; },
+                duration: MOVE_DURATION,
+                ease: ease,
+                stagger: DOT_STAGGER
+              });
+            });
+          }
+        });
+      }
+      document.querySelectorAll('.insight-scatter').forEach(initScatter);
+
+      // --- Vector-animation gating for .insight-anim artwork slots: adds
+      // .is-in-view once one scrolls into frame, so its CSS @keyframes loops
+      // (defined in style.css, scoped per .insight-anim--* modifier) start
+      // on entrance instead of running continuously off-screen. All three
+      // insight cards currently run bespoke JS animations that wire their
+      // own triggers above, so this matches nothing today — it stays as the
+      // hook for pasted-in vector artwork. ---
+      gsap.utils.toArray('.insight-anim[data-anim]').forEach(function (el) {
         ScrollTrigger.create({
           trigger: el,
           start: 'top 85%',

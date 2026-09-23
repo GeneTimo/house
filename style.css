@@ -380,20 +380,41 @@ body.theme-light .theme-bg {
   stroke-linejoin: round;
 }
 
+/* The curve closed down to the bottom of the box, hatch-filled. The fill
+   itself is a presentation attribute in the markup, not set here: a
+   url(#id) in an external stylesheet resolves against the stylesheet's own
+   URL, so it would never find the pattern in the document. */
+.insight-chart__area {
+  stroke: none;
+}
+
+.insight-chart__hatch {
+  stroke: #cccccc;
+  stroke-width: 3;
+}
+
 .insight-chart__label {
   position: absolute;
   left: 4%;
-  top: 6%;
+  top: 4%;
   font-family: "Jost", sans-serif;
   font-weight: 400;
-  font-size: calc(var(--base) * 20 / 1440);
-  color: var(--fg);
+  font-size: calc(var(--base) * 28 / 1440);
+  color: #cccccc;
   /* Fixed-width digit glyphs — so as the number changes every frame, each
      digit's own column stays put instead of the whole string re-kerning
      (see the JS zero-padding in formatValue() for the other half of this:
      keeping the digit COUNT fixed too, not just each digit's width). */
   font-variant-numeric: tabular-nums;
-  transition: var(--theme-transition), color 1s ease;
+}
+
+/* Pulls the "S" of "ROAS" 1% of the font size closer to the "A". A margin,
+   not letter-spacing: Jost kerns the A-S pair itself (by about -0.03em), and
+   Chrome drops that built-in kerning the moment letter-spacing is non-zero —
+   so asking for -0.01em there actually ends up 2% WIDER. A margin leaves the
+   font's own kerning intact and just shifts what follows. */
+.insight-chart__label-kern {
+  margin-right: -0.01em;
 }
 
 /* Marker + tooltip are given the SAME left/top (the point on the curve,
@@ -474,6 +495,41 @@ body.theme-light .theme-bg {
   z-index: 2;
   width: var(--slider-cursor-width);
   height: var(--slider-cursor-height);
+}
+
+/* --- "Private Equity Logic for Digital Growth" scatter plot --- */
+
+.insight-scatter {
+  --scatter-dot-size: calc(var(--base) * 10 / 1440);
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.insight-scatter__grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.insight-scatter__line {
+  stroke: #cccccc;
+  stroke-width: 3;
+}
+
+/* Same diameter as the stat chart's marker and the slider thumbs' width —
+   one dot size shared across all three cards. */
+.insight-scatter__dot {
+  position: absolute;
+  width: var(--scatter-dot-size);
+  height: var(--scatter-dot-size);
+  border-radius: 50%;
+  background-color: var(--fg);
+  transform: translate(-50%, -50%);
+  transition: var(--theme-transition), background-color 1s ease;
 }
 
 .insight-title {
