@@ -66,7 +66,7 @@
             Four horizontal slider tracks (480x300 viewBox, same local space
             as the stat chart) with a thumb on each. A cursor (the supplied
             Cursor.svg, inlined) flies to a thumb, drags it to a new value,
-            then moves to the next — see initSliders() near </body>, which
+            then moves to the next — see initSliders() near the closing body tag, which
             reuses the chart's cubicBezier ease and the same
             "fly / hold / travel" rhythm. Thumb x-positions and the cursor's
             x/y are set purely via inline style (left/top in %) every frame,
@@ -98,7 +98,7 @@
             the same 480x300 viewBox the other two cards are drawn in. The
             dots' resting positions below are the mockup's own, measured off
             it rather than eyeballed; the two trend states they cycle through
-            live in initScatter() near </body>.
+            live in initScatter() near the closing body tag.
           -->
           <div class="insight-scatter" data-anim>
             <svg class="insight-scatter__grid" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -174,31 +174,10 @@
             apart (marker centers on the point, tooltip floats a fixed gap
             above it) so a single coordinate update moves both correctly at
             any position on the curve — see the ping-pong loop in the
-            "-2.15%" stat chart script near the closing </body>.
+            "-2.15%" stat chart script near the closing body tag.
           -->
           <div class="insight-chart" data-anim>
             <svg class="insight-chart__line" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-              <defs>
-                <!--
-                  Diagonal hatch under the curve, per the reference: lines
-                  leaning 30deg off vertical, tile width setting how tightly
-                  they pack. The line sits at the tile's CENTRE, not its edge
-                  — a stroke straddling x=0 would be half clipped away by the
-                  tile bounds and render at half thickness.
-                -->
-                <pattern id="insight-chart-hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
-                  <line class="insight-chart__hatch" x1="7" y1="0" x2="7" y2="14" />
-                </pattern>
-              </defs>
-              <!--
-                The hatched area doesn't touch anything: it's the curve's own
-                path with every y pushed down 14 units, so the hatch keeps a
-                constant buffer below the line instead of butting against it,
-                and it stops at y=286 rather than 300 to leave air above the
-                bottom of the frame. Regenerate both offsets together if the
-                curve above ever changes.
-              -->
-              <path class="insight-chart__area" fill="url(#insight-chart-hatch)" d="M15.42,175.39 C86.92,258.06 135.62,234.24 186.01,202.39 C254.10,159.36 285.65,160.32 358.78,197.77 C432.82,235.69 466.65,118.44 466.65,118.44 L466.65,286 L15.42,286 Z" />
               <path class="insight-chart__path" d="M15.42,161.39 C86.92,244.06 135.62,220.24 186.01,188.39 C254.10,145.36 285.65,146.32 358.78,183.77 C432.82,221.69 466.65,104.44 466.65,104.44" />
             </svg>
             <span class="insight-chart__label"><span class="insight-chart__label-value">-2.15%</span> RO<span class="insight-chart__label-kern">A</span>S</span>

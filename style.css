@@ -380,19 +380,6 @@ body.theme-light .theme-bg {
   stroke-linejoin: round;
 }
 
-/* The curve closed down to the bottom of the box, hatch-filled. The fill
-   itself is a presentation attribute in the markup, not set here: a
-   url(#id) in an external stylesheet resolves against the stylesheet's own
-   URL, so it would never find the pattern in the document. */
-.insight-chart__area {
-  stroke: none;
-}
-
-.insight-chart__hatch {
-  stroke: #cccccc;
-  stroke-width: 3;
-}
-
 .insight-chart__label {
   position: absolute;
   left: 4%;
