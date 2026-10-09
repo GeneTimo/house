@@ -48,7 +48,8 @@ html.lenis body {
   --theme-transition: color 1s ease;
 }
 
-/* Inverted (light) theme — toggled on scroll into the three-column section */
+/* Inverted (light) theme — toggled once "Media budgets are investment
+   capital…" (.efficiency-title) scrolls into view */
 body.theme-light {
   --bg: #f4f3ef;
   --fg: #0a0a0a;
@@ -134,7 +135,6 @@ body.theme-light .theme-bg {
 .nav-link:nth-child(2) { animation-delay: 0.22s; }
 .nav-link:nth-child(3) { animation-delay: 0.29s; }
 .nav-link:nth-child(4) { animation-delay: 0.36s; }
-.nav-link:nth-child(5) { animation-delay: 0.43s; }
 
 .nav-link:hover {
   opacity: 1;
@@ -265,6 +265,154 @@ body.theme-light .theme-bg {
 @keyframes tickerScroll {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
+}
+
+/* Clients — logo wall right under the ticker. Starts in the dark zone; the
+   light theme flips on once .efficiency-title enters the screen, while the
+   grid is still in view.
+   16 cells, 4x4 (2 columns on mobile), no frames or rules. Each logo is a
+   one-colour copy in assets/logos-clients/ (cropped to its ink, white
+   backing shapes removed) used as a CSS mask, so --client-color alone
+   paints every logo and placeholder the same grey. That grey is the muted
+   "The Conventional Agency Model" heading — rgba(250, 250, 250, 0.62) on
+   black — baked opaque so it doesn't fade out on the light theme. On the
+   light theme logos and placeholders switch to the Our Method icon grey
+   instead (see body.theme-light .clients). */
+.clients {
+  --client-color: rgb(155, 155, 155);
+  width: 100%;
+  background-color: transparent;
+  padding: calc(var(--base) * 160 / 1440) 0 0;
+}
+
+.clients-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 calc(var(--base) * 80 / 1440);
+}
+
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.client {
+  aspect-ratio: 3 / 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Widths below are % of the cell, sized for equal visual weight: the logo's
+   box area times its ink density to the power 0.35 is the same for every
+   logo (measured on the cleaned files), capped at 70% of the cell width and
+   42% of its height. */
+.client-logo {
+  display: block;
+  background-color: var(--client-color);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  transition: background-color 1s ease;
+}
+
+/* Light theme: same grey as .our-method-icon (text colour mixed 50/50 with
+   the background) for logos and placeholders alike, recoloured in step
+   with the 1s background crossfade. */
+body.theme-light .clients {
+  --client-color: color-mix(in srgb, var(--fg) 50%, var(--bg));
+}
+
+.client-logo--lvmh {
+  width: 50.1%;
+  aspect-ratio: 2210.44 / 525.6;
+  -webkit-mask-image: url("assets/logos-clients/lvmh.svg");
+  mask-image: url("assets/logos-clients/lvmh.svg");
+}
+
+.client-logo--dropbox {
+  width: 54.0%;
+  aspect-ratio: 256 / 50.45;
+  -webkit-mask-image: url("assets/logos-clients/dropbox.svg");
+  mask-image: url("assets/logos-clients/dropbox.svg");
+}
+
+.client-logo--eos {
+  width: 21.1%;
+  aspect-ratio: 500.14 / 500.14;
+  -webkit-mask-image: url("assets/logos-clients/eos.svg");
+  mask-image: url("assets/logos-clients/eos.svg");
+}
+
+.client-logo--mit-sloan {
+  width: 30.2%;
+  aspect-ratio: 433 / 248.07;
+  -webkit-mask-image: url("assets/logos-clients/mit-sloan.svg");
+  mask-image: url("assets/logos-clients/mit-sloan.svg");
+}
+
+.client-logo--everlane {
+  width: 70.0%;
+  aspect-ratio: 600.38 / 56.78;
+  -webkit-mask-image: url("assets/logos-clients/everlane.svg");
+  mask-image: url("assets/logos-clients/everlane.svg");
+}
+
+.client-logo--franzia {
+  width: 52.5%;
+  aspect-ratio: 491.87 / 122.31;
+  -webkit-mask-image: url("assets/logos-clients/franzia.svg");
+  mask-image: url("assets/logos-clients/franzia.svg");
+}
+
+.client-logo--creative-cloud {
+  width: 25.4%;
+  aspect-ratio: 121.5 / 89.61;
+  -webkit-mask-image: url("assets/logos-clients/creative-cloud.svg");
+  mask-image: url("assets/logos-clients/creative-cloud.svg");
+}
+
+.client-logo--drinkworks {
+  width: 35.0%;
+  aspect-ratio: 4939.36 / 2981.55;
+  -webkit-mask-image: url("assets/logos-clients/drinkworks.svg");
+  mask-image: url("assets/logos-clients/drinkworks.svg");
+}
+
+.client-logo--rutgers-business {
+  width: 21.9%;
+  aspect-ratio: 67.79 / 68.05;
+  -webkit-mask-image: url("assets/logos-clients/rutgers-business.svg");
+  mask-image: url("assets/logos-clients/rutgers-business.svg");
+}
+
+.client-logo--dr-noze-best {
+  width: 63.4%;
+  aspect-ratio: 793.34 / 125.87;
+  -webkit-mask-image: url("assets/logos-clients/dr-noze-best.svg");
+  mask-image: url("assets/logos-clients/dr-noze-best.svg");
+}
+
+.client-placeholder {
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: calc(var(--base) * 14 / 1440);
+  line-height: 100%;
+  letter-spacing: 0;
+  color: var(--client-color);
+  white-space: nowrap;
+  transition: color 1s ease;
+}
+
+/* Mobile: 2 columns x 8 rows. */
+@media (max-width: 639px) {
+  .clients-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .efficiency {

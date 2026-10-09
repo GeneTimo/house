@@ -23,11 +23,10 @@
     <img class="logo" src="assets/logo_house_of_roi.svg" alt="House of ROI">
 
     <nav class="nav">
-      <a href="#" class="nav-link">SERVICES</a>
-      <a href="#" class="nav-link">CLIENTS</a>
+      <a href="#clients" class="nav-link">CLIENTS</a>
+      <a href="#approach" class="nav-link">APPROACH</a>
+      <a href="#our-method" class="nav-link">METHOD</a>
       <a href="#rules-of-the-house" class="nav-link">RULES OF THE HOUSE</a>
-      <a href="#" class="nav-link">PROOF</a>
-      <a href="#" class="nav-link">IN MEDIA</a>
     </nav>
 
     <section class="hero">
@@ -51,7 +50,40 @@
     </div>
   </div>
 
-  <section class="efficiency">
+  <section class="clients" id="clients">
+    <div class="clients-inner">
+      <!-- 16 cells, 4x4 (2 columns on mobile). Logos are one-colour copies
+           in assets/logos-clients/, painted grey through a CSS mask — see
+           .client-logo in style.css. Empty slots carry "to be placed".
+           Each cell is its own data-reveal, so every row fades up as it
+           scrolls into view (cells in a row share a top and fire together)
+           instead of the whole grid playing out while rows 2-4 are still
+           below the fold. -->
+      <div class="clients-grid">
+        <div class="client" data-reveal><span class="client-logo client-logo--lvmh" role="img" aria-label="LVMH"></span></div>
+        <div class="client" data-reveal><span class="client-placeholder">to be placed</span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--dropbox" role="img" aria-label="Dropbox"></span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--eos" role="img" aria-label="eos"></span></div>
+
+        <div class="client" data-reveal><span class="client-placeholder">to be placed</span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--mit-sloan" role="img" aria-label="MIT Sloan School of Management"></span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--everlane" role="img" aria-label="Everlane"></span></div>
+        <div class="client" data-reveal><span class="client-placeholder">to be placed</span></div>
+
+        <div class="client" data-reveal><span class="client-logo client-logo--franzia" role="img" aria-label="Franzia"></span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--creative-cloud" role="img" aria-label="Adobe Creative Cloud"></span></div>
+        <div class="client" data-reveal><span class="client-placeholder">to be placed</span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--drinkworks" role="img" aria-label="Drinkworks"></span></div>
+
+        <div class="client" data-reveal><span class="client-logo client-logo--rutgers-business" role="img" aria-label="Rutgers Business School"></span></div>
+        <div class="client" data-reveal><span class="client-placeholder">to be placed</span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--dr-noze-best" role="img" aria-label="dr.noze best"></span></div>
+        <div class="client" data-reveal><span class="client-placeholder">to be placed</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="efficiency" id="approach">
     <div class="efficiency-inner">
       <p class="efficiency-label" data-reveal>Engineered for<br>Capital Efficiency.</p>
       <h2 class="efficiency-title" data-reveal>Media budgets are investment capital. We treat them accordingly.</h2>
@@ -249,7 +281,7 @@
     </div>
   </section>
 
-  <section class="our-method">
+  <section class="our-method" id="our-method">
     <div class="our-method-inner">
       <h2 class="our-method-title" data-reveal>Our Method</h2>
 
@@ -435,13 +467,12 @@
         </a>
         <nav class="footer-nav" aria-label="Footer">
           <ul class="footer-nav-col">
-            <li><a href="#" class="footer-link">SERVICES</a></li>
-            <li><a href="#" class="footer-link">CLIENTS</a></li>
-            <li><a href="#rules-of-the-house" class="footer-link">RULES OF THE HOUSE</a></li>
+            <li><a href="#clients" class="footer-link">CLIENTS</a></li>
+            <li><a href="#approach" class="footer-link">APPROACH</a></li>
           </ul>
           <ul class="footer-nav-col">
-            <li><a href="#" class="footer-link">PROOF</a></li>
-            <li><a href="#" class="footer-link">IN MEDIA</a></li>
+            <li><a href="#our-method" class="footer-link">METHOD</a></li>
+            <li><a href="#rules-of-the-house" class="footer-link">RULES OF THE HOUSE</a></li>
           </ul>
         </nav>
       </div>
@@ -450,14 +481,15 @@
   </footer>
 
   <script>
-    // Invert the whole page to a light theme while the three-column
-    // section is in view. The flip is smooth via CSS transitions.
+    // Invert the whole page to a light theme once "Media budgets are
+    // investment capital…" scrolls into view. The flip is smooth via CSS
+    // transitions.
     (function () {
-      // The light theme flips on at the top of the three-column section — see
-      // the boundary-crossing observer below for how down vs. up scrolling
-      // is handled differently past this point.
-      var sections = document.querySelectorAll('.insights');
-      if (!sections.length) return;
+      // The light theme flips on as soon as .efficiency-title enters the
+      // screen — see the boundary-crossing observer below for how down vs.
+      // up scrolling is handled differently past this point.
+      var titles = document.querySelectorAll('.efficiency-title');
+      if (!titles.length) return;
 
       // Paint-free text inversion: for every flip-zone text block, stack a
       // dark-coloured clone exactly over the original and crossfade it via
@@ -480,12 +512,13 @@
       });
 
       // Single boundary, not per-section tracking: the light theme flips on
-      // when scrolling DOWN past the top of .insights, and flips back off
-      // only when scrolling back UP above that same line — so it stays light
-      // all the way through .compare/.method going down (nothing below the
-      // boundary can turn it off), but going back up re-enters the hero
-      // section dark, at the same crossing point it left from.
-      var boundary = sections[0];
+      // when scrolling DOWN brings the top of .efficiency-title onto the
+      // screen, and flips back off only when scrolling back UP takes it below
+      // the screen again — so it stays light all the way through
+      // .insights/.compare/.method going down (nothing below the boundary can
+      // turn it off), but going back up re-enters the hero section dark, at
+      // the same crossing point it left from.
+      var boundary = titles[0];
       var observer = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
@@ -497,9 +530,8 @@
           }
         });
       }, {
-        // Fires soon after the boundary enters: its top must rise ~10% of the
-        // viewport height above the bottom edge.
-        rootMargin: '0px 0px -10% 0px',
+        // Fires the moment the title's first pixel enters the screen.
+        rootMargin: '0px',
         threshold: 0
       });
 
@@ -616,8 +648,9 @@
         });
       });
 
-      // --- Single-element reveals: fade + slide up when entering the viewport ---
-      gsap.utils.toArray('[data-reveal]').forEach(function (el) {
+      // --- Single-element reveals: fade + slide up when entering the viewport
+      // (Clients logo cells have their own, later and slower, trigger below) ---
+      gsap.utils.toArray('[data-reveal]:not(.client)').forEach(function (el) {
         ScrollTrigger.create({
           trigger: el,
           start: 'top 85%',
@@ -972,6 +1005,29 @@
           start: 'top 85%',
           once: true,
           onEnter: function () { el.classList.add('is-in-view'); }
+        });
+      });
+
+      // --- Clients logos: each row fades up on its own (cells in a row share
+      // a centre, so they fire together), one cell at a time left to right.
+      // Later and slower than the generic reveal above (top 85%, 0.6s), which
+      // played out with the logos still at the very bottom edge and went
+      // unnoticed: here a row starts once its logos are a quarter of the
+      // screen up from the bottom, each cell takes 1.2s, and each next column
+      // waits 0.2s more. The column is read off the live grid (4 across, 2 on
+      // mobile) when the row fires. ---
+      gsap.utils.toArray('.client[data-reveal]').forEach(function (cell, i) {
+        ScrollTrigger.create({
+          trigger: cell,
+          start: 'center 75%',
+          once: true,
+          onEnter: function () {
+            var cols = getComputedStyle(cell.parentNode).gridTemplateColumns.split(' ').length;
+            gsap.fromTo(cell,
+              { opacity: 0, y: 30 },
+              { opacity: 1, y: 0, duration: 1.2, delay: (i % cols) * 0.2, ease: 'power2.out', clearProps: 'transform' }
+            );
+          }
         });
       });
 
