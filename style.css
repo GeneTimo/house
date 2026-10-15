@@ -273,10 +273,10 @@ body.theme-light .theme-bg {
    16 cells, 4x4 (2 columns on mobile), no frames or rules. Each logo is a
    one-colour copy in assets/logos-clients/ (cropped to its ink, white
    backing shapes removed) used as a CSS mask, so --client-color alone
-   paints every logo and placeholder the same grey. That grey is the muted
+   paints every logo the same grey. That grey is the muted
    "The Conventional Agency Model" heading — rgba(250, 250, 250, 0.62) on
    black — baked opaque so it doesn't fade out on the light theme. On the
-   light theme logos and placeholders switch to the Our Method icon grey
+   light theme logos switch to the Our Method icon grey
    instead (see body.theme-light .clients). */
 .clients {
   --client-color: rgb(155, 155, 155);
@@ -320,7 +320,7 @@ body.theme-light .theme-bg {
 }
 
 /* Light theme: same grey as .our-method-icon (text colour mixed 50/50 with
-   the background) for logos and placeholders alike, recoloured in step
+   the background) for the logos, recoloured in step
    with the 1s background crossfade. */
 body.theme-light .clients {
   --client-color: color-mix(in srgb, var(--fg) 50%, var(--bg));
@@ -331,6 +331,13 @@ body.theme-light .clients {
   aspect-ratio: 2210.44 / 525.6;
   -webkit-mask-image: url("assets/logos-clients/lvmh.svg");
   mask-image: url("assets/logos-clients/lvmh.svg");
+}
+
+.client-logo--method {
+  width: 26.4%;
+  aspect-ratio: 170.44 / 111.59;
+  -webkit-mask-image: url("assets/logos-clients/method.svg");
+  mask-image: url("assets/logos-clients/method.svg");
 }
 
 .client-logo--dropbox {
@@ -347,6 +354,13 @@ body.theme-light .clients {
   mask-image: url("assets/logos-clients/eos.svg");
 }
 
+.client-logo--maritime {
+  width: 22.2%;
+  aspect-ratio: 1764.46 / 1764.37;
+  -webkit-mask-image: url("assets/logos-clients/maritime.svg");
+  mask-image: url("assets/logos-clients/maritime.svg");
+}
+
 .client-logo--mit-sloan {
   width: 30.2%;
   aspect-ratio: 433 / 248.07;
@@ -359,6 +373,13 @@ body.theme-light .clients {
   aspect-ratio: 600.38 / 56.78;
   -webkit-mask-image: url("assets/logos-clients/everlane.svg");
   mask-image: url("assets/logos-clients/everlane.svg");
+}
+
+.client-logo--amazon-fashion {
+  width: 34.9%;
+  aspect-ratio: 426.28 / 207.88;
+  -webkit-mask-image: url("assets/logos-clients/amazon-fashion.svg");
+  mask-image: url("assets/logos-clients/amazon-fashion.svg");
 }
 
 .client-logo--franzia {
@@ -375,6 +396,13 @@ body.theme-light .clients {
   mask-image: url("assets/logos-clients/creative-cloud.svg");
 }
 
+.client-logo--svb {
+  width: 35.3%;
+  aspect-ratio: 1566 / 722.5;
+  -webkit-mask-image: url("assets/logos-clients/svb.svg");
+  mask-image: url("assets/logos-clients/svb.svg");
+}
+
 .client-logo--drinkworks {
   width: 35.0%;
   aspect-ratio: 4939.36 / 2981.55;
@@ -389,6 +417,13 @@ body.theme-light .clients {
   mask-image: url("assets/logos-clients/rutgers-business.svg");
 }
 
+.client-logo--sdg {
+  width: 44.8%;
+  aspect-ratio: 73.707 / 28.6;
+  -webkit-mask-image: url("assets/logos-clients/sdg.svg");
+  mask-image: url("assets/logos-clients/sdg.svg");
+}
+
 .client-logo--dr-noze-best {
   width: 63.4%;
   aspect-ratio: 793.34 / 125.87;
@@ -396,16 +431,11 @@ body.theme-light .clients {
   mask-image: url("assets/logos-clients/dr-noze-best.svg");
 }
 
-.client-placeholder {
-  font-family: "Jost", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: calc(var(--base) * 14 / 1440);
-  line-height: 100%;
-  letter-spacing: 0;
-  color: var(--client-color);
-  white-space: nowrap;
-  transition: color 1s ease;
+.client-logo--the-wine-group {
+  width: 42.5%;
+  aspect-ratio: 237 / 99.426;
+  -webkit-mask-image: url("assets/logos-clients/the-wine-group.svg");
+  mask-image: url("assets/logos-clients/the-wine-group.svg");
 }
 
 /* Mobile: 2 columns x 8 rows. */
