@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +8,14 @@
   <script>document.documentElement.classList.add('js');</script>
   <script>
     // Always land on top on reload/navigation — don't let the browser
-    // restore whatever scroll position the page was at before.
+    // restore whatever scroll position the page was at before. Exception: a
+    // link from another page to a section (e.g. index_work.html#clients from
+    // the legal pages' nav) lands on that section.
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    window.addEventListener('pageshow', function () { window.scrollTo(0, 0); });
+    window.addEventListener('pageshow', function () {
+      var target = location.hash.length > 1 && document.getElementById(location.hash.slice(1));
+      if (target) target.scrollIntoView(); else window.scrollTo(0, 0);
+    });
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -476,7 +481,13 @@
           </ul>
         </nav>
       </div>
-      <p class="footer-copy">© 2026 House of ROI. All rights reserved.</p>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 House of ROI. All rights reserved.</p>
+        <nav class="footer-legal" aria-label="Legal">
+          <a href="terms-of-use.html" class="footer-legal-link">Terms of Use</a>
+          <a href="privacy-policy.html" class="footer-legal-link">Privacy Policy</a>
+        </nav>
+      </div>
     </div>
   </footer>
 
@@ -523,9 +534,12 @@
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
             document.body.classList.add('theme-light');
-          } else if (entry.boundingClientRect.top > 0) {
+          } else if (boundary.getBoundingClientRect().top > 0) {
             // Boundary is below the viewport again — we scrolled back up
-            // above it, not further down past it.
+            // above it, not further down past it. Checked live, not via
+            // entry.boundingClientRect: the first entry can be measured
+            // before a landing jump to a section further down and delivered
+            // after it, which would wrongly switch the theme back off.
             document.body.classList.remove('theme-light');
           }
         });
@@ -536,6 +550,15 @@
       });
 
       observer.observe(boundary);
+
+      // A link from another page (index_work.html#our-method) lands past the
+      // boundary without it ever crossing the screen, so the observer never
+      // fires — check once the landing scroll (pageshow, in <head>) is done.
+      window.addEventListener('pageshow', function () {
+        if (boundary.getBoundingClientRect().top < 0) {
+          document.body.classList.add('theme-light');
+        }
+      });
     })();
   </script>
 

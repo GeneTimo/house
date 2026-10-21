@@ -534,7 +534,7 @@ body.theme-light .clients {
 /* --- "Investment-Grade Rigor" stat chart (graph-curve-line.svg + mockup) --- */
 
 .insight-chart {
-  --chart-marker-size: calc(var(--base) * 10 / 1440);
+  --chart-marker-size: calc(var(--base) * 7.5 / 1440);
   --chart-tooltip-gap: calc(var(--base) * 12 / 1440);
   position: absolute;
   z-index: 1;
@@ -622,7 +622,7 @@ body.theme-light .clients {
 /* --- "Institutional Marketing Discipline" slider animation --- */
 
 .insight-sliders {
-  --slider-thumb-width: calc(var(--base) * 10 / 1440);
+  --slider-thumb-width: calc(var(--base) * 7.5 / 1440);
   --slider-cursor-width: calc(var(--base) * 25 / 1440);
   --slider-cursor-height: calc(var(--base) * 29 / 1440);
   position: absolute;
@@ -648,7 +648,7 @@ body.theme-light .clients {
 .insight-sliders__thumb {
   position: absolute;
   width: var(--slider-thumb-width);
-  height: calc(var(--slider-thumb-width) * 2);
+  height: calc(var(--base) * 20 / 1440);
   border-radius: calc(var(--slider-thumb-width) / 2);
   background-color: var(--fg);
   transform: translate(-50%, -50%);
@@ -665,7 +665,7 @@ body.theme-light .clients {
 /* --- "Private Equity Logic for Digital Growth" scatter plot --- */
 
 .insight-scatter {
-  --scatter-dot-size: calc(var(--base) * 10 / 1440);
+  --scatter-dot-size: calc(var(--base) * 7.5 / 1440);
   position: absolute;
   z-index: 1;
   inset: 0;
@@ -1283,7 +1283,8 @@ body.theme-light .clients {
 }
 
 /* Footer — its own dark zone (below the inversion area), modelled on the
-   stella-test footer: logo left, link columns right, copyright below. */
+   stella-test footer: logo left, link columns right, copyright below with
+   the legal links on the same line. */
 .footer {
   width: 100%;
   background-color: #0a0a0a;
@@ -1291,23 +1292,26 @@ body.theme-light .clients {
     calc(var(--base) * 32 / 1440);
 }
 
+/* Two-column grid: logo and copyright on the left, nav and legal links on
+   the right. The row wrappers (.footer-top / .footer-bottom) are
+   display: contents, so the legal links share the nav's column and line up
+   with it edge to edge. */
 .footer-inner {
   max-width: 1280px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--base) * 56 / 1440);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: calc(var(--base) * 48 / 1440);
+  row-gap: calc(var(--base) * 56 / 1440);
 }
 
 .footer-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: calc(var(--base) * 48 / 1440);
+  display: contents;
 }
 
 .footer-logo {
-  flex-shrink: 0;
+  justify-self: start;
+  align-self: start;
   display: inline-block;
 }
 
@@ -1337,13 +1341,16 @@ body.theme-light .clients {
   font-size: calc(var(--base) * 14 / 1440);
   line-height: 110%;
   letter-spacing: 0.3em;
-  color: #fafafa;
+  /* Same grey as the header nav: #fafafa at its 0.6 opacity over black
+     renders as rgb(150, 150, 150); set solid here, since the same opacity
+     over the footer's #0a0a0a would come out slightly lighter. */
+  color: rgb(150, 150, 150);
   text-decoration: none;
-  transition: opacity 0.3s ease;
+  transition: color 0.3s ease;
 }
 
 .footer-link:hover {
-  opacity: 0.6;
+  color: #fafafa;
 }
 
 .footer-copy {
@@ -1354,6 +1361,143 @@ body.theme-light .clients {
   line-height: 150%;
   letter-spacing: 0.1em;
   color: rgba(250, 250, 250, 0.5);
+}
+
+/* Bottom line: copyright left, legal links right, set like the copyright.
+   The links sit in the nav's column, flush right with it. */
+.footer-bottom {
+  display: contents;
+}
+
+.footer-legal {
+  display: flex;
+  justify-content: flex-end;
+  gap: calc(var(--base) * 32 / 1440);
+}
+
+.footer-legal-link {
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: calc(var(--base) * 13 / 1440);
+  line-height: 150%;
+  letter-spacing: 0.1em;
+  color: rgba(250, 250, 250, 0.5);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-legal-link:hover {
+  color: #fafafa;
+}
+
+/* Legal pages (terms-of-use / privacy-policy) —
+   the main page's dark header (logo + nav) on top, then a light block in the
+   light-theme colours with a large serif title and the document text, then
+   the standard footer. The light colours are scoped to the block, so the
+   header and footer stay dark. Unlike the rest of the site, the title and
+   text don't shrink below a readable size (max() floors / fixed 16px, same
+   idea as .hero-subtitle's fixed 18px), so the long text reads on a phone. */
+.legal {
+  --bg: #f4f3ef;
+  --fg: #0a0a0a;
+  width: 100%;
+  margin-top: calc(var(--base) * 104 / 1440);
+  background-color: var(--bg);
+  padding: calc(var(--base) * 120 / 1440) calc(var(--base) * 80 / 1440)
+    calc(var(--base) * 160 / 1440);
+}
+
+.legal-inner {
+  max-width: calc(var(--base) * 800 / 1440);
+  margin: 0 auto;
+}
+
+.legal-title {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: max(32px, calc(var(--base) * 64 / 1440));
+  line-height: 115%;
+  letter-spacing: 0;
+  color: var(--fg);
+  text-align: center;
+  margin-bottom: max(32px, calc(var(--base) * 64 / 1440));
+}
+
+.legal-text p,
+.legal-text li {
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0;
+  color: var(--fg);
+}
+
+/* Numbered section headings, in the site's serif like the method items. */
+.legal-heading {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: max(22px, calc(var(--base) * 28 / 1440));
+  line-height: 120%;
+  letter-spacing: 0;
+  color: var(--fg);
+}
+
+/* Vertical rhythm: 24px between blocks, more air above each section
+   heading, a tighter gap below it. */
+.legal-text > * + * {
+  margin-top: max(16px, calc(var(--base) * 24 / 1440));
+}
+
+.legal-text > * + .legal-heading {
+  margin-top: max(40px, calc(var(--base) * 56 / 1440));
+}
+
+.legal-text > .legal-heading + * {
+  margin-top: max(12px, calc(var(--base) * 16 / 1440));
+}
+
+.legal-text ul {
+  padding-left: 1.25em;
+}
+
+.legal-text li + li {
+  margin-top: max(6px, calc(var(--base) * 8 / 1440));
+}
+
+/* Bold lead-ins ("Information you provide.", "Necessary:"…), as in the
+   source document. Jost 500 is loaded on the legal pages only. */
+.legal-text strong {
+  font-weight: 500;
+}
+
+.legal-text a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  transition: opacity 0.3s ease;
+}
+
+.legal-text a:hover {
+  opacity: 0.6;
+}
+
+/* Logo in the legal pages' header links back to the main page. */
+.logo-link {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+/* Mobile: the text column takes the full width instead of 800/1440. */
+@media (max-width: 639px) {
+  .legal-inner {
+    max-width: none;
+  }
 }
 
 /* Light-theme copy of a flip-zone text block, stacked exactly over the original
