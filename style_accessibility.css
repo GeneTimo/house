@@ -1,0 +1,1746 @@
+/* Breakpoints (mobile-first)
+   < 640px   mobile (base)
+   ≥ 640px   sm  — large phones / small tablets
+   ≥ 768px   md  — iPad portrait
+   ≥ 1024px  lg  — laptops / iPad landscape
+   ≥ 1280px  xl  — desktop
+   ≥ 1536px  2xl — large monitors
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Scroll-reveal initial state — applied only when JS is available,
+   so content stays visible if scripts fail to load. */
+.js [data-reveal],
+.js [data-reveal-item] {
+  opacity: 0;
+}
+
+:root {
+  --base: min(100vw, 1440px);
+
+  /* Theme colors — dark by default */
+  --bg: #000000;
+  --fg: #fafafa;
+  --placeholder: #1a1a1a;
+
+  /* Only paint property we still animate per-element is text color (small
+     area). The full-page background flip is done via the GPU-composited
+     .theme-bg opacity crossfade, not background-color. */
+  --theme-transition: color 1s ease;
+}
+
+/* Inverted (light) theme — toggled once "Media budgets are investment
+   capital…" (.efficiency-title) scrolls into view */
+body.theme-light {
+  --bg: #f4f3ef;
+  --fg: #0a0a0a;
+  --placeholder: #e6e5e0;
+}
+
+body {
+  background-color: #000000;
+  min-height: 100vh;
+}
+
+/* Fixed full-screen light layer, crossfaded via opacity (composited on the
+   GPU = zero repaint). The dark base is the body background underneath. */
+.theme-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: #f4f3ef;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+}
+
+body.theme-light .theme-bg {
+  opacity: 1;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto;
+  padding-top: calc(var(--base) * 48 / 1440);
+  width: calc(var(--base) * 5 / 100);
+  height: auto;
+  opacity: 0;
+  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.nav {
+  margin-top: calc(var(--base) * 56 / 1440);
+  display: flex;
+  justify-content: center;
+}
+
+/* Gap between links is padding, not flex `gap` — a larger, more forgiving
+   hoverable box per link. Behavior mirrors Thoma Bravo's header nav: each
+   link fades independently between a dimmed default and full brightness on
+   its own hover — no cross-link dimming, so there's nothing for one link's
+   hover state to interrupt on another. */
+.nav-link {
+  position: relative;
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 110%;
+  letter-spacing: 0.3em;
+  color: var(--fg);
+  opacity: 0.6;
+  text-decoration: none;
+  padding: 0 calc(var(--base) * 24 / 1440) calc(var(--base) * 4 / 1440);
+  transition: var(--theme-transition), opacity 0.3s ease;
+  /* Same page-load entrance as the hero lines below, staggered left to
+     right. Fill mode "both", not just "forwards": the static opacity above
+     is 0.6 (its resting dimmed state), which doesn't match the animation's
+     0 starting point the way it does for the other hero elements (theirs
+     is a plain 0 either way) — with only "forwards", that mismatch showed
+     as the links flashing visible at 0.6 during animation-delay, then
+     snapping to 0 once the animation actually started. "both" applies the
+     from-keyframe during the delay too. Ends at 0.6, not 1 — a JS cleanup
+     (see script near the theme-flip logic) drops the animation once it
+     finishes, handing opacity back to the plain :hover rule below. Without
+     that, animation-fill-mode would keep "winning" the cascade over :hover
+     forever, since a filled animation outranks a normal rule. */
+  animation: navLinkIn 1s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+.nav-link:nth-child(1) { animation-delay: 0.15s; }
+.nav-link:nth-child(2) { animation-delay: 0.22s; }
+.nav-link:nth-child(3) { animation-delay: 0.29s; }
+.nav-link:nth-child(4) { animation-delay: 0.36s; }
+
+.nav-link:hover {
+  opacity: 1;
+}
+
+@keyframes navLinkIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 0.6;
+    transform: translateY(0);
+  }
+}
+
+.hero {
+  margin-top: calc(var(--base) * 104 / 1440);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-title {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 4rem;
+  line-height: 120%;
+  letter-spacing: 0;
+  color: var(--fg);
+  text-align: center;
+  transition: var(--theme-transition);
+}
+
+@keyframes heroLineIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-line {
+  display: block;
+  opacity: 0;
+  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.hero-line:nth-child(1) { animation-delay: 0.55s; }
+.hero-line:nth-child(2) { animation-delay: 0.7s; }
+
+.hero-subtitle {
+  margin-top: calc(var(--base) * 56 / 1440);
+  font-family: "Jost", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 150%;
+  letter-spacing: 0.02em;
+  color: var(--fg);
+  text-align: center;
+  opacity: 0;
+  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.85s forwards;
+  transition: var(--theme-transition);
+}
+
+.contact-btn {
+  margin-top: calc(var(--base) * 56 / 1440);
+  display: inline-block;
+  padding: calc(var(--base) * 24 / 1440) calc(var(--base) * 32 / 1440);
+  border: 1px solid var(--fg);
+  border-radius: 999px;
+  background: transparent;
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0.3em;
+  color: var(--fg);
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0;
+  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) 1s forwards;
+  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.7s ease;
+}
+
+.contact-btn:hover {
+  background-color: var(--fg);
+  color: var(--bg);
+}
+
+.ticker {
+  margin-top: calc(var(--base) * 104 / 1440);
+  width: 100%;
+  overflow: hidden;
+  padding: calc(var(--base) * 24 / 1440) 0;
+  opacity: 0;
+  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) 1.15s forwards;
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: tickerScroll 40s linear infinite;
+}
+
+.ticker-item {
+  flex-shrink: 0;
+  padding: 0 calc(var(--base) * 40 / 1440);
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--fg);
+  white-space: nowrap;
+  transition: var(--theme-transition);
+}
+
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Clients — logo wall right under the ticker. Starts in the dark zone; the
+   light theme flips on once .efficiency-title enters the screen, while the
+   grid is still in view.
+   16 cells, 4x4 (2 columns on mobile), no frames or rules. Each logo is a
+   one-colour copy in assets/logos-clients/ (cropped to its ink, white
+   backing shapes removed) used as a CSS mask, so --client-color alone
+   paints every logo the same grey. That grey is the muted
+   "The Conventional Agency Model" heading — rgba(250, 250, 250, 0.62) on
+   black — baked opaque so it doesn't fade out on the light theme. On the
+   light theme logos switch to the Our Method icon grey
+   instead (see body.theme-light .clients). */
+.clients {
+  --client-color: rgb(155, 155, 155);
+  width: 100%;
+  background-color: transparent;
+  padding: calc(var(--base) * 160 / 1440) 0 0;
+}
+
+.clients-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 calc(var(--base) * 80 / 1440);
+}
+
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.client {
+  aspect-ratio: 3 / 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Widths below are % of the cell, sized for equal visual weight: the logo's
+   box area times its ink density to the power 0.35 is the same for every
+   logo (measured on the cleaned files), capped at 70% of the cell width and
+   42% of its height. */
+.client-logo {
+  display: block;
+  background-color: var(--client-color);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  transition: background-color 1s ease;
+}
+
+/* Light theme: same grey as .our-method-icon (text colour mixed 50/50 with
+   the background) for the logos, recoloured in step
+   with the 1s background crossfade. */
+body.theme-light .clients {
+  --client-color: color-mix(in srgb, var(--fg) 50%, var(--bg));
+}
+
+.client-logo--lvmh {
+  width: 50.1%;
+  aspect-ratio: 2210.44 / 525.6;
+  -webkit-mask-image: url("assets/logos-clients/lvmh.svg");
+  mask-image: url("assets/logos-clients/lvmh.svg");
+}
+
+.client-logo--method {
+  width: 26.4%;
+  aspect-ratio: 170.44 / 111.59;
+  -webkit-mask-image: url("assets/logos-clients/method.svg");
+  mask-image: url("assets/logos-clients/method.svg");
+}
+
+.client-logo--dropbox {
+  width: 54.0%;
+  aspect-ratio: 256 / 50.45;
+  -webkit-mask-image: url("assets/logos-clients/dropbox.svg");
+  mask-image: url("assets/logos-clients/dropbox.svg");
+}
+
+.client-logo--eos {
+  width: 21.1%;
+  aspect-ratio: 500.14 / 500.14;
+  -webkit-mask-image: url("assets/logos-clients/eos.svg");
+  mask-image: url("assets/logos-clients/eos.svg");
+}
+
+.client-logo--maritime {
+  width: 22.2%;
+  aspect-ratio: 1764.46 / 1764.37;
+  -webkit-mask-image: url("assets/logos-clients/maritime.svg");
+  mask-image: url("assets/logos-clients/maritime.svg");
+}
+
+.client-logo--mit-sloan {
+  width: 30.2%;
+  aspect-ratio: 433 / 248.07;
+  -webkit-mask-image: url("assets/logos-clients/mit-sloan.svg");
+  mask-image: url("assets/logos-clients/mit-sloan.svg");
+}
+
+.client-logo--everlane {
+  width: 70.0%;
+  aspect-ratio: 600.38 / 56.78;
+  -webkit-mask-image: url("assets/logos-clients/everlane.svg");
+  mask-image: url("assets/logos-clients/everlane.svg");
+}
+
+.client-logo--amazon-fashion {
+  width: 34.9%;
+  aspect-ratio: 426.28 / 207.88;
+  -webkit-mask-image: url("assets/logos-clients/amazon-fashion.svg");
+  mask-image: url("assets/logos-clients/amazon-fashion.svg");
+}
+
+.client-logo--franzia {
+  width: 52.5%;
+  aspect-ratio: 491.87 / 122.31;
+  -webkit-mask-image: url("assets/logos-clients/franzia.svg");
+  mask-image: url("assets/logos-clients/franzia.svg");
+}
+
+.client-logo--creative-cloud {
+  width: 25.4%;
+  aspect-ratio: 121.5 / 89.61;
+  -webkit-mask-image: url("assets/logos-clients/creative-cloud.svg");
+  mask-image: url("assets/logos-clients/creative-cloud.svg");
+}
+
+.client-logo--svb {
+  width: 35.3%;
+  aspect-ratio: 1566 / 722.5;
+  -webkit-mask-image: url("assets/logos-clients/svb.svg");
+  mask-image: url("assets/logos-clients/svb.svg");
+}
+
+.client-logo--drinkworks {
+  width: 35.0%;
+  aspect-ratio: 4939.36 / 2981.55;
+  -webkit-mask-image: url("assets/logos-clients/drinkworks.svg");
+  mask-image: url("assets/logos-clients/drinkworks.svg");
+}
+
+.client-logo--rutgers-business {
+  width: 21.9%;
+  aspect-ratio: 67.79 / 68.05;
+  -webkit-mask-image: url("assets/logos-clients/rutgers-business.svg");
+  mask-image: url("assets/logos-clients/rutgers-business.svg");
+}
+
+.client-logo--sdg {
+  width: 44.8%;
+  aspect-ratio: 73.707 / 28.6;
+  -webkit-mask-image: url("assets/logos-clients/sdg.svg");
+  mask-image: url("assets/logos-clients/sdg.svg");
+}
+
+.client-logo--dr-noze-best {
+  width: 63.4%;
+  aspect-ratio: 793.34 / 125.87;
+  -webkit-mask-image: url("assets/logos-clients/dr-noze-best.svg");
+  mask-image: url("assets/logos-clients/dr-noze-best.svg");
+}
+
+.client-logo--the-wine-group {
+  width: 42.5%;
+  aspect-ratio: 237 / 99.426;
+  -webkit-mask-image: url("assets/logos-clients/the-wine-group.svg");
+  mask-image: url("assets/logos-clients/the-wine-group.svg");
+}
+
+/* Mobile: 2 columns x 8 rows. */
+@media (max-width: 639px) {
+  .clients-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.efficiency {
+  width: 100%;
+  background-color: transparent;
+  padding: calc(var(--base) * 160 / 1440) 0 calc(var(--base) * 64 / 1440);
+}
+
+.efficiency-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 calc(var(--base) * 80 / 1440);
+  display: grid;
+  grid-template-columns: 1fr 1.7fr;
+  gap: calc(var(--base) * 32 / 1440);
+  align-items: start;
+}
+
+.efficiency-label {
+  margin-top: calc(var(--base) * 12 / 1440);
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 150%;
+  letter-spacing: 0;
+  /* Dark-theme color. The light-theme color is a cloned overlay (.theme-overlay-text)
+     crossfaded via opacity — paint-free, see the JS that builds the clones. */
+  color: #fafafa;
+}
+
+.efficiency-title {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 48px;
+  line-height: 115%;
+  letter-spacing: 0;
+  color: #fafafa;
+}
+
+.insights {
+  width: 100%;
+  background-color: transparent;
+  padding: calc(var(--base) * 40 / 1440) 0 calc(var(--base) * 120 / 1440);
+}
+
+.insights-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 calc(var(--base) * 80 / 1440);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: calc(var(--base) * 40 / 1440);
+}
+
+.insight-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  /* Sizes inside the illustrations (dots, marker, cursor, chart label) are
+     drawn in this box's own units: --ill is one design px of the 346.667px
+     card at 1440, so they keep their proportion to the picture whatever its
+     width — three cards across, or one wide card when zoomed in. */
+  container-type: inline-size;
+  --ill: calc(100cqw / 346.667);
+  /* Fallback tone showing through any transparent area of the SVG (and
+     while its artwork is still a placeholder comment) — same role the old
+     flat .insight-icon background played. */
+  background-color: var(--placeholder);
+  transition: var(--theme-transition), background-color 1s ease;
+}
+
+.insight-anim {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Per-shape hooks for the pasted-in vector artwork, e.g.:
+     .insight-anim--compass .needle { transform-origin: 240px 150px; }
+     .insight-anim--compass.is-in-view .needle { animation: compassSwing 3s ease-in-out infinite; }
+   Keep loops gated on .is-in-view (toggled by the ScrollTrigger hook below)
+   so nothing animates — and burns battery — off-screen. See stella.systems'
+   .stella-pulse / .flow-dots-march for the same pattern (CSS @keyframes on
+   inline SVG shapes, GSAP/ScrollTrigger only for the on-enter gating). */
+.insight-anim__art {
+  transform-box: fill-box;
+}
+
+/* --- "Investment-Grade Rigor" stat chart (graph-curve-line.svg + mockup) --- */
+
+.insight-chart {
+  --chart-marker-size: calc(var(--ill) * 7.5);
+  --chart-tooltip-gap: calc(var(--ill) * 12);
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.insight-chart__line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.insight-chart__path {
+  fill: none;
+  stroke: #cccccc;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.insight-chart__label {
+  position: absolute;
+  left: 4%;
+  top: 4%;
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-size: calc(var(--ill) * 28);
+  color: #cccccc;
+  /* Fixed-width digit glyphs — so as the number changes every frame, each
+     digit's own column stays put instead of the whole string re-kerning
+     (see the JS zero-padding in formatValue() for the other half of this:
+     keeping the digit COUNT fixed too, not just each digit's width). */
+  font-variant-numeric: tabular-nums;
+}
+
+/* Pulls the "S" of "ROAS" 1% of the font size closer to the "A". A margin,
+   not letter-spacing: Jost kerns the A-S pair itself (by about -0.03em), and
+   Chrome drops that built-in kerning the moment letter-spacing is non-zero —
+   so asking for -0.01em there actually ends up 2% WIDER. A margin leaves the
+   font's own kerning intact and just shifts what follows. */
+.insight-chart__label-kern {
+  margin-right: -0.01em;
+}
+
+/* Marker + tooltip are given the SAME left/top (the point on the curve,
+   read via path.getPointAtLength — see the script near </body>) — these two
+   transforms are what split one coordinate into "centered on the point" vs
+   "floating above it", so the JS only ever has one number to set per axis. */
+.insight-chart__marker {
+  position: absolute;
+  width: var(--chart-marker-size);
+  height: var(--chart-marker-size);
+  border-radius: 50%;
+  background-color: var(--fg);
+  transform: translate(-50%, -50%);
+  transition: var(--theme-transition), background-color 1s ease;
+}
+
+.insight-chart__tooltip {
+  position: absolute;
+  /* Up from the point by half the marker (to clear its top edge) plus a
+     fixed gap, then its own full height (measured from the bottom, so a
+     wider/taller value string never pushes it further from the marker). */
+  transform: translate(-50%, calc(-100% - (var(--chart-marker-size) / 2) - var(--chart-tooltip-gap)));
+  padding: calc(var(--ill) * 8) calc(var(--ill) * 14);
+  border-radius: 999px; /* matches .contact-btn's pill shape */
+  /* JS locks a fixed px `width` (the widest the cycle's text ever gets) so
+     the pill stops resizing frame to frame — border-box so that width
+     includes this padding, matching the offsetWidth it was measured with. */
+  box-sizing: border-box;
+  text-align: center;
+  background-color: var(--fg);
+  color: var(--bg);
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-size: calc(var(--ill) * 14);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transition: var(--theme-transition), background-color 1s ease, color 1s ease;
+}
+
+/* --- "Institutional Marketing Discipline" slider animation --- */
+
+.insight-sliders {
+  --slider-thumb-width: calc(var(--ill) * 7.5);
+  --slider-cursor-width: calc(var(--ill) * 25);
+  --slider-cursor-height: calc(var(--ill) * 29);
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.insight-sliders__lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.insight-sliders__line {
+  stroke: #cccccc;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.insight-sliders__thumb {
+  position: absolute;
+  width: var(--slider-thumb-width);
+  height: calc(var(--ill) * 20);
+  border-radius: calc(var(--slider-thumb-width) / 2);
+  background-color: var(--fg);
+  transform: translate(-50%, -50%);
+  transition: var(--theme-transition), background-color 1s ease;
+}
+
+.insight-sliders__cursor {
+  position: absolute;
+  z-index: 2;
+  width: var(--slider-cursor-width);
+  height: var(--slider-cursor-height);
+}
+
+/* --- "Private Equity Logic for Digital Growth" scatter plot --- */
+
+.insight-scatter {
+  --scatter-dot-size: calc(var(--ill) * 7.5);
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.insight-scatter__grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.insight-scatter__line {
+  stroke: #cccccc;
+  stroke-width: 3;
+}
+
+/* Same diameter as the stat chart's marker and the slider thumbs' width —
+   one dot size shared across all three cards. */
+.insight-scatter__dot {
+  position: absolute;
+  width: var(--scatter-dot-size);
+  height: var(--scatter-dot-size);
+  border-radius: 50%;
+  background-color: var(--fg);
+  transform: translate(-50%, -50%);
+  transition: var(--theme-transition), background-color 1s ease;
+}
+
+.insight-title {
+  margin-top: calc(var(--base) * 24 / 1440);
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 28px;
+  line-height: 120%;
+  letter-spacing: 0;
+  color: #fafafa;
+}
+
+.insight-text {
+  margin-top: calc(var(--base) * 20 / 1440);
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0;
+  color: #fafafa;
+}
+
+/* xl — desktop */
+@media (min-width: 1280px) {
+  .hero-title {
+    font-size: 4rem;
+  }
+}
+
+/* Comparison section — a black rounded box (always dark) sitting on the light
+   themed page, with two parallel columns compared row-by-row. */
+.compare {
+  max-width: 1280px;
+  margin: 0 auto;
+  /* Same side padding as .insights-inner / .efficiency-inner so the box edges
+     line up with the content (columns) above. */
+  padding: 0 calc(var(--base) * 80 / 1440) calc(var(--base) * 120 / 1440);
+}
+
+.compare-box {
+  /* Optical compensation: a dark box on a light page reads smaller than it is,
+     so widen it 10% beyond the content line (5% bleed each side), kept centred. */
+  width: 110%;
+  margin-left: -5%;
+  background-color: #000000;
+  border-radius: calc(var(--base) * 32 / 1440);
+  padding: calc(var(--base) * 120 / 1440);
+}
+
+.compare-inner {
+  max-width: 936px;
+  margin: 0 auto;
+}
+
+.compare-intro {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 135%;
+  letter-spacing: 0;
+  color: #fafafa;
+  margin-bottom: calc(var(--base) * 128 / 1440);
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: calc(var(--base) * 96 / 1440);
+  row-gap: calc(var(--base) * 48 / 1440);
+  align-items: start;
+}
+
+.compare-col-title {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 120%;
+  letter-spacing: 0;
+  color: #fafafa;
+  padding-bottom: calc(var(--base) * 16 / 1440);
+  border-bottom: 1px solid rgba(250, 250, 250, 0.15);
+}
+
+.compare-point-title {
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 130%;
+  letter-spacing: 0;
+  color: #fafafa;
+  margin-bottom: calc(var(--base) * 12 / 1440);
+}
+
+.compare-point-text {
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0;
+  /* Right (House of ROI) column — brighter/full presence. */
+  color: rgba(250, 250, 250, 0.8);
+}
+
+/* Left (Conventional) column — muted so it recedes and the right column reads
+   as the advantage. Dimmed via colour, not opacity, so the reveal animation
+   (which animates opacity) doesn't override it. The grid order is
+   left, right, left, right… so odd children are the left column. */
+.compare-grid > .compare-col-title:nth-child(odd) {
+  color: rgba(250, 250, 250, 0.62);
+  border-bottom-color: rgba(250, 250, 250, 0.12);
+}
+
+.compare-grid > .compare-point:nth-child(odd) .compare-point-title {
+  color: rgba(250, 250, 250, 0.62);
+}
+
+.compare-grid > .compare-point:nth-child(odd) .compare-point-text {
+  color: rgba(250, 250, 250, 0.5);
+}
+
+/* Three-pillar convergence diagram — an Euler/Venn-style trio of overlapping
+   circles sitting directly on the page background (same always-light zone
+   as .our-method/.method below). Outline-only, no fill, matching the thin-
+   line aesthetic of .our-method-icon. Each circle swaps its label for a
+   longer description on hover/focus — same title<->description crossfade
+   idiom as .our-method-item, just via opacity instead of a slide. */
+.pillars {
+  width: 100%;
+  background-color: transparent;
+  padding: 0 0 calc(var(--base) * 40 / 1440);
+}
+
+.pillars-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 calc(var(--base) * 80 / 1440);
+}
+
+.venn {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+}
+
+/* Diameter/position are hand-tuned so the three circles share one common
+   centre (where .venn-center sits) without any pair fully swallowing the
+   other — each circle's own centre stays equidistant (18% of the diagram)
+   from that shared point. */
+.venn-circle {
+  position: absolute;
+  width: 54%;
+  height: 54%;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--fg) 30%, transparent);
+  background-color: transparent;
+  /* Fades back to transparent smoothly on mouse-leave. Declaring this
+     only here isn't enough on its own — transition is a normal cascaded
+     property, so without an explicit override below, the :hover rule
+     would inherit this same duration and make the ENTER instant-vs-leave
+     asymmetry backwards (confirmed: it did). The :hover rule's explicit
+     0s below is what actually makes entering instant. */
+  transition: background-color 0.6s ease;
+}
+
+.venn-circle--marketing {
+  top: 32%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.venn-circle--financial {
+  top: 59%;
+  left: 34.4%;
+  transform: translate(-50%, -50%);
+}
+
+.venn-circle--machine {
+  top: 59%;
+  left: 65.6%;
+  transform: translate(-50%, -50%);
+}
+
+/* Hovered/focused circle rises above everything else in the diagram —
+   the other two circles' outlines and the shared logo — so it reads as a
+   solid opaque disc sitting on top, not a shape competing for the same
+   pixels. z-index 20 clears the logo's own 10, so it's covered too when
+   the hover circle's fill sweeps over the shared centre. Filled with a
+   hair darker than the page's own --bg (not a dark card, not a flat
+   match either): it reads as a faint grey disc blanking out whatever
+   sits underneath, distinguishable from the plain page background,
+   while the text below stays the same dark --fg as the rest of the page. */
+.venn-circle:hover,
+.venn-circle:focus-within {
+  z-index: 20;
+  border-color: transparent;
+  background-color: color-mix(in srgb, var(--fg) 2%, var(--bg));
+  transition: background-color 0s;
+  outline: none;
+}
+
+/* Title (idle state) is centred on the CENTROID of the circle's unique
+   region — the circle minus both of its overlaps with the other two, the
+   sliver you'd get if you cut those intersections away — not the circle's
+   own centre and not a simple edge anchor. Coordinates below are that
+   centroid in each circle's own 0–100% box, solved numerically (grid-
+   sampled the actual set-minus shape rather than eyeballed) since the
+   region isn't a simple lens or wedge. */
+.venn-circle-title {
+  position: absolute;
+  width: 60%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 130%;
+  letter-spacing: 0;
+  color: var(--fg);
+}
+
+.venn-circle--marketing .venn-circle-title {
+  top: 30.1%;
+  left: 50%;
+}
+
+.venn-circle--financial .venn-circle-title {
+  top: 59.95%;
+  left: 32.77%;
+}
+
+.venn-circle--machine .venn-circle-title {
+  top: 59.95%;
+  left: 67.23%;
+}
+
+/* Description (hover/focus state) is centred in the circle instead, with
+   a generous inset off the rim — unlike the title, it no longer needs to
+   dodge the crossing lines: by the time it's visible, the hovered circle
+   has already filled solid and risen above its neighbours, so there's
+   nothing underneath it left to collide with. */
+.venn-circle-desc {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 22%;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 15px;
+  line-height: 150%;
+  letter-spacing: 0;
+  color: var(--fg);
+}
+
+.venn-circle:hover .venn-circle-title,
+.venn-circle:focus-within .venn-circle-title {
+  opacity: 0;
+}
+
+/* Entrance reuses heroLineIn — the same fade-up used for the hero
+   headline/subtitle/button — instead of a plain crossfade. The fill
+   above is instant, so this motion is the only thing the eye tracks on
+   hover-in. Leaving still just fades via the transition on the base
+   rule above (animation only ever plays on the way in). */
+.venn-circle:hover .venn-circle-desc,
+.venn-circle:focus-within .venn-circle-desc {
+  opacity: 1;
+  /* Was 1s (too slow), then 0.4s (felt too clipped) — 0.6s matches the
+     fade+slide duration used for the card reveals elsewhere on the page. */
+  animation: heroLineIn 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+/* Shared meeting point of all three sets — no plate, just the mark sitting
+   directly on the page background. The logo file is a fixed light
+   (#FAFAFA) fill (shared with the header/footer, which need it light on
+   their dark backdrops), so brightness(0) forces it fully black here
+   instead — same effect as var(--fg)'s text color in this always-light
+   part of the page, without needing a second copy of the asset. Sits at
+   z-index 10, below a hovered circle's 20, so it's simply covered along
+   with everything else while that circle's fill sweeps over it. */
+.venn-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.venn-center img {
+  display: block;
+  width: calc(var(--base) * 64 / 1440);
+  height: auto;
+  filter: brightness(0);
+}
+
+/* Small screens: the diagram itself has less room to grow (capped by
+   viewport width, not the 640px desktop ceiling), so give text more of the
+   circle to wrap into and drop the description down a size. */
+@media (max-width: 639px) {
+  .venn-circle-title {
+    width: 78%;
+  }
+
+  .venn-circle-desc {
+    padding: 0 14%;
+    font-size: 13px;
+    line-height: 140%;
+  }
+}
+
+/* Our Method — big single-column statement lines, each paired with a thin-
+   line icon (currentColor, so --theme-transition recolors it for free). No
+   boxed container; sits directly on the page background in the same
+   always-light-past-.insights zone as .compare/.method below. */
+.our-method {
+  width: 100%;
+  background-color: transparent;
+  padding: calc(var(--base) * 40 / 1440) 0 calc(var(--base) * 120 / 1440);
+}
+
+.our-method-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 calc(var(--base) * 80 / 1440);
+}
+
+.our-method-title {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 48px;
+  line-height: 115%;
+  letter-spacing: 0;
+  color: var(--fg);
+  text-align: center;
+  margin-bottom: calc(var(--base) * 64 / 1440);
+  transition: var(--theme-transition);
+}
+
+.our-method-list {
+  display: flex;
+  flex-direction: column;
+  /* Clips the alternating slide-in animation so each line emerges from
+     behind the row edge instead of visibly overshooting it. */
+  overflow: hidden;
+}
+
+.our-method-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--base) * 40 / 1440);
+  padding: calc(var(--base) * 28 / 1440) 0;
+  border-top: 1px solid color-mix(in srgb, var(--fg) 15%, transparent);
+  transition: border-color 1s ease;
+}
+
+.our-method-item:first-child {
+  border-top: none;
+}
+
+/* Title and description are two frames of one strip ("parented to the same
+   null", After-Effects-style): both keep their natural stacking order
+   inside .our-method-item-track, and ONE transform on the track slides the
+   whole strip — title rides down and out, description rides down into view
+   from above the window. .our-method-item-text is the fixed-height window
+   (overflow: hidden) that only ever shows one frame at a time; its height
+   drives the fit-to-width measurement, same role the title used to play
+   alone. A gentle synchronized opacity cross-fade rides along with the
+   slide so nothing gets a hard clip at the window edge. */
+.our-method-item-text {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  /* 1.3, not 1.12 (the title's line-height) — the window needs extra room
+     beyond the nominal line box so descenders (g, y, p) don't get hard-
+     clipped by this element's own overflow: hidden. */
+  --method-row-h: calc(var(--base) * 56 / 1440 * var(--method-fit-scale, 1) * 1.3);
+  /* Both frames share one grid cell, so the window is as tall as the taller
+     of the two (a wrapped title or a long description, once text is sized
+     in px and grows with zoom) and never shorter than one title row — the
+     min-height below, which is exactly the old fixed height. */
+  display: grid;
+}
+
+.our-method-item-track {
+  display: grid;
+}
+
+/* Same strip motion as before (title rides down and out, description rides
+   down into view from above), now per frame: each slides by the full
+   window height. The title is first in the HTML, so screen readers read
+   title, then description. */
+.our-method-item-title,
+.our-method-item-desc {
+  grid-area: 1 / 1;
+  min-height: var(--method-row-h);
+}
+
+.our-method-item-desc {
+  transform: translateY(-100%);
+}
+
+.our-method-item:hover .our-method-item-desc,
+.our-method-item:focus-within .our-method-item-desc {
+  transform: translateY(0);
+}
+
+.our-method-item:hover .our-method-item-title,
+.our-method-item:focus-within .our-method-item-title {
+  transform: translateY(100%);
+}
+
+.our-method-item-desc {
+  display: flex;
+  align-items: center;
+  max-width: 520px;
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 17px;
+  line-height: 150%;
+  letter-spacing: 0;
+  color: color-mix(in srgb, var(--fg) 65%, var(--bg));
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.6s cubic-bezier(0.65, 0, 0.35, 1), var(--theme-transition);
+}
+
+.our-method-item:hover .our-method-item-desc,
+.our-method-item:focus-within .our-method-item-desc {
+  opacity: 1;
+}
+
+/* Hand-placed line breaks in the descriptions — deliberate, not natural
+   reflow — only hold on desktop (xl, ≥1280px); below that the text just
+   wraps on its own against the narrower max-width. */
+.desktop-break {
+  display: none;
+}
+
+@media (min-width: 1280px) {
+  .desktop-break {
+    display: inline;
+  }
+}
+
+.our-method-item:hover .our-method-item-title,
+.our-method-item:focus-within .our-method-item-title {
+  opacity: 0;
+}
+
+/* "Portfolio" only — at the title's -0.02em tracking, the r's arm crowds
+   straight into the t's stem. Loosens just that one pair without touching
+   tracking anywhere else in the word or the other four lines. */
+.kern-rt {
+  letter-spacing: 0.02em;
+}
+
+.our-method-icon {
+  flex-shrink: 0;
+  width: calc(var(--base) * 72 / 1440);
+  height: calc(var(--base) * 72 / 1440);
+  stroke-width: 0.75;
+  /* Mixed against --bg, not "transparent" — that keeps the stroke fully
+     opaque, so overlapping segments at joints don't double-darken the way
+     a translucent stroke would where paths cross or meet. */
+  color: color-mix(in srgb, var(--fg) 50%, var(--bg));
+  transition: var(--theme-transition);
+}
+
+.our-method-item-title {
+  display: block;
+  white-space: nowrap;
+  font-family: "Jost", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+  /* --method-fit-scale is computed in JS so the "Human + Machine
+     Intelligence" line spans the full row — every other line shares that
+     same factor so all five read at one identical size. */
+  font-size: calc(var(--base) * 56 / 1440 * var(--method-fit-scale, 1));
+  line-height: 112%;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  transition: var(--theme-transition), opacity 0.6s cubic-bezier(0.65, 0, 0.35, 1), transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Rules of the House — no boxed container; sits directly on the page
+   background. .compare is tall enough that this section can still be
+   reached while the light theme is on, so every color here reads off
+   var(--fg)/var(--bg) instead of being hardcoded dark-theme white — it
+   follows whichever theme is currently active rather than assuming one. */
+.method {
+  width: 100%;
+  background-color: transparent;
+  padding: calc(var(--base) * 40 / 1440) 0 calc(var(--base) * 160 / 1440);
+}
+
+.method-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 calc(var(--base) * 80 / 1440);
+}
+
+.method-content {
+  max-width: 100%;
+}
+
+.method-title {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 48px;
+  line-height: 115%;
+  letter-spacing: 0;
+  color: var(--fg);
+  text-align: center;
+  margin-bottom: calc(var(--base) * 96 / 1440);
+  transition: var(--theme-transition);
+}
+
+.method-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: calc(var(--base) * 64 / 1440);
+}
+
+.method-item {
+  display: flex;
+  gap: calc(var(--base) * 24 / 1440);
+  align-items: flex-start;
+  padding: calc(var(--base) * 32 / 1440) 0;
+  border-top: 1px solid color-mix(in srgb, var(--fg) 15%, transparent);
+  transition: border-color 1s ease;
+}
+
+/* First row (items 1 & 2, side by side) carries no top rule/padding. */
+.method-item:nth-child(-n+2) {
+  padding-top: 0;
+  border-top: none;
+}
+
+@media (max-width: 767px) {
+  .method-list {
+    grid-template-columns: 1fr;
+  }
+
+  .method-item:nth-child(-n+2) {
+    padding-top: calc(var(--base) * 32 / 1440);
+    border-top: 1px solid color-mix(in srgb, var(--fg) 15%, transparent);
+  }
+
+  .method-item:first-child {
+    padding-top: 0;
+    border-top: none;
+  }
+}
+
+.method-number {
+  flex-shrink: 0;
+  min-width: calc(var(--base) * 64 / 1440);
+  font-family: "Jost", sans-serif;
+  font-weight: 300;
+  font-size: 40px;
+  line-height: 100%;
+  /* 50%, not 35%: 3.6:1 on the light page (35% was 2.3:1, below the 3:1
+     WCAG AA minimum for large text) and 5.1:1 on the dark one. */
+  color: color-mix(in srgb, var(--fg) 50%, transparent);
+  transition: color 1s ease;
+}
+
+.method-item-title {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 28px;
+  line-height: 120%;
+  letter-spacing: 0;
+  color: var(--fg);
+  margin-bottom: calc(var(--base) * 10 / 1440);
+  transition: var(--theme-transition);
+}
+
+.method-item-text {
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0;
+  color: var(--fg);
+  transition: var(--theme-transition);
+}
+
+/* Footer — its own dark zone (below the inversion area), modelled on the
+   stella-test footer: logo left, link columns right, copyright below with
+   the legal links on the same line. */
+.footer {
+  width: 100%;
+  background-color: #0a0a0a;
+  padding: calc(var(--base) * 64 / 1440) calc(var(--base) * 80 / 1440)
+    calc(var(--base) * 32 / 1440);
+}
+
+/* Two-column grid: logo and copyright on the left, nav and legal links on
+   the right. The row wrappers (.footer-top / .footer-bottom) are
+   display: contents, so the legal links share the nav's column and line up
+   with it edge to edge. */
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: calc(var(--base) * 48 / 1440);
+  row-gap: calc(var(--base) * 56 / 1440);
+}
+
+.footer-top {
+  display: contents;
+}
+
+.footer-logo {
+  justify-self: start;
+  align-self: start;
+  display: inline-block;
+}
+
+.footer-logo img {
+  height: calc(var(--base) * 40 / 1440);
+  width: auto;
+  display: block;
+}
+
+.footer-nav {
+  display: flex;
+  gap: calc(var(--base) * 64 / 1440);
+  flex-shrink: 0;
+}
+
+.footer-nav-col {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--base) * 16 / 1440);
+}
+
+.footer-link {
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 110%;
+  letter-spacing: 0.3em;
+  /* Same grey as the header nav: #fafafa at its 0.6 opacity over black
+     renders as rgb(150, 150, 150); set solid here, since the same opacity
+     over the footer's #0a0a0a would come out slightly lighter. */
+  color: rgb(150, 150, 150);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #fafafa;
+}
+
+.footer-copy {
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 13px;
+  line-height: 150%;
+  letter-spacing: 0.1em;
+  color: rgba(250, 250, 250, 0.5);
+}
+
+/* Bottom line: copyright left, legal links right, set like the copyright.
+   The links sit in the nav's column, flush right with it. */
+.footer-bottom {
+  display: contents;
+}
+
+.footer-legal {
+  display: flex;
+  justify-content: flex-end;
+  gap: calc(var(--base) * 32 / 1440);
+}
+
+.footer-legal-link {
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 13px;
+  line-height: 150%;
+  letter-spacing: 0.1em;
+  color: rgba(250, 250, 250, 0.5);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-legal-link:hover {
+  color: #fafafa;
+}
+
+/* Legal pages (terms-of-use / privacy-policy) —
+   the main page's dark header (logo + nav) on top, then a light block in the
+   light-theme colours with a large serif title and the document text, then
+   the standard footer. The light colours are scoped to the block, so the
+   header and footer stay dark. Unlike the rest of the site, the title and
+   text don't shrink below a readable size (max() floors / fixed 16px, same
+   idea as .hero-subtitle's fixed 18px), so the long text reads on a phone. */
+.legal {
+  --bg: #f4f3ef;
+  --fg: #0a0a0a;
+  width: 100%;
+  margin-top: calc(var(--base) * 104 / 1440);
+  background-color: var(--bg);
+  padding: calc(var(--base) * 120 / 1440) calc(var(--base) * 80 / 1440)
+    calc(var(--base) * 160 / 1440);
+}
+
+.legal-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.legal-title {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 64px;
+  line-height: 115%;
+  letter-spacing: 0;
+  color: var(--fg);
+  text-align: center;
+  margin-bottom: max(32px, calc(var(--base) * 64 / 1440));
+}
+
+.legal-text p,
+.legal-text li {
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0;
+  color: var(--fg);
+}
+
+/* Numbered section headings, in the site's serif like the method items. */
+.legal-heading {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 28px;
+  line-height: 120%;
+  letter-spacing: 0;
+  color: var(--fg);
+}
+
+/* Vertical rhythm: 24px between blocks, more air above each section
+   heading, a tighter gap below it. */
+.legal-text > * + * {
+  margin-top: max(16px, calc(var(--base) * 24 / 1440));
+}
+
+.legal-text > * + .legal-heading {
+  margin-top: max(40px, calc(var(--base) * 56 / 1440));
+}
+
+.legal-text > .legal-heading + * {
+  margin-top: max(12px, calc(var(--base) * 16 / 1440));
+}
+
+.legal-text ul {
+  padding-left: 1.25em;
+}
+
+.legal-text li + li {
+  margin-top: max(6px, calc(var(--base) * 8 / 1440));
+}
+
+/* Bold lead-ins ("Information you provide.", "Necessary:"…), as in the
+   source document. Jost 500 is loaded on the legal pages only. */
+.legal-text strong {
+  font-weight: 500;
+}
+
+.legal-text a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  transition: opacity 0.3s ease;
+}
+
+.legal-text a:hover {
+  opacity: 0.6;
+}
+
+/* Logo in the legal pages' header links back to the main page. */
+.logo-link {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+/* Mobile: the text column takes the full width instead of 800/1440. */
+@media (max-width: 639px) {
+  .legal-inner {
+    max-width: none;
+  }
+}
+
+/* Light-theme copy of a flip-zone text block, stacked exactly over the original
+   and crossfaded via opacity (composited, frame-perfect, zero repaint). Built
+   by JS as a clone of each text element. Placed last so it overrides the
+   original typography classes the clone still carries (same specificity). */
+.theme-overlay-text {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  color: #0a0a0a;
+  opacity: 0;
+  transition: opacity 1s ease;
+  pointer-events: none;
+}
+
+body.theme-light .theme-overlay-text {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Accessibility (WCAG 2.1 AA)
+   ========================================================================== */
+
+/* Skip link — the first Tab stop on every page. Parked above the screen
+   until it receives focus, then slides into the top-left corner. Sized in
+   px (not --base) so it grows with browser zoom. */
+.skip-link {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 100;
+  padding: 14px 24px;
+  border: 1px solid var(--fg);
+  border-radius: 999px;
+  background-color: var(--bg);
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: none;
+  transform: translateY(calc(-100% - 32px));
+  transition: transform 0.3s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Sections and <main> receive focus from script only (skip link, in-page
+   nav) so Tab continues from there; they are not controls, so no ring. */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* Focus — one designed indicator for every control: a 2px ring in the
+   element's own text colour, 4px clear of it. :focus-visible, so it shows
+   for keyboard users and not on mouse clicks. Every text colour on the site
+   passes 4.5:1, so a ring in that colour clears the 3:1 minimum. */
+a:focus-visible,
+button:focus-visible,
+[tabindex="0"]:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+/* Elements without a text colour of their own get the ring colour set. */
+.our-method-item:focus-visible,
+.logo-link:focus-visible {
+  outline-color: var(--fg);
+}
+
+.footer-logo:focus-visible {
+  outline-color: rgb(150, 150, 150); /* same grey as the footer links */
+}
+
+/* Our Method lines sit edge to edge in .our-method-list, whose overflow:
+   hidden (it masks the ±15% slide-in) would cut a ring drawn outside the
+   line — so theirs is drawn just inside the line's own box. */
+.our-method-item:focus-visible {
+  outline-offset: -2px;
+}
+
+/* The nav links rest dimmed to 60%; focus brightens them the way hover
+   does, so the ring isn't dimmed along with the text. */
+.nav-link:focus-visible {
+  opacity: 1;
+}
+
+/* Venn circles: the ring follows the circle (outline tracks
+   border-radius). Overrides the outline: none of their hover /
+   focus-within rule above. */
+.venn-circle:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 4px;
+}
+
+/* Browser zoom — text is in px, so at 200% it is twice the size; the
+   layout reflows instead of shrinking. 1279px and below is a 1440 screen
+   zoomed past ~112% (or a smaller laptop). */
+@media (max-width: 1279px) {
+  /* Our Method lines stop fitting the row width and wrap at a fixed size —
+     the ≥1280 fitted size (56px × 1.537, measured at 1440). */
+  .our-method-item-title {
+    font-size: 86px;
+    white-space: normal;
+    /* Room under the last line for descenders (g, y, p): 1.12em line +
+       0.18em = the 1.3em window the desktop row has. */
+    padding-bottom: 0.18em;
+  }
+}
+
+/* 899px and below (zoom ~160%+): one column where columns get too narrow
+   for the text, and the three pillars stack — at this width a description
+   no longer fits inside its circle. */
+@media (max-width: 899px) {
+  .efficiency-inner,
+  .insights-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .venn {
+    aspect-ratio: auto;
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .venn-circle {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+
+  .venn-circle + .venn-circle {
+    margin-top: -18%;
+  }
+
+  .venn-circle .venn-circle-title {
+    top: 50%;
+    left: 50%;
+  }
+
+  .venn-center {
+    display: none;
+  }
+}
+
+/* "Pause motion" (WCAG 2.2.2) — one more item of the footer's legal row,
+   styled like its links. */
+.motion-toggle {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 150%;
+  letter-spacing: 0.1em;
+  color: rgba(250, 250, 250, 0.5);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.motion-toggle:hover {
+  color: #fafafa;
+}
+
+.motion-paused .ticker-track {
+  animation-play-state: paused;
+}
+
+/* prefers-reduced-motion — nothing slides, scrolls by itself or loops:
+   entrances show their end state at once, the ticker stands still, Our
+   Method and the Venn circles swap title/description by crossfade only.
+   (The JS skips smooth scrolling, reveals and the card loops.) Fades of
+   colour and opacity stay — they are not motion. */
+@media (prefers-reduced-motion: reduce) {
+  .logo,
+  .hero-line,
+  .hero-subtitle,
+  .contact-btn,
+  .ticker {
+    animation: none;
+    opacity: 1;
+  }
+
+  .nav-link,
+  .ticker-track {
+    animation: none;
+  }
+
+  .our-method-item-title,
+  .our-method-item-desc,
+  .our-method-item:hover .our-method-item-title,
+  .our-method-item:focus-within .our-method-item-title,
+  .our-method-item:hover .our-method-item-desc,
+  .our-method-item:focus-within .our-method-item-desc {
+    transform: none;
+  }
+
+  .venn-circle:hover .venn-circle-desc,
+  .venn-circle:focus-within .venn-circle-desc {
+    animation: none;
+  }
+
+  .skip-link {
+    transition: none;
+  }
+
+  .motion-toggle {
+    display: none;
+  }
+}
+

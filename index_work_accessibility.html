@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>House of ROI</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <script>document.documentElement.classList.add('js');</script>
+  <script>
+    // Always land on top on reload/navigation — don't let the browser
+    // restore whatever scroll position the page was at before. Exception: a
+    // link from another page to a section (e.g. index_work.html#clients from
+    // the legal pages' nav) lands on that section.
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.addEventListener('pageshow', function () {
+      var target = location.hash.length > 1 && document.getElementById(location.hash.slice(1));
+      if (target) target.scrollIntoView(); else window.scrollTo(0, 0);
+    });
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400&display=swap">
+  <link rel="stylesheet" href="style_accessibility.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="theme-bg" aria-hidden="true"></div>
+  <header class="container" id="top">
+    <img class="logo" src="assets/logo_house_of_roi.svg" alt="House of ROI">
+
+    <nav class="nav" aria-label="Main">
+      <a href="#clients" class="nav-link">CLIENTS</a>
+      <a href="#approach" class="nav-link">APPROACH</a>
+      <a href="#our-method" class="nav-link">METHOD</a>
+      <a href="#rules-of-the-house" class="nav-link">RULES OF THE HOUSE</a>
+    </nav>
+  </header>
+
+  <main id="main" tabindex="-1">
+  <div class="container">
+    <section class="hero">
+      <h1 class="hero-title">
+        <span class="hero-line">Digital Marketing and Growth Media</span>
+        <span class="hero-line">as a Financial Obsession</span>
+      </h1>
+      <p class="hero-subtitle">Media, data and AI deployed with investment-grade rigor and a clear mandate:<br>growth objectives achieved at the highest level of capital efficiency.</p>
+      <a href="mailto:inquiries@thehouseofroi.com" class="contact-btn">CONTACT</a>
+    </section>
+  </div>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="ticker-item">Digital Growth. Financial Discipline.</span>
+      <span class="ticker-item">Digital Growth. Financial Discipline.</span>
+      <span class="ticker-item">Digital Growth. Financial Discipline.</span>
+      <span class="ticker-item">Digital Growth. Financial Discipline.</span>
+      <span class="ticker-item">Digital Growth. Financial Discipline.</span>
+      <span class="ticker-item">Digital Growth. Financial Discipline.</span>
+    </div>
+  </div>
+
+  <section class="clients" id="clients">
+    <div class="clients-inner">
+      <!-- 16 cells, 4x4 (2 columns on mobile). Logos are one-colour copies
+           in assets/logos-clients/, painted grey through a CSS mask — see
+           .client-logo in style.css.
+           Each cell is its own data-reveal, so every row fades up as it
+           scrolls into view (cells in a row share a top and fire together)
+           instead of the whole grid playing out while rows 2-4 are still
+           below the fold. -->
+      <div class="clients-grid">
+        <div class="client" data-reveal><span class="client-logo client-logo--lvmh" role="img" aria-label="LVMH"></span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--method" role="img" aria-label="method"></span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--dropbox" role="img" aria-label="Dropbox"></span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--eos" role="img" aria-label="eos"></span></div>
+
+        <div class="client" data-reveal><span class="client-logo client-logo--maritime" role="img" aria-label="The Maritime Financial Group"></span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--mit-sloan" role="img" aria-label="MIT Sloan School of Management"></span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--everlane" role="img" aria-label="Everlane"></span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--amazon-fashion" role="img" aria-label="Amazon Fashion"></span></div>
+
+        <div class="client" data-reveal><span class="client-logo client-logo--franzia" role="img" aria-label="Franzia"></span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--creative-cloud" role="img" aria-label="Adobe Creative Cloud"></span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--svb" role="img" aria-label="Silicon Valley Bank"></span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--drinkworks" role="img" aria-label="Drinkworks"></span></div>
+
+        <div class="client" data-reveal><span class="client-logo client-logo--rutgers-business" role="img" aria-label="Rutgers Business School"></span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--sdg" role="img" aria-label="Strategic Decisions Group"></span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--dr-noze-best" role="img" aria-label="dr.noze best"></span></div>
+        <div class="client" data-reveal><span class="client-logo client-logo--the-wine-group" role="img" aria-label="The Wine Group"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="efficiency" id="approach">
+    <div class="efficiency-inner">
+      <p class="efficiency-label" data-reveal>Engineered for<br>Capital Efficiency.</p>
+      <h2 class="efficiency-title" data-reveal>Media budgets are investment capital. We treat them accordingly.</h2>
+    </div>
+  </section>
+
+  <section class="insights">
+    <div class="insights-inner" data-reveal-group>
+      <article class="insight" data-reveal-item>
+        <div class="insight-image">
+          <!--
+            Four horizontal slider tracks (480x300 viewBox, same local space
+            as the stat chart) with a thumb on each. A cursor (the supplied
+            Cursor.svg, inlined) flies to a thumb, drags it to a new value,
+            then moves to the next — see initSliders() near the closing body tag, which
+            reuses the chart's cubicBezier ease and the same
+            "fly / hold / travel" rhythm. Thumb x-positions and the cursor's
+            x/y are set purely via inline style (left/top in %) every frame,
+            same technique as the chart's marker/tooltip.
+          -->
+          <div class="insight-sliders" data-anim>
+            <svg class="insight-sliders__lines" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <line class="insight-sliders__line" x1="30" y1="72" x2="450" y2="72" />
+              <line class="insight-sliders__line" x1="30" y1="124" x2="450" y2="124" />
+              <line class="insight-sliders__line" x1="30" y1="176" x2="450" y2="176" />
+              <line class="insight-sliders__line" x1="30" y1="228" x2="450" y2="228" />
+            </svg>
+            <div class="insight-sliders__thumb"></div>
+            <div class="insight-sliders__thumb"></div>
+            <div class="insight-sliders__thumb"></div>
+            <div class="insight-sliders__thumb"></div>
+            <svg class="insight-sliders__cursor" viewBox="0 0 25 29" aria-hidden="true">
+              <path d="M0.00530428 0.894335C-0.0719433 0.201224 0.713784 -0.252415 1.29013 0.152541L24.086 16.1694C24.6715 16.5808 24.4824 17.4814 23.7812 17.621L11.7163 20.0219C11.5291 20.0592 11.3614 20.1601 11.2423 20.3072L4.50378 28.6355C4.04893 29.1976 3.12984 28.9294 3.04978 28.2111L0.00530428 0.894335Z" fill="#cccccc" />
+            </svg>
+          </div>
+        </div>
+        <h3 class="insight-title">Institutional Marketing Discipline</h3>
+        <p class="insight-text">House of ROI operates at the intersection of winning strategy and sophisticated execution. We build performance engines that deliver structural value — combining campaign mastery with structured oversight designed to protect and scale return.</p>
+      </article>
+      <article class="insight" data-reveal-item>
+        <div class="insight-image">
+          <!--
+            Scatter plot on a 21-unit grid spanning x 30..450 / y 45..255 of
+            the same 480x300 viewBox the other two cards are drawn in. The
+            dots' resting positions below are the mockup's own, measured off
+            it rather than eyeballed; the two trend states they cycle through
+            live in initScatter() near the closing body tag.
+          -->
+          <div class="insight-scatter" data-anim>
+            <svg class="insight-scatter__grid" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <line class="insight-scatter__line" x1="30" y1="45" x2="30" y2="255" />
+              <line class="insight-scatter__line" x1="51" y1="45" x2="51" y2="255" />
+              <line class="insight-scatter__line" x1="72" y1="45" x2="72" y2="255" />
+              <line class="insight-scatter__line" x1="93" y1="45" x2="93" y2="255" />
+              <line class="insight-scatter__line" x1="114" y1="45" x2="114" y2="255" />
+              <line class="insight-scatter__line" x1="135" y1="45" x2="135" y2="255" />
+              <line class="insight-scatter__line" x1="156" y1="45" x2="156" y2="255" />
+              <line class="insight-scatter__line" x1="177" y1="45" x2="177" y2="255" />
+              <line class="insight-scatter__line" x1="198" y1="45" x2="198" y2="255" />
+              <line class="insight-scatter__line" x1="219" y1="45" x2="219" y2="255" />
+              <line class="insight-scatter__line" x1="240" y1="45" x2="240" y2="255" />
+              <line class="insight-scatter__line" x1="261" y1="45" x2="261" y2="255" />
+              <line class="insight-scatter__line" x1="282" y1="45" x2="282" y2="255" />
+              <line class="insight-scatter__line" x1="303" y1="45" x2="303" y2="255" />
+              <line class="insight-scatter__line" x1="324" y1="45" x2="324" y2="255" />
+              <line class="insight-scatter__line" x1="345" y1="45" x2="345" y2="255" />
+              <line class="insight-scatter__line" x1="366" y1="45" x2="366" y2="255" />
+              <line class="insight-scatter__line" x1="387" y1="45" x2="387" y2="255" />
+              <line class="insight-scatter__line" x1="408" y1="45" x2="408" y2="255" />
+              <line class="insight-scatter__line" x1="429" y1="45" x2="429" y2="255" />
+              <line class="insight-scatter__line" x1="450" y1="45" x2="450" y2="255" />
+              <line class="insight-scatter__line" x1="30" y1="45" x2="450" y2="45" />
+              <line class="insight-scatter__line" x1="30" y1="66" x2="450" y2="66" />
+              <line class="insight-scatter__line" x1="30" y1="87" x2="450" y2="87" />
+              <line class="insight-scatter__line" x1="30" y1="108" x2="450" y2="108" />
+              <line class="insight-scatter__line" x1="30" y1="129" x2="450" y2="129" />
+              <line class="insight-scatter__line" x1="30" y1="150" x2="450" y2="150" />
+              <line class="insight-scatter__line" x1="30" y1="171" x2="450" y2="171" />
+              <line class="insight-scatter__line" x1="30" y1="192" x2="450" y2="192" />
+              <line class="insight-scatter__line" x1="30" y1="213" x2="450" y2="213" />
+              <line class="insight-scatter__line" x1="30" y1="234" x2="450" y2="234" />
+              <line class="insight-scatter__line" x1="30" y1="255" x2="450" y2="255" />
+            </svg>
+            <div class="insight-scatter__dot" style="left: 15.417%; top: 70.667%;"></div>
+            <div class="insight-scatter__dot" style="left: 16.146%; top: 57.633%;"></div>
+            <div class="insight-scatter__dot" style="left: 21.188%; top: 70.667%;"></div>
+            <div class="insight-scatter__dot" style="left: 24.062%; top: 79.867%;"></div>
+            <div class="insight-scatter__dot" style="left: 41.062%; top: 74.367%;"></div>
+            <div class="insight-scatter__dot" style="left: 43.938%; top: 51.333%;"></div>
+            <div class="insight-scatter__dot" style="left: 46.833%; top: 60.567%;"></div>
+            <div class="insight-scatter__dot" style="left: 52.583%; top: 74.367%;"></div>
+            <div class="insight-scatter__dot" style="left: 55.479%; top: 60.567%;"></div>
+            <div class="insight-scatter__dot" style="left: 56.188%; top: 47.567%;"></div>
+            <div class="insight-scatter__dot" style="left: 59.083%; top: 24.5%;"></div>
+            <div class="insight-scatter__dot" style="left: 61.229%; top: 60.567%;"></div>
+            <div class="insight-scatter__dot" style="left: 61.958%; top: 33.733%;"></div>
+            <div class="insight-scatter__dot" style="left: 64.104%; top: 69.767%;"></div>
+            <div class="insight-scatter__dot" style="left: 67.729%; top: 47.567%;"></div>
+            <div class="insight-scatter__dot" style="left: 69.875%; top: 79%;"></div>
+            <div class="insight-scatter__dot" style="left: 70.604%; top: 33.733%;"></div>
+            <div class="insight-scatter__dot" style="left: 76.375%; top: 33.733%;"></div>
+            <div class="insight-scatter__dot" style="left: 79.25%; top: 42.933%;"></div>
+            <div class="insight-scatter__dot" style="left: 85.021%; top: 52.167%;"></div>
+          </div>
+        </div>
+        <h3 class="insight-title">Private Equity Logic for Digital Growth</h3>
+        <p class="insight-text">Growth capital is deployed with rigorous unit economics, structured testing, independent analysis protected from vendor-supplied materials and platform sales narratives, disciplined optimization across the full digital landscape.</p>
+      </article>
+      <article class="insight" data-reveal-item>
+        <div class="insight-image">
+          <!--
+            Per graph-curve-line.svg + the mockup — the line's "d" is that
+            file's path, rescaled from its native 668x202 viewBox into this
+            card's local 480x300 one (same 16:10 space the compass/stairs
+            cards use). Box top = +100, box bottom = -100 (per spec), so any
+            point's value is 100 - (y / 300) * 200 — read straight off the
+            live curve via path.getPointAtLength() in the script at the
+            bottom of the page, not hand-placed. Marker + tooltip share one
+            left/top (set by JS every frame); CSS transforms below split them
+            apart (marker centers on the point, tooltip floats a fixed gap
+            above it) so a single coordinate update moves both correctly at
+            any position on the curve — see the ping-pong loop in the
+            "-2.15%" stat chart script near the closing body tag.
+          -->
+          <div class="insight-chart" data-anim aria-hidden="true">
+            <svg class="insight-chart__line" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <path class="insight-chart__path" d="M15.42,161.39 C86.92,244.06 135.62,220.24 186.01,188.39 C254.10,145.36 285.65,146.32 358.78,183.77 C432.82,221.69 466.65,104.44 466.65,104.44" />
+            </svg>
+            <span class="insight-chart__label"><span class="insight-chart__label-value">-2.15%</span> RO<span class="insight-chart__label-kern">A</span>S</span>
+            <div class="insight-chart__marker" style="left: 56.8%; top: 56.6%;"></div>
+            <div class="insight-chart__tooltip" style="left: 56.8%; top: 56.6%;">-2.15%</div>
+          </div>
+        </div>
+        <h3 class="insight-title">Investment-Grade<br>Rigor</h3>
+        <p class="insight-text">Every channel, every campaign, every dollar deployed defends its position with performance data. Our reporting answers the CFO's question: What did this capital drive? We don't manage marketing expenses; we manage media investment.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="compare">
+    <div class="compare-box">
+      <div class="compare-inner">
+      <p class="compare-intro" data-reveal>The standard agency model is an assembly line designed to process budgets. House of ROI is structured to generate business efficiencies and goal accomplishment.</p>
+
+      <div class="compare-grid" data-reveal-group data-reveal-cols="2">
+        <h3 class="compare-col-title" data-reveal-item>The Conventional Agency Model</h3>
+        <h3 class="compare-col-title" data-reveal-item>House of ROI Approach</h3>
+
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Budget Deployment Focused.</h4>
+          <p class="compare-point-text">Primary objective is exhausting allocated spend according to plan, regardless of real-time performance.</p>
+        </div>
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Mandate-Driven.</h4>
+          <p class="compare-point-text">Optimization governed strictly by business objectives — from awareness to acquisition and retention.</p>
+        </div>
+
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Process-Driven Structure.</h4>
+          <p class="compare-point-text">Layered account management and junior execution teams. The senior professionals who pitch rarely do the work.</p>
+        </div>
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Principal-Led Implementation.</h4>
+          <p class="compare-point-text">Direct access to practice leadership. Minimal layers between capital allocation and decision-making. Clients know who is managing their budget.</p>
+        </div>
+
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Vendor Pleasing.</h4>
+          <p class="compare-point-text">Recommendations shaped by platform sales relationships and self-referential industry best practices.</p>
+        </div>
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Vendor Independence.</h4>
+          <p class="compare-point-text">Zero reliance on platform sales narratives. We operate on an independent, structural understanding of platform algorithms to protect the client's capital, not the provider's relationship.</p>
+        </div>
+
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">"Set-and-Forget" Autopilot.</h4>
+          <p class="compare-point-text">Heavy dependence on platform automation black boxes with limited oversight or intervention.</p>
+        </div>
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Dynamic Intervention.</h4>
+          <p class="compare-point-text">Rigorous human oversight combining automation with manual precision and ongoing monitoring to maintain control over the campaign's performance output.</p>
+        </div>
+
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Marketing as Expense.</h4>
+          <p class="compare-point-text">Managed as sunk cost with minimal accountability for capital efficiency and execution quality.</p>
+        </div>
+        <div class="compare-point" data-reveal-item>
+          <h4 class="compare-point-title">Marketing as Investment.</h4>
+          <p class="compare-point-text">Digital media managed as growth asset with real-time accountability and optimization.</p>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="our-method" id="our-method">
+    <div class="our-method-inner">
+      <h2 class="our-method-title" data-reveal>Our Method</h2>
+
+      <div class="our-method-list">
+        <div class="our-method-item" tabindex="0">
+          <svg class="our-method-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="16" y="16" width="6" height="6" rx="1"/>
+            <rect x="2" y="16" width="6" height="6" rx="1"/>
+            <rect x="9" y="2" width="6" height="6" rx="1"/>
+            <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/>
+            <path d="M12 12V8"/>
+          </svg>
+          <div class="our-method-item-text">
+            <div class="our-method-item-track">
+              <h3 class="our-method-item-title">Systems Thinking</h3>
+              <p class="our-method-item-desc">Every decision made in context of the full market<br class="desktop-break"> system — never a channel tactic in isolation.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="our-method-item" tabindex="0">
+          <svg class="our-method-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/>
+            <path d="M9 13a4.5 4.5 0 0 0 3-4"/>
+            <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/>
+            <path d="M3.477 10.896a4 4 0 0 1 .585-.396"/>
+            <path d="M6 18a4 4 0 0 1-1.967-.516"/>
+            <path d="M12 13h4"/>
+            <path d="M12 18h6a2 2 0 0 1 2 2v1"/>
+            <path d="M12 8h8"/>
+            <path d="M16 8V5a2 2 0 0 1 2-2"/>
+            <circle cx="16" cy="13" r=".5"/>
+            <circle cx="18" cy="3" r=".5"/>
+            <circle cx="20" cy="21" r=".5"/>
+            <circle cx="20" cy="8" r=".5"/>
+          </svg>
+          <div class="our-method-item-text">
+            <div class="our-method-item-track">
+              <h3 class="our-method-item-title" id="our-method-fit">Human + Machine Intelligence</h3>
+              <p class="our-method-item-desc">AI accelerates the analysis. Every strategic call<br class="desktop-break"> is made, and owned, by a human.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="our-method-item" tabindex="0">
+          <svg class="our-method-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"/>
+          </svg>
+          <div class="our-method-item-text">
+            <div class="our-method-item-track">
+              <h3 class="our-method-item-title">Full-Funnel Command</h3>
+              <p class="our-method-item-desc">Awareness to acquisition — one system built for<br class="desktop-break"> whatever the growth mandate requires.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="our-method-item" tabindex="0">
+          <svg class="our-method-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z"/>
+            <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/>
+          </svg>
+          <div class="our-method-item-text">
+            <div class="our-method-item-track">
+              <h3 class="our-method-item-title">Po<span class="kern-rt">r</span>tfolio-Level Allocation</h3>
+              <p class="our-method-item-desc">Budgets deployed and rebalanced across channels<br class="desktop-break"> the way capital moves across a portfolio.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="our-method-item" tabindex="0">
+          <svg class="our-method-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+            <path d="M21 3v5h-5"/>
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+            <path d="M8 16H3v5"/>
+          </svg>
+          <div class="our-method-item-text">
+            <div class="our-method-item-track">
+              <h3 class="our-method-item-title">Continuous Optimization</h3>
+              <p class="our-method-item-desc">No set-and-forget. Capital reallocated in<br class="desktop-break"> real time as performance data arrives.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- share-2 (Lucide): three linked nodes — cross-channel synergy,
+             not a single node/channel in isolation. -->
+        <div class="our-method-item" tabindex="0">
+          <svg class="our-method-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="18" cy="5" r="3"/>
+            <circle cx="6" cy="12" r="3"/>
+            <circle cx="18" cy="19" r="3"/>
+            <path d="M8.59 13.51 15.42 17.49"/>
+            <path d="M15.41 6.51 8.59 10.49"/>
+          </svg>
+          <div class="our-method-item-text">
+            <div class="our-method-item-track">
+              <h3 class="our-method-item-title">Cross-Channel Orchestration</h3>
+              <p class="our-method-item-desc">Deep, current knowledge of how each platform's<br class="desktop-break"> algorithm actually behaves — deployed so every channel creates synergistic lift and actively reinforces the others.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pillars">
+    <div class="pillars-inner">
+      <div class="venn" data-reveal>
+        <div class="venn-circle venn-circle--marketing" tabindex="0">
+          <h3 class="venn-circle-title">Marketing Excellence</h3>
+          <p class="venn-circle-desc">We view media as a capital allocation task. Business objectives and strategic viability are put before platform tactics and dollar deployed defends its position with performance data (portfolio-level). to fulfill specific growth mandates. Every touchpoint is structured to capture immediate efficiency while sustaining long-term market authority.</p>
+        </div>
+        <div class="venn-circle venn-circle--financial" tabindex="0">
+          <h3 class="venn-circle-title">Financial Mindset</h3>
+          <p class="venn-circle-desc">We speak the language of the CFO because our primary metric is the KPI achievement and absolute reconciliation of capital to profit.</p>
+        </div>
+        <div class="venn-circle venn-circle--machine" tabindex="0">
+          <h3 class="venn-circle-title">Machine Intelligence</h3>
+          <p class="venn-circle-desc">Business objectives and strategic viability dictate the architecture, never platform tactics. Every touchpoint is engineered to fulfill specific growth mandates - capturing immediate efficiency while sustaining long-term market authority.</p>
+        </div>
+        <div class="venn-center" aria-hidden="true">
+          <img src="assets/logo_house_of_roi.svg" alt="House of ROI">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="method" id="rules-of-the-house">
+    <div class="method-inner">
+      <div class="method-content">
+        <h2 class="method-title" data-reveal>Rules of the House</h2>
+
+        <div class="method-list" data-reveal-group data-reveal-cols="2">
+          <div class="method-item" data-reveal-item>
+            <span class="method-number">01</span>
+            <div class="method-item-body">
+              <h3 class="method-item-title">In God We Trust. Everyone Else Brings Data.</h3>
+              <p class="method-item-text">We're proponents of data-driven decisions and have limited tolerance for self-referential advice, speculative best practices, "trust-me-bro" vendor efforts, or methodology without measurable validation.</p>
+            </div>
+          </div>
+
+          <div class="method-item" data-reveal-item>
+            <span class="method-number">02</span>
+            <div class="method-item-body">
+              <h3 class="method-item-title">We Tell the Truth.</h3>
+              <p class="method-item-text">We're focused on results, not process. Expect to hear the things that agencies prioritizing "client service" and internal politics are too afraid or shy to tell you. We are here to move the needle, not to be liked.</p>
+            </div>
+          </div>
+
+          <div class="method-item" data-reveal-item>
+            <span class="method-number">03</span>
+            <div class="method-item-body">
+              <h3 class="method-item-title">We're Not Taking Hostages.</h3>
+              <p class="method-item-text">Partnerships continue by performance, not inertia.</p>
+            </div>
+          </div>
+
+          <div class="method-item" data-reveal-item>
+            <span class="method-number">04</span>
+            <div class="method-item-body">
+              <h3 class="method-item-title">You Set the Destination. We Fly the Plane.</h3>
+              <p class="method-item-text">We'll focus on your objectives, not ours. But we don't operate by committee — we're not here to debate execution with unqualified voices, accommodate vendor agendas, or implement crowd-sourced strategy.</p>
+            </div>
+          </div>
+
+          <div class="method-item" data-reveal-item>
+            <span class="method-number">05</span>
+            <div class="method-item-body">
+              <h3 class="method-item-title">We Interview Clients Too.</h3>
+              <p class="method-item-text">Every engagement starts with mutual vetting. We evaluate budget adequacy, decision-making speed, organizational readiness, alignment with our cultural and ethical standards, and general market fit. Access is not automatic.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <a href="#top" class="footer-logo" aria-label="House of ROI — back to top">
+          <img src="assets/logo_house_of_roi.svg" alt="House of ROI">
+        </a>
+        <nav class="footer-nav" aria-label="Footer">
+          <ul class="footer-nav-col">
+            <li><a href="#clients" class="footer-link">CLIENTS</a></li>
+            <li><a href="#approach" class="footer-link">APPROACH</a></li>
+          </ul>
+          <ul class="footer-nav-col">
+            <li><a href="#our-method" class="footer-link">METHOD</a></li>
+            <li><a href="#rules-of-the-house" class="footer-link">RULES OF THE HOUSE</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 House of ROI. All rights reserved.</p>
+        <nav class="footer-legal" aria-label="Legal">
+          <a href="terms-of-use_accessibility.html" class="footer-legal-link">Terms of Use</a>
+          <a href="privacy-policy_accessibility.html" class="footer-legal-link">Privacy Policy</a>
+          <button class="motion-toggle" type="button"><span class="motion-toggle__label">Pause motion</span></button>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // "Pause motion" (WCAG 2.2.2 Pause, Stop, Hide): stops the ticker and the
+    // three looping card animations for anyone who finds them distracting.
+    // The button sits in the footer's legal row. The choice is remembered in
+    // this browser.
+    // Under prefers-reduced-motion nothing loops in the first place, so the
+    // button is hidden (CSS).
+    window.__motion = (function () {
+      var KEY = 'hor-motion-paused';
+      var loops = [];
+      var paused = false;
+      try { paused = localStorage.getItem(KEY) === '1'; } catch (e) {}
+      var buttons = document.querySelectorAll('.motion-toggle');
+      function apply() {
+        document.documentElement.classList.toggle('motion-paused', paused);
+        buttons.forEach(function (btn) {
+          btn.querySelector('.motion-toggle__label').textContent = paused ? 'Play motion' : 'Pause motion';
+        });
+        loops.forEach(function (tl) { if (paused) tl.pause(); else tl.resume(); });
+      }
+      buttons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          paused = !paused;
+          try { localStorage.setItem(KEY, paused ? '1' : '0'); } catch (e) {}
+          apply();
+        });
+      });
+      apply();
+      // Each looping card timeline registers itself when it starts.
+      return { register: function (tl) { loops.push(tl); if (paused) tl.pause(); } };
+    })();
+  </script>
+
+  <script>
+    // Invert the whole page to a light theme once "Media budgets are
+    // investment capital…" scrolls into view. The flip is smooth via CSS
+    // transitions.
+    (function () {
+      // The light theme flips on as soon as .efficiency-title enters the
+      // screen — see the boundary-crossing observer below for how down vs.
+      // up scrolling is handled differently past this point.
+      var titles = document.querySelectorAll('.efficiency-title');
+      if (!titles.length) return;
+
+      // Paint-free text inversion: for every flip-zone text block, stack a
+      // dark-coloured clone exactly over the original and crossfade it via
+      // opacity. Opacity is composited and interpolated per-frame, so the text
+      // recolours perfectly in sync with the background — unlike a color
+      // transition (repaints) or mix-blend-mode (recomputes with lag).
+      var FLIP_TEXT = '.efficiency-label, .efficiency-title, .insight-title, .insight-text';
+      document.querySelectorAll(FLIP_TEXT).forEach(function (el) {
+        // Clone BEFORE touching el's inline style, otherwise the clone would
+        // inherit position:relative inline and that would beat the overlay's
+        // position:absolute class rule (inline wins on specificity).
+        var clone = el.cloneNode(true);
+        if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
+        clone.classList.add('theme-overlay-text');
+        clone.setAttribute('aria-hidden', 'true');
+        // Strip reveal hooks so the clone isn't picked up as its own trigger.
+        clone.removeAttribute('data-reveal');
+        clone.removeAttribute('data-reveal-item');
+        el.appendChild(clone);
+      });
+
+      // Single boundary, not per-section tracking: the page is light exactly
+      // while the top of .efficiency-title is above the bottom edge of the
+      // screen — so it turns light when scrolling DOWN brings the title onto
+      // the screen, stays light all the way through .insights/.compare/
+      // .method (nothing below the boundary can turn it off), and goes back
+      // dark when scrolling UP takes the title below the screen again.
+      // Read from the live scroll position on every scroll, not from an
+      // IntersectionObserver crossing: a jump (Tab to an element far down,
+      // a "back to top" link, Home/End) can carry the title from one side
+      // of the screen to the other without it ever being on screen, and the
+      // observer then never fired — the page stayed dark below the boundary
+      // or light at the top.
+      var boundary = titles[0];
+      function syncTheme() {
+        document.body.classList.toggle('theme-light', boundary.getBoundingClientRect().top < window.innerHeight);
+      }
+      window.addEventListener('scroll', syncTheme, { passive: true });
+      window.addEventListener('resize', syncTheme);
+      // A link from another page (index_work.html#our-method) lands past the
+      // boundary — check again once the landing scroll (pageshow, in <head>)
+      // is done.
+      window.addEventListener('pageshow', syncTheme);
+      syncTheme();
+    })();
+  </script>
+
+  <script>
+    // The nav links' page-load entrance (see @keyframes navLinkIn) uses
+    // animation-fill-mode: forwards, which keeps outranking the plain
+    // :hover opacity rule in the cascade even after the animation is long
+    // done. Dropping the animation once it ends hands opacity control back
+    // to the stylesheet's normal (non-animation) rules.
+    document.querySelectorAll('.nav-link').forEach(function (link) {
+      link.addEventListener('animationend', function () {
+        link.style.animation = 'none';
+      }, { once: true });
+    });
+  </script>
+
+  <script>
+    // Sizes every "Our Method" line identically, calibrated so the longest
+    // line (Human + Machine Intelligence) spans the full row width. The
+    // result is stored as a unitless scale factor multiplying the base
+    // font-size (see .our-method-item-title), so it stays correct on resize
+    // without re-measuring — every dimension involved is --base-relative,
+    // so the ratio between them is viewport-independent.
+    // Below 1280px the lines wrap at a fixed px size (see the max-width:
+    // 1279px block in the stylesheet) — nothing to fit, and measuring there
+    // would read the wrapped line. Fit once at ≥1280 (the ratio holds at any
+    // width from then on), including when a zoom-out or resize first gets
+    // the page there.
+    var methodFitWide = window.matchMedia('(min-width: 1280px)');
+    function fitMethodLine() {
+      if (!methodFitWide.matches) return;
+      if (document.documentElement.style.getPropertyValue('--method-fit-scale')) return;
+      var el = document.getElementById('our-method-fit');
+      if (!el) return;
+      // Measured via canvas rather than el.scrollWidth: with overflow:visible
+      // (the default, and what we want for the final fitted state) browsers
+      // don't reliably grow scrollWidth to the true nowrap content width, so
+      // it under-reports and the computed scale collapses to ~1.
+      var style = getComputedStyle(el);
+      var canvas = fitMethodLine._canvas || (fitMethodLine._canvas = document.createElement('canvas'));
+      var ctx = canvas.getContext('2d');
+      ctx.font = style.fontStyle + ' ' + style.fontWeight + ' ' + style.fontSize + ' ' + style.fontFamily;
+      if ('letterSpacing' in ctx) ctx.letterSpacing = style.letterSpacing;
+      var natural = ctx.measureText(el.textContent).width;
+      var available = el.clientWidth;
+      if (!natural || !available) return;
+      document.documentElement.style.setProperty('--method-fit-scale', available / natural);
+    }
+    methodFitWide.addEventListener('change', fitMethodLine);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(fitMethodLine);
+    } else {
+      window.addEventListener('load', fitMethodLine);
+    }
+  </script>
+
+  <!-- Smooth scroll (Lenis) + scroll-reveal animations (GSAP ScrollTrigger) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script defer src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+  <script>
+    window.addEventListener('load', function () {
+      var reveals = document.querySelectorAll('[data-reveal], [data-reveal-item]');
+
+      // Graceful fallback: if GSAP failed to load, just show everything.
+      if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+        reveals.forEach(function (el) { el.style.opacity = 1; el.style.transform = 'none'; });
+        return;
+      }
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      // --- prefers-reduced-motion: no smooth scrolling, no slide-in reveals
+      // and no looping card animations — everything is shown in place at
+      // once, each card on its first frame. ---
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) {
+        reveals.forEach(function (el) { el.style.opacity = 1; });
+      }
+
+      // --- Smooth scroll via Lenis, driven by the GSAP ticker (skip on touch
+      // and under reduced motion) ---
+      var isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+      if (!isTouch && !reduceMotion && typeof Lenis !== 'undefined') {
+        var lenis = new Lenis({ lerp: 0.1, smoothWheel: true, smoothTouch: false });
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+        gsap.ticker.lagSmoothing(0);
+      }
+
+      // CSS-style cubic-bezier(x1, y1, x2, y2) as a t -> progress function,
+      // via Newton-Raphson — Lenis takes a plain easing function, not a
+      // bezier string. ease-in-out-ish curve so the scroll ramps up, not
+      // just decelerates in.
+      function cubicBezier(x1, y1, x2, y2) {
+        function a(p1, p2) { return 1 - 3 * p2 + 3 * p1; }
+        function b(p1, p2) { return 3 * p2 - 6 * p1; }
+        function c(p1) { return 3 * p1; }
+        function bezier(t, p1, p2) { return ((a(p1, p2) * t + b(p1, p2)) * t + c(p1)) * t; }
+        function slope(t, p1, p2) { return 3 * a(p1, p2) * t * t + 2 * b(p1, p2) * t + c(p1); }
+        return function (x) {
+          var t = x;
+          for (var i = 0; i < 8; i++) {
+            var s = slope(t, x1, x2);
+            if (s === 0) break;
+            t -= (bezier(t, x1, x2) - x) / s;
+          }
+          return bezier(t, y1, y2);
+        };
+      }
+      var scrollEasing = cubicBezier(0.76, 0, 0.24, 1);
+
+      // --- In-page anchor links scroll to their target section. Routed
+      // through Lenis (when active) instead of the native jump, since a
+      // raw hash-jump fights Lenis's own scroll-position tracking. ---
+      document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+        var hash = link.getAttribute('href');
+        if (hash.length < 2) return; // bare "#" placeholders — not real anchors
+        var target = document.querySelector(hash);
+        if (!target) return;
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          // Keyboard and screen-reader users continue from the section they
+          // jumped to: focus moves there (preventScroll, so it doesn't fight
+          // the smooth scroll below). Sections aren't focusable on their own,
+          // so they get tabindex="-1" — focusable by script, not by Tab.
+          if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+          target.focus({ preventScroll: true });
+          if (typeof lenis !== 'undefined' && lenis) {
+            lenis.scrollTo(target, { duration: 1.5, easing: scrollEasing, lock: true });
+          } else {
+            target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+          }
+        });
+      });
+
+      // --- Single-element reveals: fade + slide up when entering the viewport
+      // (Clients logo cells have their own, later and slower, trigger below) ---
+      gsap.utils.toArray('[data-reveal]:not(.client)').forEach(function (el) {
+        if (reduceMotion) return;
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 85%',
+          once: true,
+          onEnter: function () {
+            // fromTo so the slide-up works without a transform in the CSS base,
+            // and clearProps removes the leftover transform afterwards — a
+            // lingering transform would create a stacking context and break the
+            // mix-blend-mode theme inversion.
+            gsap.fromTo(el,
+              { opacity: 0, y: 30 },
+              { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', clearProps: 'transform' }
+            );
+          }
+        });
+      });
+
+      // --- "-2.15%" stat chart: marker + tooltip ping-pong along the real
+      // curve, forever, once the card is in view. The path is read via the
+      // SVG geometry API (getPointAtLength), not re-derived — so the marker
+      // is always exactly on the line at every progress value, not just at
+      // the one point we hand-measured for the static layout. Per spec: box
+      // top = +100, box bottom = -100 (the viewBox is 480x300 — see the HTML
+      // comment above the markup), so a point's value is a straight line
+      // interpolation of its y between those two.
+      function initStatChart(chart) {
+        var path = chart.querySelector('.insight-chart__path');
+        var marker = chart.querySelector('.insight-chart__marker');
+        var tooltip = chart.querySelector('.insight-chart__tooltip');
+        var labelValue = chart.querySelector('.insight-chart__label-value');
+        if (!path || !marker || !tooltip || !labelValue) return;
+
+        var VB_WIDTH = 480;
+        var VB_HEIGHT = 300;
+        var length = path.getTotalLength();
+
+        // Zero sits at the very bottom of the frame (y=300), so the curve
+        // — which never reaches that far down — reads strictly positive:
+        // value = 100 * (300 - y) / 300, i.e. just the box-top-is-+100
+        // reading with nothing below zero. Kept as ZERO_Y (rather than
+        // inlining 300) so the "above zero" formula below still reads the
+        // same as when zero was placed elsewhere (see git history for the
+        // 80/20 time-split placement this replaced). The "below zero"
+        // branch is dead code at ZERO_Y = VB_HEIGHT — y can't exceed the
+        // box it's drawn in — kept only so moving ZERO_Y off the bottom
+        // again later doesn't require rederiving it.
+        var ZERO_Y = VB_HEIGHT;
+
+        // Fixed "XX.XX%" shape — always 2 integer digits (zero-padded),
+        // dot, 2 decimals, percent — so no character ever appears/vanishes
+        // frame to frame (paired with font-variant-numeric: tabular-nums in
+        // CSS, so within that shape no digit's own column width jumps
+        // around either). value is never negative at ZERO_Y = VB_HEIGHT
+        // (see above), so there's no sign character to reserve a slot for.
+        function formatValue(value) {
+          var parts = Math.abs(value).toFixed(2).split('.');
+          if (parts[0].length < 2) parts[0] = '0' + parts[0];
+          return parts.join('.') + '%';
+        }
+
+        function render(t) {
+          var pt = path.getPointAtLength(t * length);
+          var leftPct = pt.x / VB_WIDTH * 100;
+          var topPct = pt.y / VB_HEIGHT * 100;
+
+          marker.style.left = leftPct + '%';
+          marker.style.top = topPct + '%';
+
+          var value = pt.y <= ZERO_Y
+            ? 100 * (ZERO_Y - pt.y) / ZERO_Y                 // above zero: 0 .. +100
+            : -100 * (pt.y - ZERO_Y) / (VB_HEIGHT - ZERO_Y); // below zero: 0 .. -100
+          var numText = formatValue(value);
+          tooltip.textContent = numText;
+          labelValue.textContent = numText; // the " ROAS" suffix is static markup, not rewritten every frame
+
+          // The path runs close to the card's left/right edges, closer than
+          // half the tooltip's own (text-dependent) width — centered at
+          // leftPct there would push it past .insight-image's overflow:
+          // hidden and clip the pill (and the "-" sign with it). Clamp in
+          // px, measured after the text above is set, so it stays fully
+          // inside the card at every point on the curve while still
+          // tracking the marker's true (unclamped) position vertically.
+          var chartWidth = chart.clientWidth;
+          var tooltipHalf = tooltip.offsetWidth / 2;
+          var idealLeft = (leftPct / 100) * chartWidth;
+          var clampedLeft = Math.min(Math.max(idealLeft, tooltipHalf), chartWidth - tooltipHalf);
+          tooltip.style.left = clampedLeft + 'px';
+          tooltip.style.top = topPct + '%';
+        }
+
+        // Waypoint sequence (progress along the curve, 0-1), each one held
+        // for a beat before the next leg — not a plain back-and-forth.
+        // WAYPOINTS[0] is also the resting position while off-screen/before
+        // the timeline starts. cubicBezier() is the same helper the Lenis
+        // scroll setup above builds its easing function with — reused here
+        // as CSS's own default `ease` curve, so no extra GSAP ease plugin is
+        // needed for it.
+        var WAYPOINTS = [0.20, 0.80, 0.50, 0.82, 0.20];
+        var TRAVEL_DURATION = 2;
+        var HOLD_DURATION = 1;
+        var travelEase = cubicBezier(0.25, 0.1, 0.25, 1);
+
+        // Lock the tooltip to one fixed width — the widest it's ever asked
+        // to be over the cycle — so it doesn't visibly resize every frame
+        // as the digit count / minus sign changes. Every travel leg only
+        // ever crosses progress values between WAYPOINTS' own min and max
+        // (easing changes speed, not which points on the path get visited),
+        // so sampling that single continuous range covers every value the
+        // cycle can actually produce — measured against the real rendered
+        // text (font, padding, everything) rather than a guessed px number.
+        (function lockTooltipWidth() {
+          var minT = Math.min.apply(null, WAYPOINTS);
+          var maxT = Math.max.apply(null, WAYPOINTS);
+          var widest = 0;
+          var STEPS = 400;
+          for (var i = 0; i <= STEPS; i++) {
+            var t = minT + (maxT - minT) * (i / STEPS);
+            var pt = path.getPointAtLength(t * length);
+            var value = pt.y <= ZERO_Y
+              ? 100 * (ZERO_Y - pt.y) / ZERO_Y
+              : -100 * (pt.y - ZERO_Y) / (VB_HEIGHT - ZERO_Y);
+            tooltip.textContent = formatValue(value);
+            widest = Math.max(widest, tooltip.offsetWidth);
+          }
+          tooltip.style.width = widest + 'px';
+        })();
+
+        render(WAYPOINTS[0]);
+
+        ScrollTrigger.create({
+          trigger: chart,
+          start: 'top 85%',
+          once: true,
+          onEnter: function () {
+            chart.classList.add('is-in-view');
+            if (reduceMotion) return; // stays on its first frame
+            var progress = { t: WAYPOINTS[0] };
+            var tl = gsap.timeline({ repeat: -1 });
+            window.__motion.register(tl);
+            for (var i = 0; i < WAYPOINTS.length - 1; i++) {
+              tl.to({}, { duration: HOLD_DURATION }); // hold at WAYPOINTS[i]
+              tl.to(progress, {
+                t: WAYPOINTS[i + 1],
+                duration: TRAVEL_DURATION,
+                ease: travelEase,
+                onUpdate: function () { render(progress.t); }
+              });
+            }
+          }
+        });
+      }
+      document.querySelectorAll('.insight-chart').forEach(initStatChart);
+
+      // --- "Institutional Marketing Discipline" sliders: a cursor visits
+      // each of the 4 thumbs in turn and drags it to a new value along its
+      // track. One full loop is 2 passes over the 4 sliders (8 drags) — one
+      // out to hand-picked "random" values, one back to each slider's
+      // original value — after which the timeline repeats forever.
+      // Reuses the stat chart's cubicBezier ease and its fly/settle rhythm;
+      // unlike the chart, position is driven by x/y (not a path length),
+      // since each thumb only ever moves horizontally along its own fixed
+      // line.
+      function initSliders(container) {
+        var lines = container.querySelectorAll('.insight-sliders__line');
+        var thumbs = container.querySelectorAll('.insight-sliders__thumb');
+        var cursor = container.querySelector('.insight-sliders__cursor');
+        if (!lines.length || !thumbs.length || !cursor) return;
+
+        var VB_WIDTH = 480;
+        var VB_HEIGHT = 300;
+        var LINE_X1 = 30;
+        var LINE_X2 = 450;
+        var LINE_Y = [72, 124, 176, 228]; // must match the <line> y1/y2 above
+
+        // Each slider's starting value (matches the static mockup) and the
+        // hand-picked "random" value the cursor drags it to on pass 1 —
+        // fractions (0-1) along the track, not generated at runtime, so the
+        // motion is reviewable/reproducible.
+        var SLIDERS = [
+          { initial: 0.37, target: 0.82 },
+          { initial: 0.69, target: 0.15 },
+          { initial: 0.55, target: 0.88 },
+          { initial: 0.16, target: 0.60 }
+        ];
+
+        function pointFor(i, frac) {
+          return { x: LINE_X1 + frac * (LINE_X2 - LINE_X1), y: LINE_Y[i] };
+        }
+        function placeThumb(i, frac) {
+          var p = pointFor(i, frac);
+          thumbs[i].style.left = (p.x / VB_WIDTH * 100) + '%';
+          thumbs[i].style.top = (p.y / VB_HEIGHT * 100) + '%';
+        }
+        function placeCursor(x, y) {
+          cursor.style.left = (x / VB_WIDTH * 100) + '%';
+          cursor.style.top = (y / VB_HEIGHT * 100) + '%';
+        }
+
+        SLIDERS.forEach(function (s, i) { placeThumb(i, s.initial); });
+        // The cursor rests on the LAST slider's thumb — which is exactly
+        // where the cycle ends, since pass 2's final drag returns that thumb
+        // to its initial value. A repeating GSAP timeline snaps its targets
+        // back to their recorded start values at the loop point, so resting
+        // anywhere else (the first slider, say) made the cursor teleport
+        // there instead of flying; ending where it starts makes that snap a
+        // no-op and the loop one continuous motion.
+        var LAST = SLIDERS.length - 1;
+        var restPoint = pointFor(LAST, SLIDERS[LAST].initial);
+        placeCursor(restPoint.x, restPoint.y);
+
+        var FLIGHT_DURATION = 0.6; // cursor travel between sliders, no thumb attached
+        var DRAG_DURATION = 1;     // dragging a thumb to its new value
+        var GRAB_PAUSE = 0.2;      // brief settle once the cursor reaches a thumb
+        var ease = cubicBezier(0.25, 0.1, 0.25, 1);
+
+        ScrollTrigger.create({
+          trigger: container,
+          start: 'top 85%',
+          once: true,
+          onEnter: function () {
+            container.classList.add('is-in-view');
+            if (reduceMotion) return; // stays on its first frame
+
+            var current = SLIDERS.map(function (s) { return s.initial; });
+            var cursorState = { x: restPoint.x, y: restPoint.y };
+            var tl = gsap.timeline({ repeat: -1 });
+            window.__motion.register(tl);
+
+            function runPass(targets) {
+              SLIDERS.forEach(function (s, i) {
+                var from = pointFor(i, current[i]);
+                var to = pointFor(i, targets[i]);
+
+                tl.to(cursorState, {
+                  x: from.x, y: from.y,
+                  duration: FLIGHT_DURATION,
+                  ease: ease,
+                  onUpdate: function () { placeCursor(cursorState.x, cursorState.y); }
+                });
+                tl.to({}, { duration: GRAB_PAUSE });
+                tl.to(cursorState, {
+                  x: to.x, y: to.y,
+                  duration: DRAG_DURATION,
+                  ease: ease,
+                  onUpdate: function () {
+                    placeCursor(cursorState.x, cursorState.y);
+                    thumbs[i].style.left = (cursorState.x / VB_WIDTH * 100) + '%';
+                  }
+                });
+                current[i] = targets[i];
+              });
+            }
+
+            runPass(SLIDERS.map(function (s) { return s.target; }));  // pass 1: out to the new values
+            runPass(SLIDERS.map(function (s) { return s.initial; })); // pass 2: back to the starting values
+          }
+        });
+      }
+      document.querySelectorAll('.insight-sliders').forEach(initSliders);
+
+      // --- "Private Equity Logic for Digital Growth" scatter: 20 dots on
+      // the grid hold three states — the mockup's own random scatter, then
+      // two upward trends, the second tighter and steeper — and cycle
+      // scatter -> loose trend -> tight trend -> scatter, forever. Ending on
+      // the state it starts from is what keeps the repeat seamless. Dots are
+      // matched to target slots without preserving their left-to-right
+      // order, so paths cross and a rebuild reads as data reshuffling rather
+      // than sliding. Same cubicBezier ease as the other two cards; each dot
+      // sets off a beat after the one before it instead of the whole cloud
+      // moving as one block.
+      function initScatter(container) {
+        var dots = container.querySelectorAll('.insight-scatter__dot');
+        if (!dots.length) return;
+
+        var VB_WIDTH = 480;
+        var VB_HEIGHT = 300;
+
+        // [x, y] per dot in viewBox units, one array per state. STATES[0]
+        // mirrors the inline left/top in the markup above.
+        var STATES = [
+          [
+            [74, 212], [77.5, 172.9], [101.7, 212], [115.5, 239.6],
+            [197.1, 223.1], [210.9, 154], [224.8, 181.7], [252.4, 223.1],
+            [266.3, 181.7], [269.7, 142.7], [283.6, 73.5], [293.9, 181.7],
+            [297.4, 101.2], [307.7, 209.3], [325.1, 142.7], [335.4, 237],
+            [338.9, 101.2], [366.6, 101.2], [380.4, 128.8], [408.1, 156.5]
+          ],
+          [
+            [244.5, 120], [287.6, 117.1], [66.8, 212.6], [306, 121.5],
+            [37.9, 225.2], [125.3, 207.5], [190.3, 144.2], [398.8, 81.2],
+            [442.1, 89.2], [158.2, 193.2], [137, 173.5], [80.6, 211.6],
+            [232.1, 160], [429.8, 112.3], [357.3, 115.9], [378.3, 109.5],
+            [96.1, 199.9], [272.4, 114.8], [216.8, 186.5], [334.6, 134.4]
+          ],
+          [
+            [141, 188.7], [63.3, 224.5], [210.9, 162.8], [422.2, 76.8],
+            [401.3, 78.5], [171.5, 179], [100.7, 219.7], [437.3, 70.8],
+            [295.3, 122.8], [225.4, 153.3], [249.5, 151.2], [381.3, 91.5],
+            [272.7, 130], [357.2, 104.1], [314.6, 112], [118.3, 199.8],
+            [38.5, 234.9], [334.6, 114], [80.6, 216.3], [188.1, 171.6]
+          ]
+        ];
+
+        var HOLD_DURATION = 1;   // beat spent resting in each state
+        var MOVE_DURATION = 1.2; // one dot's travel between states
+        var DOT_STAGGER = 0.03;  // offset between neighbouring dots setting off
+        var ease = cubicBezier(0.25, 0.1, 0.25, 1);
+
+        var pos = STATES[0].map(function (p) { return { x: p[0], y: p[1] }; });
+        function renderAll() {
+          for (var i = 0; i < pos.length; i++) {
+            dots[i].style.left = (pos[i].x / VB_WIDTH * 100) + '%';
+            dots[i].style.top = (pos[i].y / VB_HEIGHT * 100) + '%';
+          }
+        }
+        renderAll();
+
+        ScrollTrigger.create({
+          trigger: container,
+          start: 'top 85%',
+          once: true,
+          onEnter: function () {
+            container.classList.add('is-in-view');
+            if (reduceMotion) return; // stays on its first frame
+
+            // One render pass for the whole cloud per frame, driven off the
+            // timeline rather than per-tween, since a staggered tween fans
+            // out into one sub-tween per dot.
+            var tl = gsap.timeline({ repeat: -1, onUpdate: renderAll });
+            window.__motion.register(tl);
+
+            [1, 2, 0].forEach(function (stateIndex) {
+              var target = STATES[stateIndex];
+              tl.to({}, { duration: HOLD_DURATION });
+              tl.to(pos, {
+                x: function (i) { return target[i][0]; },
+                y: function (i) { return target[i][1]; },
+                duration: MOVE_DURATION,
+                ease: ease,
+                stagger: DOT_STAGGER
+              });
+            });
+          }
+        });
+      }
+      document.querySelectorAll('.insight-scatter').forEach(initScatter);
+
+      // --- Vector-animation gating for .insight-anim artwork slots: adds
+      // .is-in-view once one scrolls into frame, so its CSS @keyframes loops
+      // (defined in style.css, scoped per .insight-anim--* modifier) start
+      // on entrance instead of running continuously off-screen. All three
+      // insight cards currently run bespoke JS animations that wire their
+      // own triggers above, so this matches nothing today — it stays as the
+      // hook for pasted-in vector artwork. ---
+      gsap.utils.toArray('.insight-anim[data-anim]').forEach(function (el) {
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 85%',
+          once: true,
+          onEnter: function () { el.classList.add('is-in-view'); }
+        });
+      });
+
+      // --- Clients logos: each row fades up on its own (cells in a row share
+      // a centre, so they fire together), one cell at a time left to right.
+      // Later and slower than the generic reveal above (top 85%, 0.6s), which
+      // played out with the logos still at the very bottom edge and went
+      // unnoticed: here a row starts once its logos are a quarter of the
+      // screen up from the bottom, each cell takes 1.2s, and each next column
+      // waits 0.2s more. The column is read off the live grid (4 across, 2 on
+      // mobile) when the row fires. ---
+      gsap.utils.toArray('.client[data-reveal]').forEach(function (cell, i) {
+        if (reduceMotion) return;
+        ScrollTrigger.create({
+          trigger: cell,
+          start: 'center 75%',
+          once: true,
+          onEnter: function () {
+            var cols = getComputedStyle(cell.parentNode).gridTemplateColumns.split(' ').length;
+            gsap.fromTo(cell,
+              { opacity: 0, y: 30 },
+              { opacity: 1, y: 0, duration: 1.2, delay: (i % cols) * 0.2, ease: 'power2.out', clearProps: 'transform' }
+            );
+          }
+        });
+      });
+
+      // --- Grouped reveals: items cascade in with a stagger ---
+      gsap.utils.toArray('[data-reveal-group]').forEach(function (group) {
+        if (reduceMotion) return;
+        var items = group.querySelectorAll('[data-reveal-item]');
+        var cols = parseInt(group.getAttribute('data-reveal-cols'), 10) || 1;
+        // With multiple columns (e.g. the comparison grid) stagger by ROW only,
+        // so items on the same line appear synchronously and rows cascade down.
+        var stagger = cols > 1
+          ? { grid: [Math.ceil(items.length / cols), cols], axis: 'y', each: 0.15, from: 0 }
+          : 0.12;
+        ScrollTrigger.create({
+          trigger: group,
+          start: 'top 85%',
+          once: true,
+          onEnter: function () {
+            gsap.fromTo(items,
+              { opacity: 0, y: 30 },
+              { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: stagger, clearProps: 'transform' }
+            );
+          }
+        });
+      });
+
+      // --- "Our Method" lines: slide in from alternating sides on the way
+      // down, and slide back out if you scroll back up past them (unlike
+      // the once-only reveals above). Mirrors the Thoma Bravo "at a glance"
+      // stat entrance. toggleActions: play on enter, ignore leaving forward,
+      // ignore re-entering from below, reverse only on leaving back upward.
+      gsap.utils.toArray('.our-method-item').forEach(function (item, i) {
+        if (reduceMotion) return; // lines simply stay in place
+        var tween = gsap.fromTo(item,
+          { x: i % 2 === 0 ? '-15%' : '15%', opacity: 0 },
+          { x: '0%', opacity: 1, duration: 0.8, ease: 'power2.out', paused: true }
+        );
+        // Same as toggleActions 'play none none reverse', written out so the
+        // reverse can be skipped for a line that holds keyboard focus.
+        ScrollTrigger.create({
+          trigger: item,
+          // Further up the viewport than the once-only reveals above
+          // (top 85%): that trigger point sits right at the bottom
+          // edge, so the reverse (scrolling back up) played while the
+          // line was already almost off-screen and went unnoticed.
+          start: 'top 60%',
+          onEnter: function () { tween.play(); },
+          onLeaveBack: function () {
+            if (!item.contains(document.activeElement)) tween.reverse();
+          }
+        });
+        // Tab can land on a line before it reaches 60% of the screen (the
+        // browser scrolls a focused element only up to the bottom edge),
+        // which left it focused at opacity 0 — play it in on focus.
+        item.addEventListener('focusin', function () { tween.play(); });
+      });
+
+      ScrollTrigger.refresh();
+    });
+  </script>
+</body>
+</html>
