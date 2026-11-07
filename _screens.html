@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screen Preview</title>
+  <!-- ВРЕМЕННАЯ СТРАНИЦА для проверки вёрстки. Не коммитить. -->
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #1c1c1e;
+      color: #e5e5e7;
+      font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 16px 24px 48px;
+    }
+    .bar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      padding: 12px 0;
+      background: #1c1c1e;
+      border-bottom: 1px solid #3a3a3c;
+      margin-bottom: 24px;
+    }
+    .bar label { display: inline-flex; gap: 6px; align-items: center; }
+    .bar select, .bar button, .bar input {
+      font: inherit;
+      color: inherit;
+      background: #2c2c2e;
+      border: 1px solid #48484a;
+      border-radius: 6px;
+      padding: 4px 8px;
+    }
+    .bar button { cursor: pointer; }
+    h2 {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #8e8e93;
+      margin: 32px 0 12px;
+    }
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      align-items: flex-start;
+    }
+    .device { display: flex; flex-direction: column; gap: 6px; }
+    .device-name { font-weight: 600; }
+    .device-size { color: #8e8e93; font-variant-numeric: tabular-nums; }
+    .frame-wrap {
+      overflow: hidden;
+      border: 1px solid #48484a;
+      border-radius: 10px;
+      background: #000;
+    }
+    .frame-wrap iframe {
+      border: 0;
+      display: block;
+      transform-origin: 0 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <label>Страница
+      <select id="page">
+        <option value="index.html">index.html</option>
+      </select>
+    </label>
+    <label>Масштаб
+      <select id="scale">
+        <option value="0.35">35%</option>
+        <option value="0.5" selected>50%</option>
+        <option value="0.75">75%</option>
+        <option value="1">100%</option>
+      </select>
+    </label>
+    <button id="reload" type="button">Перезагрузить все</button>
+  </div>
+
+  <div id="groups"></div>
+
+  <script>
+    const groups = [
+      { title: 'Телефоны — портрет', devices: [
+        ['iPhone SE (1st gen)', 320, 568],
+        ['Galaxy S8 / S9', 360, 740],
+        ['Galaxy S21–S24', 360, 800],
+        ['iPhone SE (2nd/3rd)', 375, 667],
+        ['iPhone 13 mini', 375, 812],
+        ['iPhone 15 / 16', 393, 852],
+        ['Pixel 7 / 8', 412, 915],
+        ['iPhone 15 Pro Max', 430, 932],
+      ]},
+      { title: 'Телефоны — ландшафт', devices: [
+        ['iPhone SE (1st gen)', 568, 320],
+        ['iPhone SE (2nd/3rd)', 667, 375],
+        ['iPhone 15 / 16', 852, 393],
+        ['iPhone 15 Pro Max', 932, 430],
+      ]},
+      { title: 'Планшеты', devices: [
+        ['iPad mini', 768, 1024],
+        ['iPad Air', 820, 1180],
+        ['iPad Pro 12.9"', 1024, 1366],
+        ['iPad mini — ландшафт', 1024, 768],
+        ['iPad Pro 12.9" — ландшафт', 1366, 1024],
+      ]},
+      { title: 'Десктоп', devices: [
+        ['Laptop 13"', 1280, 800],
+        ['MacBook Air', 1440, 900],
+        ['Full HD', 1920, 1080],
+        ['2K / 1440p', 2560, 1440],
+      ]},
+    ];
+
+    const root = document.getElementById('groups');
+    const pageSel = document.getElementById('page');
+    const scaleSel = document.getElementById('scale');
+
+    function render() {
+      const page = pageSel.value;
+      const scale = parseFloat(scaleSel.value);
+      root.innerHTML = '';
+      for (const g of groups) {
+        const h = document.createElement('h2');
+        h.textContent = g.title;
+        root.appendChild(h);
+        const grid = document.createElement('div');
+        grid.className = 'grid';
+        for (const [name, w, hgt] of g.devices) {
+          const d = document.createElement('div');
+          d.className = 'device';
+          d.innerHTML =
+            '<div><span class="device-name"></span> <span class="device-size"></span></div>' +
+            '<div class="frame-wrap"><iframe loading="lazy"></iframe></div>';
+          d.querySelector('.device-name').textContent = name;
+          d.querySelector('.device-size').textContent = w + '×' + hgt;
+          const wrap = d.querySelector('.frame-wrap');
+          wrap.style.width = Math.round(w * scale) + 'px';
+          wrap.style.height = Math.round(hgt * scale) + 'px';
+          const f = d.querySelector('iframe');
+          f.width = w;
+          f.height = hgt;
+          f.style.transform = 'scale(' + scale + ')';
+          f.title = name;
+          f.src = page;
+          grid.appendChild(d);
+        }
+        root.appendChild(grid);
+      }
+    }
+
+    pageSel.addEventListener('change', render);
+    scaleSel.addEventListener('change', render);
+    document.getElementById('reload').addEventListener('click', render);
+    render();
+  </script>
+</body>
+</html>

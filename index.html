@@ -16,6 +16,10 @@
     :root {
       --base: min(100vw, 1440px);
       --edge-gap: 120px;
+      --headline-size: clamp(22px, 7.5vw, 40px);
+      /* половина высоты блока Coming soon + by invitation only */
+      --text-half: calc(var(--headline-size) * 1.25);
+      --footer-gap: calc(4vh + env(safe-area-inset-bottom, 0px));
     }
 
     body {
@@ -50,7 +54,6 @@
     }
 
     .stub-text-group {
-      --headline-size: clamp(22px, 7.5vw, 40px);
       position: fixed;
       top: 50%;
       left: 50%;
@@ -92,11 +95,20 @@
       animation: stubIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.35s forwards;
     }
 
-    .stub-socials {
+    /* От низа текстового блока до низа экрана: иконки по центру свободного места, копирайт внизу */
+    .stub-footer {
       position: fixed;
       left: 0;
       right: 0;
-      bottom: var(--edge-gap);
+      top: calc(50% + var(--text-half));
+      bottom: var(--footer-gap);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .stub-socials {
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -124,56 +136,126 @@
       opacity: 0.6;
     }
 
-    @media (max-width: 639px) {
-      .stub-socials {
-        bottom: calc(13vh + env(safe-area-inset-bottom, 0px));
-      }
+    /* Фокус с клавиатуры: кольцо 2px цвета иконок с отступом 4px; на клик мышью не появляется */
+    .stub-social:focus-visible {
+      outline: 2px solid #fafafa;
+      outline-offset: 4px;
+    }
+
+    .stub-trademark {
+      padding: 0 16px;
+      font-family: "futura-pt", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      letter-spacing: 0.02em;
+      color: #ffffff;
+      text-align: center;
+      opacity: 0;
+      animation: stubIn 1s cubic-bezier(0.65, 0, 0.35, 1) 0.65s forwards;
+    }
+
+    /* каждое предложение — своя строка; если не влезает, переносится ровно, без «сирот» */
+    .stub-trademark span {
+      display: block;
+      text-wrap: balance;
     }
 
     @media (min-width: 640px) {
+      :root {
+        /* 40px, а не 36px: 640–767px — это экран 1280–1440 при зуме 200%,
+           и заголовок должен быть там вдвое больше своих десктопных 40px */
+        --headline-size: 40px;
+        --text-half: calc(var(--headline-size) * 1.25);
+        --footer-gap: 48px;
+      }
+
+      .stub-logo {
+        width: clamp(56px, calc(var(--base) * 5 / 100), 72px);
+      }
+
       .stub-text-group {
-        --headline-size: 36px;
         width: auto;
       }
 
       .stub-tagline {
-        font-size: 23px;
+        font-size: calc(var(--headline-size) * 0.5);
       }
     }
 
     @media (min-width: 768px) {
-      .stub-logo {
-        width: calc(var(--base) * 5 / 100);
-      }
-
-      .stub-text-group {
+      :root {
         --headline-size: 40px;
+        --text-half: calc((var(--headline-size) * 2 + 14px) / 2);
       }
 
       .stub-tagline {
         font-size: 14px;
       }
     }
+
+    /* Низкие экраны (телефоны в ландшафте, десктоп при зуме 200%): ужимаем отступы и логотип */
+    @media (max-height: 500px) and (orientation: landscape) {
+      :root {
+        --edge-gap: 20px;
+        --text-half: calc(var(--headline-size) * 1.2);
+        --footer-gap: calc(12px + env(safe-area-inset-bottom, 0px));
+      }
+
+      .stub-logo {
+        width: auto;
+        height: clamp(28px, 10vh, 40px);
+      }
+
+      .stub-text-group {
+        gap: calc(var(--headline-size) * 0.8);
+      }
+
+      .stub-tagline {
+        font-size: calc(var(--headline-size) * 0.45);
+      }
+    }
+
+    /* Текст уменьшаем только на сенсорных экранах: на десктопе низкий экран — это зум,
+       и заголовок должен расти вместе с ним (WCAG 1.4.4) */
+    @media (max-height: 500px) and (orientation: landscape) and (pointer: coarse) {
+      :root {
+        --headline-size: clamp(20px, 7vh, 30px);
+      }
+    }
+
+    /* «Уменьшить движение» в системе: всё на месте сразу, без анимации появления */
+    @media (prefers-reduced-motion: reduce) {
+      .stub-logo,
+      .stub-headline,
+      .stub-tagline,
+      .stub-socials,
+      .stub-trademark {
+        animation: none;
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="stub">
+  <main class="stub">
     <img class="stub-logo" src="assets/logo_house_of_roi.svg" alt="House of ROI">
     <div class="stub-text-group">
-      <p class="stub-headline">Coming soon</p>
+      <h1 class="stub-headline">Coming soon</h1>
       <p class="stub-tagline">by invitation only</p>
     </div>
-  </div>
-  <div class="stub-socials">
-    <a class="stub-social" href="mailto:inquiries@thehouseofroi.com" aria-label="Email">
-      <img src="images/email.svg" alt="Email">
-    </a>
-    <a class="stub-social stub-social--linkedin" href="https://www.linkedin.com/company/the-house-of-roi" target="_blank" rel="noopener" aria-label="LinkedIn">
-      <img src="images/linkedin-svgrepo-com.svg" alt="LinkedIn">
-    </a>
-  </div>
+  </main>
   <footer class="stub-footer">
-    <p class="stub-trademark">© 2026 House of ROI™ is the trademark owned by Kingmaker LLC. All rights reserved.</p>
+    <div class="stub-socials">
+      <a class="stub-social" href="mailto:inquiries@thehouseofroi.com" aria-label="Email">
+        <img src="images/email.svg" alt="Email">
+      </a>
+      <a class="stub-social stub-social--linkedin" href="https://www.linkedin.com/company/the-house-of-roi" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <img src="images/linkedin-svgrepo-com.svg" alt="LinkedIn">
+      </a>
+    </div>
+    <p class="stub-trademark"><span>© 2026 House of ROI™ is the trademark owned by Kingmaker LLC.</span> <span>All rights reserved.</span></p>
   </footer>
 </body>
 </html>
