@@ -3,46 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
   <title>Screen Preview</title>
-  <!-- ВРЕМЕННАЯ СТРАНИЦА для проверки вёрстки. Не коммитить. -->
+  <!-- Служебная страница для проверки адаптива. Открывать через Live Server.
+       На сайт не публикуется: GitHub Pages (Jekyll) пропускает файлы, начинающиеся с «_». -->
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
     body {
       background: #1c1c1e;
       color: #e5e5e7;
       font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      padding: 16px 24px 48px;
     }
+    button, select {
+      font: inherit;
+      color: inherit;
+      background: #2c2c2e;
+      border: 1px solid #48484a;
+      border-radius: 6px;
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+    button:hover, select:hover { border-color: #8e8e93; }
+    button:focus-visible, select:focus-visible { outline: 2px solid #0a84ff; outline-offset: 2px; }
+    button[disabled] { opacity: 0.4; cursor: default; }
+    .muted { color: #8e8e93; }
+
+    /* --- верхняя панель --- */
     .bar {
       position: sticky;
       top: 0;
       z-index: 10;
       display: flex;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 12px 16px;
       align-items: center;
-      padding: 12px 0;
+      padding: 12px 24px;
       background: #1c1c1e;
       border-bottom: 1px solid #3a3a3c;
-      margin-bottom: 24px;
     }
     .bar label { display: inline-flex; gap: 6px; align-items: center; }
-    .bar select, .bar button, .bar input {
-      font: inherit;
-      color: inherit;
-      background: #2c2c2e;
-      border: 1px solid #48484a;
-      border-radius: 6px;
-      padding: 4px 8px;
-    }
-    .bar button { cursor: pointer; }
+    .bar .spacer { flex: 1; }
+    .bar .solo-only { display: none; }
+    body.is-solo .bar .solo-only { display: inline-flex; }
+    body.is-solo .bar .grid-only { display: none; }
+    .solo-title { font-weight: 600; gap: 6px; }
+
+    /* --- сетка всех экранов --- */
+    #grid { padding: 8px 24px 48px; }
+    body.is-solo #grid { display: none; }
     h2 {
       font-size: 13px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: #8e8e93;
-      margin: 32px 0 12px;
+      margin: 28px 0 12px;
     }
     .grid {
       display: flex;
@@ -51,43 +67,84 @@
       align-items: flex-start;
     }
     .device { display: flex; flex-direction: column; gap: 6px; }
-    .device-name { font-weight: 600; }
-    .device-size { color: #8e8e93; font-variant-numeric: tabular-nums; }
+    .device-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2px 8px;
+    }
+    .device-name { font-weight: 600; flex-basis: 100%; }
+    .device-size { font-variant-numeric: tabular-nums; }
+    .device-head button { margin-left: auto; padding: 2px 8px; font-size: 12px; }
     .frame-wrap {
+      position: relative;
       overflow: hidden;
       border: 1px solid #48484a;
       border-radius: 10px;
       background: #000;
+      flex: none;
     }
     .frame-wrap iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
       border: 0;
       display: block;
       transform-origin: 0 0;
+      background: #000;
     }
+
+    /* --- соло-режим --- */
+    #solo {
+      display: none;
+      height: calc(100vh - var(--bar-h, 57px));
+      padding: 24px;
+      overflow: auto;
+    }
+    body.is-solo #solo { display: flex; }
+    #solo .frame-wrap { margin: auto; }
   </style>
 </head>
 <body>
-  <div class="bar">
+  <div class="bar" id="bar">
     <label>Страница
-      <select id="page">
-        <option value="index.html">index.html</option>
-      </select>
+      <select id="page"></select>
     </label>
-    <label>Масштаб
-      <select id="scale">
+
+    <label class="grid-only">Масштаб
+      <select id="gridScale">
         <option value="0.35">35%</option>
         <option value="0.5" selected>50%</option>
         <option value="0.75">75%</option>
         <option value="1">100%</option>
       </select>
     </label>
-    <button id="reload" type="button">Перезагрузить все</button>
+
+    <span class="solo-only solo-title"><span id="soloName"></span> <span class="muted" id="soloSize"></span></span>
+    <button class="solo-only" id="prev" type="button" title="Предыдущий экран (←)">←</button>
+    <button class="solo-only" id="next" type="button" title="Следующий экран (→)">→</button>
+    <button class="solo-only" id="rotate" type="button" title="Повернуть экран (R)">⟲ Повернуть</button>
+    <label class="solo-only">Масштаб
+      <select id="soloScale">
+        <option value="fit" selected>По окну</option>
+        <option value="0.5">50%</option>
+        <option value="0.75">75%</option>
+        <option value="1">100%</option>
+      </select>
+    </label>
+
+    <span class="spacer"></span>
+    <button id="reload" type="button" title="Перезагрузить экраны">Перезагрузить</button>
+    <button class="solo-only" id="back" type="button" title="Вернуться ко всем экранам (Esc)">Все экраны</button>
   </div>
 
-  <div id="groups"></div>
+  <div id="grid"></div>
+  <div id="solo"></div>
 
   <script>
-    const groups = [
+    const PAGES = ['index.html', 'index_work.html', 'terms-of-use.html', 'privacy-policy.html'];
+
+    const GROUPS = [
       { title: 'Телефоны — портрет', devices: [
         ['iPhone SE (1st gen)', 320, 568],
         ['Galaxy S8 / S9', 360, 740],
@@ -99,10 +156,10 @@
         ['iPhone 15 Pro Max', 430, 932],
       ]},
       { title: 'Телефоны — ландшафт', devices: [
-        ['iPhone SE (1st gen)', 568, 320],
-        ['iPhone SE (2nd/3rd)', 667, 375],
-        ['iPhone 15 / 16', 852, 393],
-        ['iPhone 15 Pro Max', 932, 430],
+        ['iPhone SE (1st gen) — ландшафт', 568, 320],
+        ['iPhone SE (2nd/3rd) — ландшафт', 667, 375],
+        ['iPhone 15 / 16 — ландшафт', 852, 393],
+        ['iPhone 15 Pro Max — ландшафт', 932, 430],
       ]},
       { title: 'Планшеты', devices: [
         ['iPad mini', 768, 1024],
@@ -119,46 +176,179 @@
       ]},
     ];
 
-    const root = document.getElementById('groups');
-    const pageSel = document.getElementById('page');
-    const scaleSel = document.getElementById('scale');
+    // Плоский список экранов с индексами — для соло-режима и стрелок.
+    const DEVICES = [];
+    GROUPS.forEach(g => g.devices.forEach(([name, w, h]) => DEVICES.push({ name, w, h })));
 
-    function render() {
-      const page = pageSel.value;
-      const scale = parseFloat(scaleSel.value);
-      root.innerHTML = '';
-      for (const g of groups) {
-        const h = document.createElement('h2');
-        h.textContent = g.title;
-        root.appendChild(h);
+    const $ = id => document.getElementById(id);
+    const pageSel = $('page'), gridScaleSel = $('gridScale'), soloScaleSel = $('soloScale');
+    const gridEl = $('grid'), soloEl = $('solo');
+
+    PAGES.forEach(p => pageSel.add(new Option(p, p)));
+
+    // Состояние живёт в адресе (#page=…&solo=…&rot=…&scale=…), поэтому
+    // переживает автоперезагрузку Live Server и его можно сохранить в закладки.
+    const state = { page: PAGES[0], solo: null, rot: false, gridScale: '0.5', soloScale: 'fit' };
+
+    function readHash() {
+      const h = new URLSearchParams(location.hash.slice(1));
+      if (PAGES.includes(h.get('page'))) state.page = h.get('page');
+      const s = parseInt(h.get('solo'), 10);
+      state.solo = Number.isInteger(s) && DEVICES[s] ? s : null;
+      state.rot = h.get('rot') === '1';
+      if (h.get('grid')) state.gridScale = h.get('grid');
+      if (h.get('scale')) state.soloScale = h.get('scale');
+    }
+
+    function writeHash() {
+      const h = new URLSearchParams({ page: state.page, grid: state.gridScale });
+      if (state.solo !== null) {
+        h.set('solo', state.solo);
+        h.set('scale', state.soloScale);
+        if (state.rot) h.set('rot', '1');
+      }
+      history.replaceState(null, '', '#' + h.toString());
+    }
+
+    function makeFrame(name, w, h, scale) {
+      const wrap = document.createElement('div');
+      wrap.className = 'frame-wrap';
+      wrap.style.width = Math.round(w * scale) + 'px';
+      wrap.style.height = Math.round(h * scale) + 'px';
+      const f = document.createElement('iframe');
+      f.width = w;
+      f.height = h;
+      f.title = name;
+      f.style.transform = 'scale(' + scale + ')';
+      f.src = state.page;
+      wrap.appendChild(f);
+      return wrap;
+    }
+
+    function renderGrid() {
+      const scale = parseFloat(state.gridScale);
+      gridEl.innerHTML = '';
+      let i = 0;
+      for (const g of GROUPS) {
+        const h2 = document.createElement('h2');
+        h2.textContent = g.title;
+        gridEl.appendChild(h2);
         const grid = document.createElement('div');
         grid.className = 'grid';
-        for (const [name, w, hgt] of g.devices) {
+        for (const [name, w, h] of g.devices) {
+          const idx = i++;
           const d = document.createElement('div');
           d.className = 'device';
-          d.innerHTML =
-            '<div><span class="device-name"></span> <span class="device-size"></span></div>' +
-            '<div class="frame-wrap"><iframe loading="lazy"></iframe></div>';
-          d.querySelector('.device-name').textContent = name;
-          d.querySelector('.device-size').textContent = w + '×' + hgt;
-          const wrap = d.querySelector('.frame-wrap');
-          wrap.style.width = Math.round(w * scale) + 'px';
-          wrap.style.height = Math.round(hgt * scale) + 'px';
-          const f = d.querySelector('iframe');
-          f.width = w;
-          f.height = hgt;
-          f.style.transform = 'scale(' + scale + ')';
-          f.title = name;
-          f.src = page;
+          const head = document.createElement('div');
+          head.className = 'device-head';
+          head.innerHTML = '<span class="device-name"></span><span class="device-size muted"></span><button type="button" title="Открыть этот экран отдельно">Соло</button>';
+          head.querySelector('.device-name').textContent = name;
+          head.querySelector('.device-size').textContent = w + '×' + h;
+          head.querySelector('button').addEventListener('click', () => openSolo(idx));
+          const frame = makeFrame(name, w, h, scale);
+          frame.querySelector('iframe').loading = 'lazy';
+          frame.style.width = Math.max(Math.round(w * scale), 0) + 'px';
+          d.style.width = Math.max(Math.round(w * scale), 160) + 'px';
+          d.append(head, frame);
           grid.appendChild(d);
         }
-        root.appendChild(grid);
+        gridEl.appendChild(grid);
       }
     }
 
-    pageSel.addEventListener('change', render);
-    scaleSel.addEventListener('change', render);
-    document.getElementById('reload').addEventListener('click', render);
+    function soloDims() {
+      const d = DEVICES[state.solo];
+      return state.rot ? { w: d.h, h: d.w } : { w: d.w, h: d.h };
+    }
+
+    function soloScaleValue() {
+      if (state.soloScale !== 'fit') return parseFloat(state.soloScale);
+      const { w, h } = soloDims();
+      const availW = soloEl.clientWidth - 48 - 2;
+      const availH = soloEl.clientHeight - 48 - 2;
+      return Math.min(1, availW / w, availH / h);
+    }
+
+    function renderSolo() {
+      const d = DEVICES[state.solo];
+      const { w, h } = soloDims();
+      $('soloName').textContent = d.name;
+      $('soloSize').textContent = w + '×' + h + (state.rot ? ' (повёрнут)' : '');
+      $('prev').disabled = state.solo === 0;
+      $('next').disabled = state.solo === DEVICES.length - 1;
+      soloScaleSel.value = state.soloScale;
+      const scale = soloScaleValue();
+      soloEl.innerHTML = '';
+      soloEl.appendChild(makeFrame(d.name, w, h, scale));
+      const pct = Math.round(scale * 100);
+      soloScaleSel.options[0].text = 'По окну' + (state.soloScale === 'fit' ? ' (' + pct + '%)' : '');
+    }
+
+    function updateBarHeight() {
+      document.documentElement.style.setProperty('--bar-h', $('bar').offsetHeight + 'px');
+    }
+
+    function render() {
+      pageSel.value = state.page;
+      gridScaleSel.value = state.gridScale;
+      document.body.classList.toggle('is-solo', state.solo !== null);
+      updateBarHeight();
+      if (state.solo !== null) renderSolo();
+      else renderGrid();
+      writeHash();
+    }
+
+    function openSolo(idx) {
+      state.solo = idx;
+      state.rot = false;
+      gridScrollY = window.scrollY;
+      render();
+      window.scrollTo(0, 0);
+    }
+
+    let gridScrollY = 0;
+    function closeSolo() {
+      state.solo = null;
+      render();
+      window.scrollTo(0, gridScrollY);
+    }
+
+    function step(delta) {
+      const n = state.solo + delta;
+      if (n < 0 || n >= DEVICES.length) return;
+      state.solo = n;
+      state.rot = false;
+      render();
+    }
+
+    pageSel.addEventListener('change', () => { state.page = pageSel.value; render(); });
+    gridScaleSel.addEventListener('change', () => { state.gridScale = gridScaleSel.value; render(); });
+    soloScaleSel.addEventListener('change', () => { state.soloScale = soloScaleSel.value; render(); });
+    $('reload').addEventListener('click', render);
+    $('back').addEventListener('click', closeSolo);
+    $('prev').addEventListener('click', () => step(-1));
+    $('next').addEventListener('click', () => step(1));
+    $('rotate').addEventListener('click', () => { state.rot = !state.rot; render(); });
+
+    document.addEventListener('keydown', e => {
+      if (state.solo === null || e.target.tagName === 'SELECT') return;
+      if (e.key === 'Escape') closeSolo();
+      else if (e.key === 'ArrowLeft') step(-1);
+      else if (e.key === 'ArrowRight') step(1);
+      else if (e.key === 'r' || e.key === 'R' || e.key === 'к' || e.key === 'К') { state.rot = !state.rot; render(); }
+    });
+
+    // «По окну» пересчитывается при изменении размера окна.
+    let resizeT;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeT);
+      resizeT = setTimeout(() => {
+        updateBarHeight();
+        if (state.solo !== null && state.soloScale === 'fit') renderSolo();
+      }, 150);
+    });
+
+    readHash();
     render();
   </script>
 </body>

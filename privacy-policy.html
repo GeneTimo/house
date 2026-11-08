@@ -12,20 +12,26 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="container">
     <a href="index_work.html" class="logo-link" aria-label="House of ROI — main page">
       <img class="logo" src="assets/logo_house_of_roi.svg" alt="House of ROI">
     </a>
 
-    <nav class="nav">
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Open menu">
+      <span class="nav-toggle__bar" aria-hidden="true"></span>
+      <span class="nav-toggle__bar" aria-hidden="true"></span>
+    </button>
+
+    <nav class="nav" id="main-nav" aria-label="Main">
       <a href="index_work.html#clients" class="nav-link">CLIENTS</a>
       <a href="index_work.html#approach" class="nav-link">APPROACH</a>
       <a href="index_work.html#our-method" class="nav-link">METHOD</a>
       <a href="index_work.html#rules-of-the-house" class="nav-link">RULES OF THE HOUSE</a>
     </nav>
-  </div>
+  </header>
 
-  <main class="legal">
+  <main class="legal" id="main" tabindex="-1">
     <div class="legal-inner">
       <h1 class="legal-title" data-reveal>Privacy Policy</h1>
       <div class="legal-text">
@@ -161,6 +167,8 @@
     </div>
   </footer>
 
+  <script src="nav-menu.js"></script>
+
   <script>
     // Same as the main page: drop the nav links' finished load animation so
     // the :hover opacity rule works (see @keyframes navLinkIn in style.css).
@@ -190,6 +198,14 @@
       }
 
       gsap.registerPlugin(ScrollTrigger);
+
+      // prefers-reduced-motion: no smooth scrolling and no slide-in reveals —
+      // the text is simply there.
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) {
+        reveals.forEach(function (el) { el.style.opacity = 1; });
+        return;
+      }
 
       // Smooth scroll via Lenis, driven by the GSAP ticker (skip on touch) —
       // same setup as the main page.

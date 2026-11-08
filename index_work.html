@@ -23,24 +23,33 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
   <div class="theme-bg" aria-hidden="true"></div>
-  <div class="container">
+  <header class="container" id="top">
     <img class="logo" src="assets/logo_house_of_roi.svg" alt="House of ROI">
 
-    <nav class="nav">
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Open menu">
+      <span class="nav-toggle__bar" aria-hidden="true"></span>
+      <span class="nav-toggle__bar" aria-hidden="true"></span>
+    </button>
+
+    <nav class="nav" id="main-nav" aria-label="Main">
       <a href="#clients" class="nav-link">CLIENTS</a>
       <a href="#approach" class="nav-link">APPROACH</a>
       <a href="#our-method" class="nav-link">METHOD</a>
       <a href="#rules-of-the-house" class="nav-link">RULES OF THE HOUSE</a>
     </nav>
+  </header>
 
+  <main id="main" tabindex="-1">
+  <div class="container">
     <section class="hero">
       <h1 class="hero-title">
         <span class="hero-line">Digital Marketing and Growth Media</span>
         <span class="hero-line">as a Financial Obsession</span>
       </h1>
-      <p class="hero-subtitle">Media, data and AI deployed with investment-grade rigor and a clear mandate:<br>growth objectives achieved at the highest level of capital efficiency.</p>
-      <a href="#" class="contact-btn">CONTACT</a>
+      <p class="hero-subtitle">Media, data and AI deployed with <span class="no-break">investment-grade</span> rigor and a clear mandate: <br>growth objectives achieved at the highest level of capital efficiency.</p>
+      <a href="mailto:inquiries@thehouseofroi.com" class="contact-btn">CONTACT</a>
     </section>
   </div>
 
@@ -213,7 +222,7 @@
             any position on the curve — see the ping-pong loop in the
             "-2.15%" stat chart script near the closing body tag.
           -->
-          <div class="insight-chart" data-anim>
+          <div class="insight-chart" data-anim aria-hidden="true">
             <svg class="insight-chart__line" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
               <path class="insight-chart__path" d="M15.42,161.39 C86.92,244.06 135.62,220.24 186.01,188.39 C254.10,145.36 285.65,146.32 358.78,183.77 C432.82,221.69 466.65,104.44 466.65,104.44" />
             </svg>
@@ -238,46 +247,56 @@
         <h3 class="compare-col-title" data-reveal-item>House of ROI Approach</h3>
 
         <div class="compare-point" data-reveal-item>
+          <span class="compare-point-label">The Conventional Agency Model</span>
           <h4 class="compare-point-title">Budget Deployment Focused.</h4>
           <p class="compare-point-text">Primary objective is exhausting allocated spend according to plan, regardless of real-time performance.</p>
         </div>
         <div class="compare-point" data-reveal-item>
+          <span class="compare-point-label">House of ROI Approach</span>
           <h4 class="compare-point-title">Mandate-Driven.</h4>
           <p class="compare-point-text">Optimization governed strictly by business objectives — from awareness to acquisition and retention.</p>
         </div>
 
         <div class="compare-point" data-reveal-item>
+          <span class="compare-point-label">The Conventional Agency Model</span>
           <h4 class="compare-point-title">Process-Driven Structure.</h4>
           <p class="compare-point-text">Layered account management and junior execution teams. The senior professionals who pitch rarely do the work.</p>
         </div>
         <div class="compare-point" data-reveal-item>
+          <span class="compare-point-label">House of ROI Approach</span>
           <h4 class="compare-point-title">Principal-Led Implementation.</h4>
           <p class="compare-point-text">Direct access to practice leadership. Minimal layers between capital allocation and decision-making. Clients know who is managing their budget.</p>
         </div>
 
         <div class="compare-point" data-reveal-item>
+          <span class="compare-point-label">The Conventional Agency Model</span>
           <h4 class="compare-point-title">Vendor Pleasing.</h4>
           <p class="compare-point-text">Recommendations shaped by platform sales relationships and self-referential industry best practices.</p>
         </div>
         <div class="compare-point" data-reveal-item>
+          <span class="compare-point-label">House of ROI Approach</span>
           <h4 class="compare-point-title">Vendor Independence.</h4>
           <p class="compare-point-text">Zero reliance on platform sales narratives. We operate on an independent, structural understanding of platform algorithms to protect the client's capital, not the provider's relationship.</p>
         </div>
 
         <div class="compare-point" data-reveal-item>
+          <span class="compare-point-label">The Conventional Agency Model</span>
           <h4 class="compare-point-title">"Set-and-Forget" Autopilot.</h4>
           <p class="compare-point-text">Heavy dependence on platform automation black boxes with limited oversight or intervention.</p>
         </div>
         <div class="compare-point" data-reveal-item>
+          <span class="compare-point-label">House of ROI Approach</span>
           <h4 class="compare-point-title">Dynamic Intervention.</h4>
           <p class="compare-point-text">Rigorous human oversight combining automation with manual precision and ongoing monitoring to maintain control over the campaign's performance output.</p>
         </div>
 
         <div class="compare-point" data-reveal-item>
+          <span class="compare-point-label">The Conventional Agency Model</span>
           <h4 class="compare-point-title">Marketing as Expense.</h4>
           <p class="compare-point-text">Managed as sunk cost with minimal accountability for capital efficiency and execution quality.</p>
         </div>
         <div class="compare-point" data-reveal-item>
+          <span class="compare-point-label">House of ROI Approach</span>
           <h4 class="compare-point-title">Marketing as Investment.</h4>
           <p class="compare-point-text">Digital media managed as growth asset with real-time accountability and optimization.</p>
         </div>
@@ -301,8 +320,8 @@
           </svg>
           <div class="our-method-item-text">
             <div class="our-method-item-track">
-              <p class="our-method-item-desc">Every decision made in context of the full market<br class="desktop-break"> system — never a channel tactic in isolation.</p>
               <h3 class="our-method-item-title">Systems Thinking</h3>
+              <p class="our-method-item-desc">Every decision made in context of the full market<br class="desktop-break"> system — never a channel tactic in isolation.</p>
             </div>
           </div>
         </div>
@@ -325,8 +344,8 @@
           </svg>
           <div class="our-method-item-text">
             <div class="our-method-item-track">
-              <p class="our-method-item-desc">AI accelerates the analysis. Every strategic call<br class="desktop-break"> is made, and owned, by a human.</p>
               <h3 class="our-method-item-title" id="our-method-fit">Human + Machine Intelligence</h3>
+              <p class="our-method-item-desc">AI accelerates the analysis. Every strategic call<br class="desktop-break"> is made, and owned, by a human.</p>
             </div>
           </div>
         </div>
@@ -337,8 +356,8 @@
           </svg>
           <div class="our-method-item-text">
             <div class="our-method-item-track">
-              <p class="our-method-item-desc">Awareness to acquisition — one system built for<br class="desktop-break"> whatever the growth mandate requires.</p>
               <h3 class="our-method-item-title">Full-Funnel Command</h3>
+              <p class="our-method-item-desc">Awareness to acquisition — one system built for<br class="desktop-break"> whatever the growth mandate requires.</p>
             </div>
           </div>
         </div>
@@ -350,8 +369,8 @@
           </svg>
           <div class="our-method-item-text">
             <div class="our-method-item-track">
-              <p class="our-method-item-desc">Budgets deployed and rebalanced across channels<br class="desktop-break"> the way capital moves across a portfolio.</p>
               <h3 class="our-method-item-title">Po<span class="kern-rt">r</span>tfolio-Level Allocation</h3>
+              <p class="our-method-item-desc">Budgets deployed and rebalanced across channels<br class="desktop-break"> the way capital moves across a portfolio.</p>
             </div>
           </div>
         </div>
@@ -365,8 +384,8 @@
           </svg>
           <div class="our-method-item-text">
             <div class="our-method-item-track">
-              <p class="our-method-item-desc">No set-and-forget. Capital reallocated in<br class="desktop-break"> real time as performance data arrives.</p>
               <h3 class="our-method-item-title">Continuous Optimization</h3>
+              <p class="our-method-item-desc">No set-and-forget. Capital reallocated in<br class="desktop-break"> real time as performance data arrives.</p>
             </div>
           </div>
         </div>
@@ -383,8 +402,8 @@
           </svg>
           <div class="our-method-item-text">
             <div class="our-method-item-track">
-              <p class="our-method-item-desc">Deep, current knowledge of how each platform's<br class="desktop-break"> algorithm actually behaves — deployed so every channel creates synergistic lift and actively reinforces the others.</p>
               <h3 class="our-method-item-title">Cross-Channel Orchestration</h3>
+              <p class="our-method-item-desc">Deep, current knowledge of how each platform's<br class="desktop-break"> algorithm actually behaves — deployed so every channel creates synergistic lift and actively reinforces the others.</p>
             </div>
           </div>
         </div>
@@ -405,7 +424,7 @@
         </div>
         <div class="venn-circle venn-circle--machine" tabindex="0">
           <h3 class="venn-circle-title">Machine Intelligence</h3>
-          <p class="venn-circle-desc">Business objectives and strategic viability dictate the architecture, never platform tactics. Every touchpoint is engineered to fulfill specific growth mandates - capturing immediate efficiency while sustaining long-term market authority.</p>
+          <p class="venn-circle-desc">Business objectives and strategic viability dictate the architecture, never platform tactics. Every touchpoint is engineered to fulfill specific growth mandates — capturing immediate efficiency while sustaining long-term market authority.</p>
         </div>
         <div class="venn-center" aria-hidden="true">
           <img src="assets/logo_house_of_roi.svg" alt="House of ROI">
@@ -464,10 +483,12 @@
     </div>
   </section>
 
+  </main>
+
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-top">
-        <a href="#" class="footer-logo" aria-label="House of ROI">
+        <a href="#top" class="footer-logo" aria-label="House of ROI — back to top">
           <img src="assets/logo_house_of_roi.svg" alt="House of ROI">
         </a>
         <nav class="footer-nav" aria-label="Footer">
@@ -486,10 +507,77 @@
         <nav class="footer-legal" aria-label="Legal">
           <a href="terms-of-use.html" class="footer-legal-link">Terms of Use</a>
           <a href="privacy-policy.html" class="footer-legal-link">Privacy Policy</a>
+          <button class="motion-toggle" type="button"><span class="motion-toggle__label">Pause motion</span></button>
         </nav>
       </div>
     </div>
   </footer>
+
+  <script src="nav-menu.js"></script>
+
+  <script>
+    // Pillars on phones: each circle's name + description repeated as text
+    // next to the diagram (.venn-list, shown on phones only, upright or on
+    // their side — see style.css).
+    // Built from the circles, so the copy is edited in one place: the
+    // .venn-circle markup above. Runs before the reveal script (on load), so
+    // the items fade up with the rest of the page.
+    (function () {
+      var venn = document.querySelector('.venn');
+      if (!venn) return;
+      var list = document.createElement('div');
+      list.className = 'venn-list';
+      list.setAttribute('data-reveal-group', '');
+      venn.querySelectorAll('.venn-circle').forEach(function (circle) {
+        var item = document.createElement('div');
+        item.className = 'venn-list-item';
+        item.setAttribute('data-reveal-item', '');
+        var title = document.createElement('p');
+        title.className = 'venn-list-title';
+        title.textContent = circle.querySelector('.venn-circle-title').textContent;
+        var text = document.createElement('p');
+        text.className = 'venn-list-text';
+        text.textContent = circle.querySelector('.venn-circle-desc').textContent;
+        item.appendChild(title);
+        item.appendChild(text);
+        list.appendChild(item);
+      });
+      venn.parentNode.insertBefore(list, venn.nextSibling);
+    })();
+  </script>
+
+  <script>
+    // "Pause motion" (WCAG 2.2.2 Pause, Stop, Hide): stops the ticker and the
+    // three looping card animations for anyone who finds them distracting.
+    // The button sits in the footer's legal row. The choice is remembered in
+    // this browser.
+    // Under prefers-reduced-motion nothing loops in the first place, so the
+    // button is hidden (CSS).
+    window.__motion = (function () {
+      var KEY = 'hor-motion-paused';
+      var loops = [];
+      var paused = false;
+      try { paused = localStorage.getItem(KEY) === '1'; } catch (e) {}
+      var buttons = document.querySelectorAll('.motion-toggle');
+      function apply() {
+        document.documentElement.classList.toggle('motion-paused', paused);
+        buttons.forEach(function (btn) {
+          btn.querySelector('.motion-toggle__label').textContent = paused ? 'Play motion' : 'Pause motion';
+        });
+        loops.forEach(function (tl) { if (paused) tl.pause(); else tl.resume(); });
+      }
+      buttons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          paused = !paused;
+          try { localStorage.setItem(KEY, paused ? '1' : '0'); } catch (e) {}
+          apply();
+        });
+      });
+      apply();
+      // Each looping card timeline registers itself when it starts.
+      return { register: function (tl) { loops.push(tl); if (paused) tl.pause(); } };
+    })();
+  </script>
 
   <script>
     // Invert the whole page to a light theme once "Media budgets are
@@ -522,43 +610,29 @@
         el.appendChild(clone);
       });
 
-      // Single boundary, not per-section tracking: the light theme flips on
-      // when scrolling DOWN brings the top of .efficiency-title onto the
-      // screen, and flips back off only when scrolling back UP takes it below
-      // the screen again — so it stays light all the way through
-      // .insights/.compare/.method going down (nothing below the boundary can
-      // turn it off), but going back up re-enters the hero section dark, at
-      // the same crossing point it left from.
+      // Single boundary, not per-section tracking: the page is light exactly
+      // while the top of .efficiency-title is above the bottom edge of the
+      // screen — so it turns light when scrolling DOWN brings the title onto
+      // the screen, stays light all the way through .insights/.compare/
+      // .method (nothing below the boundary can turn it off), and goes back
+      // dark when scrolling UP takes the title below the screen again.
+      // Read from the live scroll position on every scroll, not from an
+      // IntersectionObserver crossing: a jump (Tab to an element far down,
+      // a "back to top" link, Home/End) can carry the title from one side
+      // of the screen to the other without it ever being on screen, and the
+      // observer then never fired — the page stayed dark below the boundary
+      // or light at the top.
       var boundary = titles[0];
-      var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            document.body.classList.add('theme-light');
-          } else if (boundary.getBoundingClientRect().top > 0) {
-            // Boundary is below the viewport again — we scrolled back up
-            // above it, not further down past it. Checked live, not via
-            // entry.boundingClientRect: the first entry can be measured
-            // before a landing jump to a section further down and delivered
-            // after it, which would wrongly switch the theme back off.
-            document.body.classList.remove('theme-light');
-          }
-        });
-      }, {
-        // Fires the moment the title's first pixel enters the screen.
-        rootMargin: '0px',
-        threshold: 0
-      });
-
-      observer.observe(boundary);
-
+      function syncTheme() {
+        document.body.classList.toggle('theme-light', boundary.getBoundingClientRect().top < window.innerHeight);
+      }
+      window.addEventListener('scroll', syncTheme, { passive: true });
+      window.addEventListener('resize', syncTheme);
       // A link from another page (index_work.html#our-method) lands past the
-      // boundary without it ever crossing the screen, so the observer never
-      // fires — check once the landing scroll (pageshow, in <head>) is done.
-      window.addEventListener('pageshow', function () {
-        if (boundary.getBoundingClientRect().top < 0) {
-          document.body.classList.add('theme-light');
-        }
-      });
+      // boundary — check again once the landing scroll (pageshow, in <head>)
+      // is done.
+      window.addEventListener('pageshow', syncTheme);
+      syncTheme();
     })();
   </script>
 
@@ -582,7 +656,15 @@
     // font-size (see .our-method-item-title), so it stays correct on resize
     // without re-measuring — every dimension involved is --base-relative,
     // so the ratio between them is viewport-independent.
+    // Below 1280px the lines wrap at a fixed px size (see the max-width:
+    // 1279px block in the stylesheet) — nothing to fit, and measuring there
+    // would read the wrapped line. Fit once at ≥1280 (the ratio holds at any
+    // width from then on), including when a zoom-out or resize first gets
+    // the page there.
+    var methodFitWide = window.matchMedia('(min-width: 1280px)');
     function fitMethodLine() {
+      if (!methodFitWide.matches) return;
+      if (document.documentElement.style.getPropertyValue('--method-fit-scale')) return;
       var el = document.getElementById('our-method-fit');
       if (!el) return;
       // Measured via canvas rather than el.scrollWidth: with overflow:visible
@@ -599,6 +681,7 @@
       if (!natural || !available) return;
       document.documentElement.style.setProperty('--method-fit-scale', available / natural);
     }
+    methodFitWide.addEventListener('change', fitMethodLine);
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(fitMethodLine);
     } else {
@@ -622,9 +705,18 @@
 
       gsap.registerPlugin(ScrollTrigger);
 
-      // --- Smooth scroll via Lenis, driven by the GSAP ticker (skip on touch) ---
+      // --- prefers-reduced-motion: no smooth scrolling, no slide-in reveals
+      // and no looping card animations — everything is shown in place at
+      // once, each card on its first frame. ---
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) {
+        reveals.forEach(function (el) { el.style.opacity = 1; });
+      }
+
+      // --- Smooth scroll via Lenis, driven by the GSAP ticker (skip on touch
+      // and under reduced motion) ---
       var isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
-      if (!isTouch && typeof Lenis !== 'undefined') {
+      if (!isTouch && !reduceMotion && typeof Lenis !== 'undefined') {
         var lenis = new Lenis({ lerp: 0.1, smoothWheel: true, smoothTouch: false });
         lenis.on('scroll', ScrollTrigger.update);
         gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
@@ -663,10 +755,16 @@
         if (!target) return;
         link.addEventListener('click', function (e) {
           e.preventDefault();
+          // Keyboard and screen-reader users continue from the section they
+          // jumped to: focus moves there (preventScroll, so it doesn't fight
+          // the smooth scroll below). Sections aren't focusable on their own,
+          // so they get tabindex="-1" — focusable by script, not by Tab.
+          if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+          target.focus({ preventScroll: true });
           if (typeof lenis !== 'undefined' && lenis) {
             lenis.scrollTo(target, { duration: 1.5, easing: scrollEasing, lock: true });
           } else {
-            target.scrollIntoView({ behavior: 'smooth' });
+            target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
           }
         });
       });
@@ -674,6 +772,7 @@
       // --- Single-element reveals: fade + slide up when entering the viewport
       // (Clients logo cells have their own, later and slower, trigger below) ---
       gsap.utils.toArray('[data-reveal]:not(.client)').forEach(function (el) {
+        if (reduceMotion) return;
         ScrollTrigger.create({
           trigger: el,
           start: 'top 85%',
@@ -809,8 +908,10 @@
           once: true,
           onEnter: function () {
             chart.classList.add('is-in-view');
+            if (reduceMotion) return; // stays on its first frame
             var progress = { t: WAYPOINTS[0] };
             var tl = gsap.timeline({ repeat: -1 });
+            window.__motion.register(tl);
             for (var i = 0; i < WAYPOINTS.length - 1; i++) {
               tl.to({}, { duration: HOLD_DURATION }); // hold at WAYPOINTS[i]
               tl.to(progress, {
@@ -893,10 +994,12 @@
           once: true,
           onEnter: function () {
             container.classList.add('is-in-view');
+            if (reduceMotion) return; // stays on its first frame
 
             var current = SLIDERS.map(function (s) { return s.initial; });
             var cursorState = { x: restPoint.x, y: restPoint.y };
             var tl = gsap.timeline({ repeat: -1 });
+            window.__motion.register(tl);
 
             function runPass(targets) {
               SLIDERS.forEach(function (s, i) {
@@ -993,11 +1096,13 @@
           once: true,
           onEnter: function () {
             container.classList.add('is-in-view');
+            if (reduceMotion) return; // stays on its first frame
 
             // One render pass for the whole cloud per frame, driven off the
             // timeline rather than per-tween, since a staggered tween fans
             // out into one sub-tween per dot.
             var tl = gsap.timeline({ repeat: -1, onUpdate: renderAll });
+            window.__motion.register(tl);
 
             [1, 2, 0].forEach(function (stateIndex) {
               var target = STATES[stateIndex];
@@ -1040,6 +1145,7 @@
       // waits 0.2s more. The column is read off the live grid (4 across, 2 on
       // mobile) when the row fires. ---
       gsap.utils.toArray('.client[data-reveal]').forEach(function (cell, i) {
+        if (reduceMotion) return;
         ScrollTrigger.create({
           trigger: cell,
           start: 'center 75%',
@@ -1056,6 +1162,7 @@
 
       // --- Grouped reveals: items cascade in with a stagger ---
       gsap.utils.toArray('[data-reveal-group]').forEach(function (group) {
+        if (reduceMotion) return;
         var items = group.querySelectorAll('[data-reveal-item]');
         var cols = parseInt(group.getAttribute('data-reveal-cols'), 10) || 1;
         // With multiple columns (e.g. the comparison grid) stagger by ROW only,
@@ -1082,24 +1189,29 @@
       // stat entrance. toggleActions: play on enter, ignore leaving forward,
       // ignore re-entering from below, reverse only on leaving back upward.
       gsap.utils.toArray('.our-method-item').forEach(function (item, i) {
-        gsap.fromTo(item,
+        if (reduceMotion) return; // lines simply stay in place
+        var tween = gsap.fromTo(item,
           { x: i % 2 === 0 ? '-15%' : '15%', opacity: 0 },
-          {
-            x: '0%',
-            opacity: 1,
-            duration: 0.8,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: item,
-              // Further up the viewport than the once-only reveals above
-              // (top 85%): that trigger point sits right at the bottom
-              // edge, so the reverse (scrolling back up) played while the
-              // line was already almost off-screen and went unnoticed.
-              start: 'top 60%',
-              toggleActions: 'play none none reverse'
-            }
-          }
+          { x: '0%', opacity: 1, duration: 0.8, ease: 'power2.out', paused: true }
         );
+        // Same as toggleActions 'play none none reverse', written out so the
+        // reverse can be skipped for a line that holds keyboard focus.
+        ScrollTrigger.create({
+          trigger: item,
+          // Further up the viewport than the once-only reveals above
+          // (top 85%): that trigger point sits right at the bottom
+          // edge, so the reverse (scrolling back up) played while the
+          // line was already almost off-screen and went unnoticed.
+          start: 'top 60%',
+          onEnter: function () { tween.play(); },
+          onLeaveBack: function () {
+            if (!item.contains(document.activeElement)) tween.reverse();
+          }
+        });
+        // Tab can land on a line before it reaches 60% of the screen (the
+        // browser scrolls a focused element only up to the bottom edge),
+        // which left it focused at opacity 0 — play it in on focus.
+        item.addEventListener('focusin', function () { tween.play(); });
       });
 
       ScrollTrigger.refresh();
