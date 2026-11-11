@@ -66,34 +66,34 @@
 
   <section class="clients" id="clients">
     <div class="clients-inner">
-      <!-- 16 cells, 4x4 (2 columns on mobile). Logos are one-colour copies
-           in assets/logos-clients/, painted grey through a CSS mask — see
-           .client-logo in style.css.
-           Each cell is its own data-reveal, so every row fades up as it
-           scrolls into view (cells in a row share a top and fire together)
-           instead of the whole grid playing out while rows 2-4 are still
-           below the fold. -->
-      <div class="clients-grid">
-        <div class="client" data-reveal><span class="client-logo client-logo--lvmh" role="img" aria-label="LVMH"></span></div>
-        <div class="client" data-reveal><span class="client-logo client-logo--method" role="img" aria-label="method"></span></div>
-        <div class="client" data-reveal><span class="client-logo client-logo--dropbox" role="img" aria-label="Dropbox"></span></div>
-        <div class="client" data-reveal><span class="client-logo client-logo--eos" role="img" aria-label="eos"></span></div>
+      <h2 class="clients-title" data-reveal>Clients</h2>
 
-        <div class="client" data-reveal><span class="client-logo client-logo--maritime" role="img" aria-label="The Maritime Financial Group"></span></div>
-        <div class="client" data-reveal><span class="client-logo client-logo--mit-sloan" role="img" aria-label="MIT Sloan School of Management"></span></div>
-        <div class="client" data-reveal><span class="client-logo client-logo--everlane" role="img" aria-label="Everlane"></span></div>
-        <div class="client" data-reveal><span class="client-logo client-logo--amazon-fashion" role="img" aria-label="Amazon Fashion"></span></div>
-
-        <div class="client" data-reveal><span class="client-logo client-logo--franzia" role="img" aria-label="Franzia"></span></div>
-        <div class="client" data-reveal><span class="client-logo client-logo--creative-cloud" role="img" aria-label="Adobe Creative Cloud"></span></div>
-        <div class="client" data-reveal><span class="client-logo client-logo--svb" role="img" aria-label="Silicon Valley Bank"></span></div>
-        <div class="client" data-reveal><span class="client-logo client-logo--drinkworks" role="img" aria-label="Drinkworks"></span></div>
-
-        <div class="client" data-reveal><span class="client-logo client-logo--rutgers-business" role="img" aria-label="Rutgers Business School"></span></div>
-        <div class="client" data-reveal><span class="client-logo client-logo--sdg" role="img" aria-label="Strategic Decisions Group"></span></div>
-        <div class="client" data-reveal><span class="client-logo client-logo--dr-noze-best" role="img" aria-label="dr.noze best"></span></div>
-        <div class="client" data-reveal><span class="client-logo client-logo--the-wine-group" role="img" aria-label="The Wine Group"></span></div>
-      </div>
+      <!-- Client names in Jost caps (the logo wall this replaced is archived
+           in _archive/clients-v1/). The names flow down the columns — 3 on
+           desktop, 2 from 899px down — so a short name never sits next to a
+           three-line one with a hole under it. Each keeps its own casing
+           here; the caps come from CSS (text-transform), so screen readers
+           and copy-paste get the real names. Each name is its own
+           data-reveal — see the Clients block in the GSAP script. -->
+      <ul class="clients-list">
+        <li class="client" data-reveal><span class="client-name">LVMH</span></li>
+        <li class="client" data-reveal><span class="client-name">Method</span></li>
+        <li class="client" data-reveal><span class="client-name">Dropbox</span></li>
+        <li class="client" data-reveal><span class="client-name">eos</span></li>
+        <li class="client" data-reveal><span class="client-name">The Maritime Financial Group</span></li>
+        <li class="client" data-reveal><span class="client-name">MIT Sloan School of Management</span></li>
+        <li class="client" data-reveal><span class="client-name">Everlane</span></li>
+        <li class="client" data-reveal><span class="client-name">Amazon Fashion</span></li>
+        <li class="client" data-reveal><span class="client-name">Franzia</span></li>
+        <li class="client" data-reveal><span class="client-name">Adobe Creative Cloud</span></li>
+        <li class="client" data-reveal><span class="client-name">Silicon Valley Bank</span></li>
+        <li class="client" data-reveal><span class="client-name">Drinkworks</span></li>
+        <li class="client" data-reveal><span class="client-name">Rutgers Business School</span></li>
+        <li class="client" data-reveal><span class="client-name">Boston College</span></li>
+        <li class="client" data-reveal><span class="client-name">Strategic Decisions Group</span></li>
+        <li class="client" data-reveal><span class="client-name">dr.noze best</span></li>
+        <li class="client" data-reveal><span class="client-name">The Wine Group</span></li>
+      </ul>
     </div>
   </section>
 
@@ -553,18 +553,36 @@
     // this browser.
     // Under prefers-reduced-motion nothing loops in the first place, so the
     // button is hidden (CSS).
+    // Each loop also stops while its card is off-screen and picks up where it
+    // left off when the card comes back — otherwise the three loops kept
+    // running for the rest of the visit, competing with the smooth scroll
+    // (Lenis runs on the same main thread) for every frame.
     window.__motion = (function () {
       var KEY = 'hor-motion-paused';
-      var loops = [];
+      var loops = []; // { tl, el, onScreen }
       var paused = false;
       try { paused = localStorage.getItem(KEY) === '1'; } catch (e) {}
       var buttons = document.querySelectorAll('.motion-toggle');
+      function sync(loop) {
+        if (paused || !loop.onScreen) loop.tl.pause(); else loop.tl.resume();
+      }
+      var io = 'IntersectionObserver' in window
+        ? new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              loops.forEach(function (loop) {
+                if (loop.el !== entry.target) return;
+                loop.onScreen = entry.isIntersecting;
+                sync(loop);
+              });
+            });
+          })
+        : null;
       function apply() {
         document.documentElement.classList.toggle('motion-paused', paused);
         buttons.forEach(function (btn) {
           btn.querySelector('.motion-toggle__label').textContent = paused ? 'Play motion' : 'Pause motion';
         });
-        loops.forEach(function (tl) { if (paused) tl.pause(); else tl.resume(); });
+        loops.forEach(sync);
       }
       buttons.forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -574,8 +592,17 @@
         });
       });
       apply();
-      // Each looping card timeline registers itself when it starts.
-      return { register: function (tl) { loops.push(tl); if (paused) tl.pause(); } };
+      // Each looping card timeline registers itself, with the element whose
+      // visibility gates it, when it starts. It starts on scrolling into
+      // view, so it counts as on-screen until the observer's first report.
+      return {
+        register: function (tl, el) {
+          var loop = { tl: tl, el: el, onScreen: true };
+          loops.push(loop);
+          sync(loop);
+          if (io && el) io.observe(el);
+        }
+      };
     })();
   </script>
 
@@ -595,7 +622,7 @@
       // opacity. Opacity is composited and interpolated per-frame, so the text
       // recolours perfectly in sync with the background — unlike a color
       // transition (repaints) or mix-blend-mode (recomputes with lag).
-      var FLIP_TEXT = '.efficiency-label, .efficiency-title, .insight-title, .insight-text';
+      var FLIP_TEXT = '.ticker-item, .clients-title, .client-name, .efficiency-label, .efficiency-title, .insight-title, .insight-text';
       document.querySelectorAll(FLIP_TEXT).forEach(function (el) {
         // Clone BEFORE touching el's inline style, otherwise the clone would
         // inherit position:relative inline and that would beat the overlay's
@@ -790,6 +817,49 @@
         });
       });
 
+      // --- Moving parts of the three card illustrations. Positions are in
+      // the artwork's viewBox units, turned into px against the container's
+      // size and applied with the `translate` property, not left/top: a
+      // translate is composited, while left/top made the browser redo layout
+      // for every moving part on every frame. The parts' own CSS `transform`
+      // (the centring on the point) still applies on top of it. The container
+      // size is cached and refreshed by a ResizeObserver, so a frame never
+      // has to measure anything. Browsers without `translate` (Safari < 14.1)
+      // keep left/top, in the same px. ---
+      var HAS_TRANSLATE = 'translate' in document.documentElement.style;
+
+      // Clears the markup's static left/top, so the translate measures from
+      // the container's corner.
+      function anchorTopLeft(el) {
+        if (!HAS_TRANSLATE) return;
+        el.style.left = '0px';
+        el.style.top = '0px';
+      }
+
+      function placeAt(el, xPx, yPx) {
+        if (HAS_TRANSLATE) {
+          el.style.translate = xPx + 'px ' + yPx + 'px';
+        } else {
+          el.style.left = xPx + 'px';
+          el.style.top = yPx + 'px';
+        }
+      }
+
+      // Returns a live { w, h } of the container's padding box (what its
+      // absolutely positioned children measure from); calls onResize after
+      // each change so the current frame can be redrawn at the new size.
+      function watchSize(container, onResize) {
+        var box = { w: container.clientWidth, h: container.clientHeight };
+        if ('ResizeObserver' in window) {
+          new ResizeObserver(function () {
+            box.w = container.clientWidth;
+            box.h = container.clientHeight;
+            onResize();
+          }).observe(container);
+        }
+        return box;
+      }
+
       // --- "-2.15%" stat chart: marker + tooltip ping-pong along the real
       // curve, forever, once the card is in view. The path is read via the
       // SVG geometry API (getPointAtLength), not re-derived — so the marker
@@ -833,34 +903,41 @@
           return parts.join('.') + '%';
         }
 
-        function render(t) {
-          var pt = path.getPointAtLength(t * length);
-          var leftPct = pt.x / VB_WIDTH * 100;
-          var topPct = pt.y / VB_HEIGHT * 100;
+        // Set up below, once the tooltip's width is locked: the chart box's
+        // size and half the tooltip's width, both cached — reading them in
+        // render(), right after writing the new text and position, forced a
+        // full layout in the middle of every frame.
+        var box, tooltipHalf;
+        var currentT = 0;
+        var lastText = '';
 
-          marker.style.left = leftPct + '%';
-          marker.style.top = topPct + '%';
+        function render(t) {
+          currentT = t;
+          var pt = path.getPointAtLength(t * length);
+          var x = pt.x / VB_WIDTH * box.w;
+          var y = pt.y / VB_HEIGHT * box.h;
+
+          placeAt(marker, x, y);
 
           var value = pt.y <= ZERO_Y
             ? 100 * (ZERO_Y - pt.y) / ZERO_Y                 // above zero: 0 .. +100
             : -100 * (pt.y - ZERO_Y) / (VB_HEIGHT - ZERO_Y); // below zero: 0 .. -100
           var numText = formatValue(value);
-          tooltip.textContent = numText;
-          labelValue.textContent = numText; // the " ROAS" suffix is static markup, not rewritten every frame
+          if (numText !== lastText) {
+            lastText = numText;
+            tooltip.textContent = numText;
+            labelValue.textContent = numText; // the " ROAS" suffix is static markup, not rewritten every frame
+          }
 
           // The path runs close to the card's left/right edges, closer than
-          // half the tooltip's own (text-dependent) width — centered at
-          // leftPct there would push it past .insight-image's overflow:
-          // hidden and clip the pill (and the "-" sign with it). Clamp in
-          // px, measured after the text above is set, so it stays fully
-          // inside the card at every point on the curve while still
-          // tracking the marker's true (unclamped) position vertically.
-          var chartWidth = chart.clientWidth;
-          var tooltipHalf = tooltip.offsetWidth / 2;
-          var idealLeft = (leftPct / 100) * chartWidth;
-          var clampedLeft = Math.min(Math.max(idealLeft, tooltipHalf), chartWidth - tooltipHalf);
-          tooltip.style.left = clampedLeft + 'px';
-          tooltip.style.top = topPct + '%';
+          // half the tooltip's own width — centered on the marker there it
+          // would push past .insight-image's overflow: hidden and clip the
+          // pill. Clamp so it stays fully inside the card at every point on
+          // the curve while still tracking the marker's true (unclamped)
+          // position vertically. The width is fixed (locked below), so its
+          // half is known without measuring.
+          var clampedX = Math.min(Math.max(x, tooltipHalf), box.w - tooltipHalf);
+          placeAt(tooltip, clampedX, y);
         }
 
         // Waypoint sequence (progress along the curve, 0-1), each one held
@@ -897,8 +974,18 @@
             tooltip.textContent = formatValue(value);
             widest = Math.max(widest, tooltip.offsetWidth);
           }
-          tooltip.style.width = widest + 'px';
+          // In em, not px: the pill's font and padding scale with the card
+          // (--ill), so the locked width has to scale with them on resize.
+          tooltip.style.width = (widest / parseFloat(getComputedStyle(tooltip).fontSize)) + 'em';
         })();
+
+        anchorTopLeft(marker);
+        anchorTopLeft(tooltip);
+        tooltipHalf = tooltip.offsetWidth / 2;
+        box = watchSize(chart, function () {
+          tooltipHalf = tooltip.offsetWidth / 2;
+          render(currentT);
+        });
 
         render(WAYPOINTS[0]);
 
@@ -911,7 +998,7 @@
             if (reduceMotion) return; // stays on its first frame
             var progress = { t: WAYPOINTS[0] };
             var tl = gsap.timeline({ repeat: -1 });
-            window.__motion.register(tl);
+            window.__motion.register(tl, chart);
             for (var i = 0; i < WAYPOINTS.length - 1; i++) {
               tl.to({}, { duration: HOLD_DURATION }); // hold at WAYPOINTS[i]
               tl.to(progress, {
@@ -961,17 +1048,33 @@
         function pointFor(i, frac) {
           return { x: LINE_X1 + frac * (LINE_X2 - LINE_X1), y: LINE_Y[i] };
         }
-        function placeThumb(i, frac) {
-          var p = pointFor(i, frac);
-          thumbs[i].style.left = (p.x / VB_WIDTH * 100) + '%';
-          thumbs[i].style.top = (p.y / VB_HEIGHT * 100) + '%';
+
+        // Current positions in viewBox units, kept so a resize can redraw
+        // the frame that's on screen.
+        var thumbX = SLIDERS.map(function (s, i) { return pointFor(i, s.initial).x; });
+        var cursorAt = { x: 0, y: 0 };
+
+        function drawThumb(i) {
+          placeAt(thumbs[i], thumbX[i] / VB_WIDTH * box.w, LINE_Y[i] / VB_HEIGHT * box.h);
+        }
+        function placeThumbX(i, x) {
+          thumbX[i] = x;
+          drawThumb(i);
         }
         function placeCursor(x, y) {
-          cursor.style.left = (x / VB_WIDTH * 100) + '%';
-          cursor.style.top = (y / VB_HEIGHT * 100) + '%';
+          cursorAt.x = x;
+          cursorAt.y = y;
+          placeAt(cursor, x / VB_WIDTH * box.w, y / VB_HEIGHT * box.h);
         }
 
-        SLIDERS.forEach(function (s, i) { placeThumb(i, s.initial); });
+        Array.prototype.forEach.call(thumbs, anchorTopLeft);
+        anchorTopLeft(cursor);
+        var box = watchSize(container, function () {
+          SLIDERS.forEach(function (s, i) { drawThumb(i); });
+          placeCursor(cursorAt.x, cursorAt.y);
+        });
+
+        SLIDERS.forEach(function (s, i) { drawThumb(i); });
         // The cursor rests on the LAST slider's thumb — which is exactly
         // where the cycle ends, since pass 2's final drag returns that thumb
         // to its initial value. A repeating GSAP timeline snaps its targets
@@ -999,7 +1102,7 @@
             var current = SLIDERS.map(function (s) { return s.initial; });
             var cursorState = { x: restPoint.x, y: restPoint.y };
             var tl = gsap.timeline({ repeat: -1 });
-            window.__motion.register(tl);
+            window.__motion.register(tl, container);
 
             function runPass(targets) {
               SLIDERS.forEach(function (s, i) {
@@ -1019,7 +1122,7 @@
                   ease: ease,
                   onUpdate: function () {
                     placeCursor(cursorState.x, cursorState.y);
-                    thumbs[i].style.left = (cursorState.x / VB_WIDTH * 100) + '%';
+                    placeThumbX(i, cursorState.x);
                   }
                 });
                 current[i] = targets[i];
@@ -1084,10 +1187,11 @@
         var pos = STATES[0].map(function (p) { return { x: p[0], y: p[1] }; });
         function renderAll() {
           for (var i = 0; i < pos.length; i++) {
-            dots[i].style.left = (pos[i].x / VB_WIDTH * 100) + '%';
-            dots[i].style.top = (pos[i].y / VB_HEIGHT * 100) + '%';
+            placeAt(dots[i], pos[i].x / VB_WIDTH * box.w, pos[i].y / VB_HEIGHT * box.h);
           }
         }
+        Array.prototype.forEach.call(dots, anchorTopLeft);
+        var box = watchSize(container, renderAll);
         renderAll();
 
         ScrollTrigger.create({
@@ -1102,7 +1206,7 @@
             // timeline rather than per-tween, since a staggered tween fans
             // out into one sub-tween per dot.
             var tl = gsap.timeline({ repeat: -1, onUpdate: renderAll });
-            window.__motion.register(tl);
+            window.__motion.register(tl, container);
 
             [1, 2, 0].forEach(function (stateIndex) {
               var target = STATES[stateIndex];
@@ -1136,29 +1240,25 @@
         });
       });
 
-      // --- Clients logos: each row fades up on its own (cells in a row share
-      // a centre, so they fire together), one cell at a time left to right.
-      // Later and slower than the generic reveal above (top 85%, 0.6s), which
-      // played out with the logos still at the very bottom edge and went
-      // unnoticed: here a row starts once its logos are a quarter of the
-      // screen up from the bottom, each cell takes 1.2s, and each next column
-      // waits 0.2s more. The column is read off the live grid (4 across, 2 on
-      // mobile) when the row fires. ---
-      gsap.utils.toArray('.client[data-reveal]').forEach(function (cell, i) {
-        if (reduceMotion) return;
-        ScrollTrigger.create({
-          trigger: cell,
+      // --- Clients names: fade up as they scroll in. Later and slower than
+      // the generic reveal above (top 85%, 0.6s), which played out with the
+      // list still at the very bottom edge and went unnoticed: a name starts
+      // once its centre is a quarter of the screen up from the bottom, and
+      // takes 1.2s. Names that cross that line together (the tops of the
+      // columns, say) come as one batch, 0.2s apart in page order — the list
+      // flows down the columns, so that runs left to right. ---
+      if (!reduceMotion) {
+        ScrollTrigger.batch('.client[data-reveal]', {
           start: 'center 75%',
           once: true,
-          onEnter: function () {
-            var cols = getComputedStyle(cell.parentNode).gridTemplateColumns.split(' ').length;
-            gsap.fromTo(cell,
+          onEnter: function (batch) {
+            gsap.fromTo(batch,
               { opacity: 0, y: 30 },
-              { opacity: 1, y: 0, duration: 1.2, delay: (i % cols) * 0.2, ease: 'power2.out', clearProps: 'transform' }
+              { opacity: 1, y: 0, duration: 1.2, stagger: 0.2, ease: 'power2.out', clearProps: 'transform' }
             );
           }
         });
-      });
+      }
 
       // --- Grouped reveals: items cascade in with a stagger ---
       gsap.utils.toArray('[data-reveal-group]').forEach(function (group) {
