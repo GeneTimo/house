@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Page Not Found — House of ROI</title>
+  <!-- GitHub Pages serves this file for any address that doesn't exist, at
+       any depth (/blog/old/page too), so every path here starts at the site
+       root ("/style.css"), never relative to the address in the bar. -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <script>document.documentElement.classList.add('js');</script>
+  <link rel="preload" href="/assets/fonts/jost/jost-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="container">
+    <a href="/index_work.html" class="logo-link" aria-label="House of ROI — main page">
+      <img class="logo" src="/assets/logo_house_of_roi.svg" alt="House of ROI">
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Open menu">
+      <span class="nav-toggle__bar" aria-hidden="true"></span>
+      <span class="nav-toggle__bar" aria-hidden="true"></span>
+    </button>
+
+    <nav class="nav" id="main-nav" aria-label="Main">
+      <a href="/index_work.html#clients" class="nav-link">CLIENTS</a>
+      <a href="/index_work.html#approach" class="nav-link">APPROACH</a>
+      <a href="/index_work.html#our-method" class="nav-link">METHOD</a>
+      <a href="/index_work.html#rules-of-the-house" class="nav-link">RULES OF THE HOUSE</a>
+    </nav>
+  </header>
+
+  <main id="main" tabindex="-1">
+  <div class="container">
+    <!-- The main page's hero, reused whole: same headline size, subtitle
+         and button at every breakpoint, same entrance. -->
+    <section class="hero">
+      <h1 class="hero-title"><span class="hero-chunk">Page not found</span></h1>
+      <p class="hero-subtitle">The link may be broken, or the page has moved. <br>Everything about House of ROI is on the main page.</p>
+      <a href="/index_work.html" class="contact-btn">BACK TO HOME</a>
+    </section>
+  </div>
+  </main>
+  <script>
+    // The hero fills the first screen under the header, as on the main page
+    // (there's no ticker here, so nothing is reserved below it) — see the
+    // .hero rule in style.css for how --hero-above / --hero-below are used.
+    (function () {
+      var hero = document.querySelector('.hero');
+      var root = document.documentElement;
+      function measure() {
+        root.style.setProperty('--hero-above', (hero.getBoundingClientRect().top + window.scrollY) + 'px');
+        root.style.setProperty('--hero-below', '0px');
+      }
+      measure();
+      window.addEventListener('resize', measure);
+      window.addEventListener('load', measure);
+    })();
+  </script>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <a href="/index_work.html" class="footer-logo" aria-label="House of ROI">
+          <img src="/assets/logo_house_of_roi.svg" alt="House of ROI">
+        </a>
+        <nav class="footer-nav" aria-label="Footer">
+          <ul class="footer-nav-col">
+            <li><a href="/index_work.html#clients" class="footer-link">CLIENTS</a></li>
+            <li><a href="/index_work.html#approach" class="footer-link">APPROACH</a></li>
+          </ul>
+          <ul class="footer-nav-col">
+            <li><a href="/index_work.html#our-method" class="footer-link">METHOD</a></li>
+            <li><a href="/index_work.html#rules-of-the-house" class="footer-link">RULES OF THE HOUSE</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 House of ROI. All rights reserved.</p>
+        <nav class="footer-legal" aria-label="Legal">
+          <a href="/terms-of-use.html" class="footer-legal-link">Terms of Use</a>
+          <a href="/privacy-policy.html" class="footer-legal-link">Privacy Policy</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/nav-menu.js"></script>
+
+  <script>
+    // Same as the main page: drop the nav links' finished load animation so
+    // the :hover opacity rule works (see @keyframes navLinkIn in style.css).
+    document.querySelectorAll('.nav-link').forEach(function (link) {
+      link.addEventListener('animationend', function () {
+        link.style.animation = 'none';
+      }, { once: true });
+    });
+  </script>
+</body>
+</html>
