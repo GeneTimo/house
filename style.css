@@ -737,8 +737,7 @@ body.theme-light .theme-bg {
 
 /* xl — desktop */
 @media (min-width: 1280px) {
-  .hero-title,
-  .legal-title {
+  .hero-title {
     font-size: 4rem;
   }
 }
@@ -1467,8 +1466,8 @@ body.theme-light .theme-bg {
    the main page's dark header (logo + nav) on top, then a light block in the
    light-theme colours with a large serif title and the document text, then
    the standard footer. The light colours are scoped to the block, so the
-   header and footer stay dark. The title is sized like the hero headline
-   (see .legal-title). Unlike the rest of the site, the text doesn't shrink
+   header and footer stay dark. The title is sized like the "Rules of the
+   House" heading (see .legal-title). Unlike the rest of the site, the text doesn't shrink
    below a readable size (max() floors / fixed 16px, same idea as
    .hero-subtitle's fixed 18px), so the long text reads on a phone. */
 .legal {
@@ -1486,15 +1485,15 @@ body.theme-light .theme-bg {
   margin: 0 auto;
 }
 
-/* Same size as the hero headline at every breakpoint: font-size and
-   line-height here match .hero-title, and the responsive .hero-title rules
-   (xl, Phones, landscape phones) list .legal-title too. */
+/* Same size as the "Rules of the House" heading (.method-title) at every
+   breakpoint: font-size and line-height here match it, and its Phones rule
+   lists .legal-title too. */
 .legal-title {
   font-family: Georgia, "Times New Roman", Times, serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 4rem;
-  line-height: 120%;
+  font-size: 48px;
+  line-height: 115%;
   letter-spacing: 0;
   color: var(--fg);
   text-align: center;
@@ -1927,10 +1926,8 @@ button:focus-visible,
     margin-top: auto;
   }
 
-  /* 35px on a 393 phone: five lines instead of six-to-eight at 64px. The
-     legal pages' title matches it. */
-  .hero-title,
-  .legal-title {
+  /* 35px on a 393 phone: five lines instead of six-to-eight at 64px. */
+  .hero-title {
     font-size: clamp(30px, 9vw, 40px);
     line-height: 118%;
   }
@@ -2207,7 +2204,10 @@ button:focus-visible,
     padding: 0 var(--gutter);
   }
 
-  .method-title {
+  /* The legal pages' title matches "Rules of the House" (its 32px gap
+     below is what it had on phones anyway). */
+  .method-title,
+  .legal-title {
     font-size: clamp(28px, 8.5vw, 36px);
     margin-bottom: 32px;
   }
@@ -2478,9 +2478,8 @@ button:focus-visible,
   /* --- Hero: 64px made the headline three or four lines filling the whole
      screen, the button below the fold. 44px on an 852 phone — about the
      share of the screen the desktop headline takes. (Where it breaks is
-     fixed — see .hero-chunk.) The legal pages' title matches it. --- */
-  .hero-title,
-  .legal-title {
+     fixed — see .hero-chunk.) --- */
+  .hero-title {
     font-size: clamp(36px, 5.2vw, 48px);
   }
 
