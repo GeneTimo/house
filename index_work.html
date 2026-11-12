@@ -334,61 +334,111 @@
         <div class="compare-point" data-reveal-item>
           <span class="compare-point-label">The Conventional Agency Model</span>
           <h4 class="compare-point-title">Budget Deployment Focused.</h4>
-          <p class="compare-point-text">Primary objective is exhausting allocated spend according to plan, regardless of real-time performance.</p>
+          <div class="compare-point-more"><p class="compare-point-text">Primary objective is exhausting allocated spend according to plan, regardless of real-time performance.</p></div>
         </div>
         <div class="compare-point" data-reveal-item>
           <span class="compare-point-label">House of ROI Approach</span>
           <h4 class="compare-point-title">Mandate-Driven.</h4>
-          <p class="compare-point-text">Optimization governed strictly by business objectives — from awareness to acquisition and retention.</p>
+          <div class="compare-point-more"><p class="compare-point-text">Optimization governed strictly by business objectives — from awareness to acquisition and retention.</p></div>
         </div>
 
         <div class="compare-point" data-reveal-item>
           <span class="compare-point-label">The Conventional Agency Model</span>
           <h4 class="compare-point-title">Process-Driven Structure.</h4>
-          <p class="compare-point-text">Layered account management and junior execution teams. The senior professionals who pitch rarely do the work.</p>
+          <div class="compare-point-more"><p class="compare-point-text">Layered account management and junior execution teams. The senior professionals who pitch rarely do the work.</p></div>
         </div>
         <div class="compare-point" data-reveal-item>
           <span class="compare-point-label">House of ROI Approach</span>
           <h4 class="compare-point-title">Principal-Led Implementation.</h4>
-          <p class="compare-point-text">Direct access to practice leadership. Minimal layers between capital allocation and decision-making. Clients know who is managing their budget.</p>
+          <div class="compare-point-more"><p class="compare-point-text">Direct access to practice leadership. Minimal layers between capital allocation and decision-making. Clients know who is managing their budget.</p></div>
         </div>
 
         <div class="compare-point" data-reveal-item>
           <span class="compare-point-label">The Conventional Agency Model</span>
           <h4 class="compare-point-title">Vendor Pleasing.</h4>
-          <p class="compare-point-text">Recommendations shaped by platform sales relationships and self-referential industry best practices.</p>
+          <div class="compare-point-more"><p class="compare-point-text">Recommendations shaped by platform sales relationships and self-referential industry best practices.</p></div>
         </div>
         <div class="compare-point" data-reveal-item>
           <span class="compare-point-label">House of ROI Approach</span>
           <h4 class="compare-point-title">Vendor Independence.</h4>
-          <p class="compare-point-text">Zero reliance on platform sales narratives. We operate on an independent, structural understanding of platform algorithms to protect the client's capital, not the provider's relationship.</p>
+          <div class="compare-point-more"><p class="compare-point-text">Zero reliance on platform sales narratives. We operate on an independent, structural understanding of platform algorithms to protect the client's capital, not the provider's relationship.</p></div>
         </div>
 
         <div class="compare-point" data-reveal-item>
           <span class="compare-point-label">The Conventional Agency Model</span>
           <h4 class="compare-point-title">"Set-and-Forget" Autopilot.</h4>
-          <p class="compare-point-text">Heavy dependence on platform automation black boxes with limited oversight or intervention.</p>
+          <div class="compare-point-more"><p class="compare-point-text">Heavy dependence on platform automation black boxes with limited oversight or intervention.</p></div>
         </div>
         <div class="compare-point" data-reveal-item>
           <span class="compare-point-label">House of ROI Approach</span>
           <h4 class="compare-point-title">Dynamic Intervention.</h4>
-          <p class="compare-point-text">Rigorous human oversight combining automation with manual precision and ongoing monitoring to maintain control over the campaign's performance output.</p>
+          <div class="compare-point-more"><p class="compare-point-text">Rigorous human oversight combining automation with manual precision and ongoing monitoring to maintain control over the campaign's performance output.</p></div>
         </div>
 
         <div class="compare-point" data-reveal-item>
           <span class="compare-point-label">The Conventional Agency Model</span>
           <h4 class="compare-point-title">Marketing as Expense.</h4>
-          <p class="compare-point-text">Managed as sunk cost with minimal accountability for capital efficiency and execution quality.</p>
+          <div class="compare-point-more"><p class="compare-point-text">Managed as sunk cost with minimal accountability for capital efficiency and execution quality.</p></div>
         </div>
         <div class="compare-point" data-reveal-item>
           <span class="compare-point-label">House of ROI Approach</span>
           <h4 class="compare-point-title">Marketing as Investment.</h4>
-          <p class="compare-point-text">Digital media managed as growth asset with real-time accountability and optimization.</p>
+          <div class="compare-point-more"><p class="compare-point-text">Digital media managed as growth asset with real-time accountability and optimization.</p></div>
         </div>
       </div>
       </div>
     </div>
   </section>
+  <script>
+    // Compare on phones: an accordion. Each pair (conventional point + its
+    // House of ROI answer) shows only its labels and titles; tapping the pair
+    // — or its "+" button — unfolds both texts. The first pair starts open,
+    // so the pattern shows itself. Tapping inside an unfolded text doesn't
+    // fold it (reading isn't toggling). All the folding is CSS under 640px
+    // (see .compare-grid.is-accordion in style.css): on wider screens, and
+    // without this script, every text stays visible.
+    (function () {
+      var grid = document.querySelector('.compare-grid');
+      if (!grid) return;
+      var points = Array.prototype.filter.call(grid.children, function (el) {
+        return el.classList.contains('compare-point');
+      });
+      var phone = window.matchMedia('(max-width: 639px)');
+
+      function setUpPair(conv, roi, n) {
+        var mores = [conv, roi].map(function (p, k) {
+          var more = p.querySelector('.compare-point-more');
+          more.id = 'compare-more-' + n + '-' + k;
+          return more;
+        });
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'compare-toggle';
+        btn.setAttribute('aria-controls', mores[0].id + ' ' + mores[1].id);
+        btn.setAttribute('aria-label', 'Details: ' + roi.querySelector('.compare-point-title').textContent);
+        roi.appendChild(btn);
+
+        function set(open) {
+          conv.classList.toggle('is-open', open);
+          roi.classList.toggle('is-open', open);
+          btn.setAttribute('aria-expanded', String(open));
+        }
+        set(n === 0);
+
+        // One handler per point; a click on the button bubbles up to it.
+        [conv, roi].forEach(function (p) {
+          p.addEventListener('click', function (e) {
+            if (!phone.matches) return;
+            if (e.target.closest('.compare-point-more')) return;
+            set(!roi.classList.contains('is-open'));
+          });
+        });
+      }
+
+      for (var i = 0; i + 1 < points.length; i += 2) setUpPair(points[i], points[i + 1], i / 2);
+      grid.classList.add('is-accordion');
+    })();
+  </script>
 
   <section class="our-method" id="our-method">
     <div class="our-method-inner">
