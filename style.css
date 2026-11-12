@@ -1232,7 +1232,13 @@ body.theme-light .theme-bg {
 
 .our-method-item-title {
   display: block;
-  white-space: nowrap;
+  /* Allowed to wrap (WCAG 2.1 1.4.12): with the fitted size every line is
+     one line anyway, but a visitor's own wider letter- or word-spacing used
+     to push the end of a line out of the masked row, cut off. Now it wraps
+     instead — and a single word too long for the row (a long word on a
+     phone) breaks rather than overflows. The window below grows with it. */
+  white-space: normal;
+  overflow-wrap: break-word;
   font-family: "Jost", sans-serif;
   font-weight: 200;
   font-style: normal;
@@ -1671,6 +1677,39 @@ button:focus-visible,
 .venn-circle:focus-visible {
   outline: 2px solid var(--fg);
   outline-offset: 4px;
+}
+
+/* Content on hover or focus (WCAG 2.1 1.4.13): an Our Method line and a
+   Venn circle swap their title for a description while hovered or
+   focused. Esc dismisses the description and puts the title back without
+   moving the pointer or the focus; the script after the Venn diagram sets
+   .is-dismissed and clears it once the pointer or focus leaves. These
+   rules carry :hover / :focus-within to outrank the ones that show the
+   description. From 640px up only: on phones the description is shown
+   under the title all the time, there's nothing to dismiss. */
+@media (min-width: 640px) {
+  .our-method-item.is-dismissed:hover .our-method-item-title,
+  .our-method-item.is-dismissed:focus-within .our-method-item-title {
+    transform: none;
+    opacity: 1;
+  }
+
+  .our-method-item.is-dismissed:hover .our-method-item-desc,
+  .our-method-item.is-dismissed:focus-within .our-method-item-desc {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  .venn-circle.is-dismissed:hover .venn-circle-title,
+  .venn-circle.is-dismissed:focus-within .venn-circle-title {
+    opacity: 1;
+  }
+
+  .venn-circle.is-dismissed:hover .venn-circle-desc,
+  .venn-circle.is-dismissed:focus-within .venn-circle-desc {
+    opacity: 0;
+    animation: none;
+  }
 }
 
 /* Browser zoom — text is in px, so at 200% it is twice the size; the

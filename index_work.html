@@ -9,13 +9,27 @@
   <script>
     // Always land on top on reload/navigation — don't let the browser
     // restore whatever scroll position the page was at before. Exception: a
-    // link from another page to a section (e.g. index_work.html#clients from
-    // the legal pages' nav) lands on that section.
+    // link from another page to a section (e.g. index_work.html#our-method
+    // from the legal pages' nav) lands on that section — once, and never on
+    // a reload. The #section used to stay in the address, so every reload
+    // after such a link (pull-to-refresh on a phone, say) jumped back down
+    // to it. Now it's taken off the address right here, before the browser
+    // gets to scroll to it on its own (it does that after this script, so
+    // clearing the hash later wasn't enough); the section to land on, if
+    // any, is kept and scrolled to below.
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    window.addEventListener('pageshow', function () {
-      var target = location.hash.length > 1 && document.getElementById(location.hash.slice(1));
-      if (target) target.scrollIntoView(); else window.scrollTo(0, 0);
-    });
+    (function () {
+      var entry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      var reload = entry ? entry.type === 'reload'
+        : !!(performance.navigation && performance.navigation.type === 1);
+      var landOn = !reload && location.hash.length > 1 ? decodeURIComponent(location.hash.slice(1)) : null;
+      if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      window.addEventListener('pageshow', function (e) {
+        var target = !e.persisted && landOn && document.getElementById(landOn);
+        if (target) target.scrollIntoView(); else window.scrollTo(0, 0);
+        landOn = null; // coming back to this page later starts at the top
+      });
+    })();
   </script>
   <link rel="preload" href="assets/fonts/jost/jost-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="style.css">
@@ -314,7 +328,7 @@
             <div class="insight-chart__tooltip" style="left: 56.8%; top: 56.6%;">-2.15%</div>
           </div>
         </div>
-        <h3 class="insight-title">Investment-Grade<br>Rigor</h3>
+        <h3 class="insight-title">Investment-Grade <br>Rigor</h3>
         <p class="insight-text">Every channel, every campaign, every dollar deployed defends its position with performance data. Our reporting answers the CFO's question: What did this capital drive? We don't manage marketing expenses; we manage media investment.</p>
       </article>
     </div>
@@ -680,6 +694,36 @@
   </script>
 
   <script>
+    // Content on hover or focus (WCAG 2.1 1.4.13): an Our Method line or a
+    // Venn circle swaps its title for a description while it is hovered or
+    // focused. Esc dismisses that description — the title comes back —
+    // without moving the pointer or the focus. It stays dismissed until the
+    // pointer leaves the line/circle or the focus moves out of it; the next
+    // hover or focus shows the description again. The CSS is next to
+    // .venn-circle:focus-visible in style.css.
+    (function () {
+      var items = document.querySelectorAll('.our-method-item, .venn-circle');
+      if (!items.length) return;
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        items.forEach(function (item) {
+          if (item.matches(':hover') || item.contains(document.activeElement)) {
+            item.classList.add('is-dismissed');
+          }
+        });
+      });
+      items.forEach(function (item) {
+        item.addEventListener('mouseleave', function () {
+          item.classList.remove('is-dismissed');
+        });
+        item.addEventListener('focusout', function (e) {
+          if (!item.contains(e.relatedTarget)) item.classList.remove('is-dismissed');
+        });
+      });
+    })();
+  </script>
+
+  <script>
     // "Pause motion" (WCAG 2.2.2 Pause, Stop, Hide): stops the ticker and the
     // three looping card animations for anyone who finds them distracting.
     // The button sits in the footer's legal row. The choice is remembered in
@@ -823,16 +867,19 @@
       // transition (repaints) or mix-blend-mode (recomputes with lag).
       var FLIP_TEXT = '.ticker-item, .clients-title, .client-name, .efficiency-label, .efficiency-title, .insight-title, .insight-text';
       document.querySelectorAll(FLIP_TEXT).forEach(function (el) {
-        // Clone BEFORE touching el's inline style, otherwise the clone would
-        // inherit position:relative inline and that would beat the overlay's
-        // position:absolute class rule (inline wins on specificity).
-        var clone = el.cloneNode(true);
+        // The copy is a <span> with the same classes and content, not a
+        // cloneNode() of the element: a cloned <h2>/<p> ended up nested in
+        // the original <h2>/<p> — invalid nesting (WCAG 2.1 4.1.1). The
+        // typography all comes from the classes, so it looks the same. Only
+        // classes and content are copied: no id, no inline style (the
+        // position:relative set below would beat the overlay's absolute),
+        // no reveal hooks (it isn't a reveal trigger of its own).
+        var clone = document.createElement('span');
+        clone.className = el.className;
+        clone.innerHTML = el.innerHTML;
         if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
         clone.classList.add('theme-overlay-text');
         clone.setAttribute('aria-hidden', 'true');
-        // Strip reveal hooks so the clone isn't picked up as its own trigger.
-        clone.removeAttribute('data-reveal');
-        clone.removeAttribute('data-reveal-item');
         el.appendChild(clone);
       });
 
@@ -905,7 +952,10 @@
       var natural = ctx.measureText(el.textContent).width;
       var available = el.clientWidth;
       if (!natural || !available) return;
-      document.documentElement.style.setProperty('--method-fit-scale', available / natural);
+      // 0.5% short of the full row: the lines may wrap now (WCAG 1.4.12,
+      // see .our-method-item-title), and a line fitted to the exact pixel
+      // could tip over onto a second line from sub-pixel rounding.
+      document.documentElement.style.setProperty('--method-fit-scale', available / natural * 0.995);
     }
     methodFitWide.addEventListener('change', fitMethodLine);
     if (document.fonts && document.fonts.ready) {
