@@ -44,10 +44,62 @@
   <main id="main" tabindex="-1">
   <div class="container">
     <section class="hero">
-      <h1 class="hero-title">
-        <span class="hero-line">Digital Marketing and Growth Media</span>
-        <span class="hero-line">as a Financial Obsession</span>
+      <!-- The headline only ever breaks one of three ways:
+             2 lines: Digital Marketing and Growth Media / as a Financial Obsession
+             3 lines: Digital Marketing / and Growth Media as / a Financial Obsession
+             4 lines: Digital Marketing / and Growth Media / as a Financial / Obsession
+           Built from five unbreakable chunks; each <br> belongs to the
+           layouts named in its classes, the others are hidden (style.css).
+           The script right below picks the fewest lines that fit, and each
+           line fades up on its own. -->
+      <h1 class="hero-title" data-lines="2">
+        <span class="hero-chunk hero-chunk--a">Digital Marketing</span>
+        <br class="hero-br hero-br--3 hero-br--4">
+        <span class="hero-chunk hero-chunk--b">and Growth Media</span>
+        <br class="hero-br hero-br--2 hero-br--4">
+        <span class="hero-chunk hero-chunk--c">as</span>
+        <br class="hero-br hero-br--3">
+        <span class="hero-chunk hero-chunk--d">a Financial</span>
+        <br class="hero-br hero-br--4">
+        <span class="hero-chunk hero-chunk--e">Obsession</span>
       </h1>
+      <script>
+        // Fewest lines that fit: try 2, 3, 4 and keep the first layout whose
+        // chunks land on exactly that many lines (a chunk wrapping onto a
+        // line of its own means that layout is too wide here). Runs before
+        // the first paint, so the headline never shows in the wrong layout;
+        // Georgia and its fallbacks are system fonts, already there to
+        // measure. Re-picked on resize. offsetTop, not getBoundingClientRect:
+        // the fade-up's translate would throw the measure off mid-animation.
+        (function () {
+          var title = document.querySelector('.hero-title');
+          if (!title) return;
+          var chunks = title.querySelectorAll('.hero-chunk');
+          function linesUsed() {
+            var tops = [];
+            for (var i = 0; i < chunks.length; i++) {
+              var t = chunks[i].offsetTop;
+              var seen = false;
+              for (var j = 0; j < tops.length; j++) if (Math.abs(tops[j] - t) < 3) seen = true;
+              if (!seen) tops.push(t);
+            }
+            return tops.length;
+          }
+          function pick() {
+            for (var n = 2; n <= 4; n++) {
+              title.setAttribute('data-lines', n);
+              if (linesUsed() === n) return;
+            }
+            title.setAttribute('data-lines', 4); // narrower than any layout: 4 is the closest
+          }
+          pick();
+          var frame = 0;
+          window.addEventListener('resize', function () {
+            cancelAnimationFrame(frame);
+            frame = requestAnimationFrame(pick);
+          });
+        })();
+      </script>
       <p class="hero-subtitle">Media, data and AI deployed with <span class="no-break">investment-grade</span> rigor and a clear mandate: <br>growth objectives achieved at the highest level of capital efficiency.</p>
       <a href="mailto:inquiries@thehouseofroi.com" class="contact-btn">CONTACT</a>
     </section>
@@ -63,6 +115,39 @@
       <span class="ticker-item">Digital Growth. Financial Discipline.</span>
     </div>
   </div>
+  <script>
+    // First screen: measures what sits above the hero (header + its top
+    // margin) and below it (the ticker with its margin) for the hero's
+    // min-height in style.css, so the hero fills the first screen exactly.
+    // Runs before the first paint; again on resize (the header scales with
+    // the width) and once the logo has its size. Layout positions only —
+    // the hero box itself is never transformed, and the ticker's height and
+    // margin aren't affected by its fade-in transform.
+    (function () {
+      var hero = document.querySelector('.hero');
+      var ticker = document.querySelector('.ticker');
+      if (!hero || !ticker) return;
+      var root = document.documentElement;
+      function measure() {
+        var heroBox = hero.getBoundingClientRect();
+        var wrapBottom = hero.parentElement.getBoundingClientRect().bottom;
+        var above = heroBox.top + window.scrollY;
+        var below = (wrapBottom - heroBox.bottom) +
+          parseFloat(getComputedStyle(ticker).marginTop) + ticker.offsetHeight;
+        root.style.setProperty('--hero-above', above + 'px');
+        root.style.setProperty('--hero-below', below + 'px');
+      }
+      measure();
+      var frame = 0;
+      window.addEventListener('resize', function () {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(measure);
+      });
+      window.addEventListener('load', measure);
+      var logo = document.querySelector('header .logo');
+      if (logo && !logo.complete) logo.addEventListener('load', measure);
+    })();
+  </script>
 
   <section class="clients" id="clients">
     <div class="clients-inner">
@@ -100,7 +185,7 @@
   <section class="efficiency" id="approach">
     <div class="efficiency-inner">
       <p class="efficiency-label" data-reveal>Engineered for<br>Capital Efficiency.</p>
-      <h2 class="efficiency-title" data-reveal>Media budgets are investment capital. We treat them accordingly.</h2>
+      <h2 class="efficiency-title" data-reveal>Media budgets are investment capital.<br class="phone-break"> We treat them accordingly.</h2>
     </div>
   </section>
 
@@ -603,6 +688,72 @@
           if (io && el) io.observe(el);
         }
       };
+    })();
+  </script>
+
+  <script>
+    // Clients: balanced columns without CSS columns. Safari mis-paints
+    // animated items inside CSS columns (see .clients-list.is-balanced in
+    // style.css), so the list becomes a column-wrapping flexbox and this
+    // sets its height: the lowest one at which the names, packed top to
+    // bottom, fit in --clients-cols columns — the same split CSS columns
+    // balance to. Re-run whenever a name changes size: window width, the
+    // 899px breakpoint (3 -> 2 columns), the web font arriving. If this
+    // script never runs, the CSS columns stay.
+    (function () {
+      var list = document.querySelector('.clients-list');
+      if (!list) return;
+      var items = list.children;
+
+      // How many columns the names need when no column may be taller than
+      // `limit`, packing each one under the previous until it doesn't fit.
+      function columnsNeeded(heights, limit) {
+        var used = 1, filled = 0;
+        for (var i = 0; i < heights.length; i++) {
+          if (filled > 0 && filled + heights[i] > limit + 0.5) { used++; filled = 0; }
+          filled += heights[i];
+        }
+        return used;
+      }
+
+      var lastHeight = '';
+      function balance() {
+        var cols = parseInt(getComputedStyle(list).getPropertyValue('--clients-cols'), 10) || 1;
+        var heights = [];
+        for (var i = 0; i < items.length; i++) heights.push(items[i].getBoundingClientRect().height);
+        if (!heights.length) return;
+
+        // Each column is a run of consecutive names, so the balanced height
+        // is one of the sums of such a run: try them from the smallest up.
+        var sums = [];
+        for (var a = 0; a < heights.length; a++) {
+          for (var s = 0, b = a; b < heights.length; b++) { s += heights[b]; sums.push(s); }
+        }
+        sums.sort(function (x, y) { return x - y; });
+        var tallest = Math.max.apply(null, heights);
+        var best = sums[sums.length - 1];
+        for (var k = 0; k < sums.length; k++) {
+          if (sums[k] < tallest) continue; // no column can be shorter than its tallest name
+          if (columnsNeeded(heights, sums[k]) <= cols) { best = sums[k]; break; }
+        }
+
+        // +1px: sub-pixel heights must never push the last name of a column
+        // over into the next one (no name is anywhere near 1px tall).
+        var h = Math.ceil(best) + 1 + 'px';
+        if (h !== lastHeight) { list.style.height = h; lastHeight = h; }
+        list.classList.add('is-balanced');
+      }
+
+      balance();
+      // A name's size changes with the list's width and with the font; the
+      // list's own height is set here, so watching the names can't loop.
+      if ('ResizeObserver' in window) {
+        var ro = new ResizeObserver(balance);
+        for (var i = 0; i < items.length; i++) ro.observe(items[i]);
+      } else {
+        window.addEventListener('resize', balance);
+        if (document.fonts) document.fonts.ready.then(balance);
+      }
     })();
   </script>
 
@@ -1240,21 +1391,36 @@
         });
       });
 
-      // --- Clients names: fade up as they scroll in. Later and slower than
-      // the generic reveal above (top 85%, 0.6s), which played out with the
-      // list still at the very bottom edge and went unnoticed: a name starts
-      // once its centre is a quarter of the screen up from the bottom, and
-      // takes 1.2s. Names that cross that line together (the tops of the
-      // columns, say) come as one batch, 0.2s apart in page order — the list
-      // flows down the columns, so that runs left to right. ---
-      if (!reduceMotion) {
-        ScrollTrigger.batch('.client[data-reveal]', {
-          start: 'center 75%',
+      // --- Clients names: one reveal for the whole list. Once the top of the
+      // list is a quarter of the screen up from the bottom, every name fades
+      // up in a single wave running top to bottom, and it plays to the end
+      // whatever the scroll does after that — not name by name as each one
+      // scrolls in. The wave follows where the names sit on screen, not page
+      // order (which runs down one column, then the next): names are sorted
+      // by height, left to right within a height, 0.08s apart, 1.2s each. ---
+      var clientsList = document.querySelector('.clients-list');
+      if (clientsList && !reduceMotion) {
+        ScrollTrigger.create({
+          trigger: clientsList,
+          start: 'top 75%',
           once: true,
-          onEnter: function (batch) {
-            gsap.fromTo(batch,
+          onEnter: function () {
+            var names = gsap.utils.toArray('.client[data-reveal]', clientsList).map(function (el) {
+              var r = el.getBoundingClientRect();
+              return { el: el, top: Math.round(r.top), left: r.left };
+            });
+            names.sort(function (a, b) { return a.top - b.top || a.left - b.left; });
+            var els = names.map(function (n) { return n.el; });
+            // Each name on its own layer while it rises, so the rise stays
+            // smooth (sub-pixel) even if the theme flips mid-wave; dropped
+            // once every name is at rest.
+            gsap.set(els, { willChange: 'transform, opacity' });
+            gsap.fromTo(els,
               { opacity: 0, y: 30 },
-              { opacity: 1, y: 0, duration: 1.2, stagger: 0.2, ease: 'power2.out', clearProps: 'transform' }
+              {
+                opacity: 1, y: 0, duration: 1.2, stagger: 0.08, ease: 'power2.out', clearProps: 'transform',
+                onComplete: function () { gsap.set(els, { willChange: 'auto' }); }
+              }
             );
           }
         });

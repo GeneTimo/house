@@ -156,11 +156,23 @@ body.theme-light .theme-bg {
   }
 }
 
+/* The hero stretches down so the ticker sits on the bottom edge of the
+   first screen and the Clients heading under it never shows before the
+   visitor scrolls, whatever the screen's height. --hero-above (header +
+   the hero's top margin) and --hero-below (the ticker with its margin) are
+   measured by the script after the ticker; without it the fallbacks make
+   the min-height 0 — the natural height. 100svh is the screen with the
+   browser bars showing, i.e. the first screen on load (100vh: fallback for
+   browsers without svh). The content centres in the extra height. Phones
+   do it differently — see the Phones block. */
 .hero {
   margin-top: calc(var(--base) * 104 / 1440);
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--hero-above, 100vh) - var(--hero-below, 0px));
+  min-height: calc(100svh - var(--hero-above, 100svh) - var(--hero-below, 0px));
 }
 
 .hero-title {
@@ -186,14 +198,53 @@ body.theme-light .theme-bg {
   }
 }
 
-.hero-line {
-  display: block;
-  opacity: 0;
-  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+/* Headline: five unbreakable chunks and the <br>s between them; only the
+   breaks of the current layout (data-lines, picked by the script under the
+   <h1>) show — see the comment above the <h1> for the three layouts. */
+.hero-title[data-lines="2"] .hero-br:not(.hero-br--2),
+.hero-title[data-lines="3"] .hero-br:not(.hero-br--3),
+.hero-title[data-lines="4"] .hero-br:not(.hero-br--4) {
+  display: none;
 }
 
-.hero-line:nth-child(1) { animation-delay: 0.55s; }
-.hero-line:nth-child(2) { animation-delay: 0.7s; }
+/* inline-block: a chunk never breaks inside, and it can take the fade-up's
+   transform (an inline box can't). */
+.hero-chunk {
+  display: inline-block;
+  opacity: 0;
+  animation: heroLineIn 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  animation-delay: 0.55s;
+}
+
+/* Line by line: every chunk starts with the line it sits on in the current
+   layout, 0.15s per line (the old two-line timing), so a line's chunks rise
+   together. Line 1 (0.55s) is the default above. */
+.hero-title[data-lines="2"] .hero-chunk--c,
+.hero-title[data-lines="2"] .hero-chunk--d,
+.hero-title[data-lines="2"] .hero-chunk--e,
+.hero-title[data-lines="3"] .hero-chunk--b,
+.hero-title[data-lines="3"] .hero-chunk--c,
+.hero-title[data-lines="4"] .hero-chunk--b {
+  animation-delay: 0.7s;
+}
+
+.hero-title[data-lines="3"] .hero-chunk--d,
+.hero-title[data-lines="3"] .hero-chunk--e,
+.hero-title[data-lines="4"] .hero-chunk--c,
+.hero-title[data-lines="4"] .hero-chunk--d {
+  animation-delay: 0.85s;
+}
+
+.hero-title[data-lines="4"] .hero-chunk--e {
+  animation-delay: 1s;
+}
+
+/* Subtitle and button keep following the headline's last line: each extra
+   line pushes them 0.15s later (0.85s / 1s with two lines). */
+.hero-title[data-lines="3"] ~ .hero-subtitle { animation-delay: 1s; }
+.hero-title[data-lines="3"] ~ .contact-btn { animation-delay: 1.15s; }
+.hero-title[data-lines="4"] ~ .hero-subtitle { animation-delay: 1.15s; }
+.hero-title[data-lines="4"] ~ .contact-btn { animation-delay: 1.3s; }
 
 .hero-subtitle {
   margin-top: calc(var(--base) * 56 / 1440);
@@ -287,10 +338,10 @@ body.theme-light .theme-bg {
    the list is still in view — so the heading and names recolour through
    cloned overlays (.theme-overlay-text), like the rest of the flip-zone
    text, not through a colour transition.
-   Jost 400 caps set tight, flowing down the columns (CSS columns, not grid
-   rows): 3 across, 2 from 899px down. In rows a one-line name stood next
-   to a three-line one with a hole under it; in columns each name just
-   follows the one above. */
+   Jost caps set tight, flowing down balanced columns (not grid rows): 3
+   across, 2 from 899px down. In rows a one-line name stood next to a
+   three-line one with a hole under it; in columns each name just follows
+   the one above. */
 .clients {
   width: 100%;
   background-color: transparent;
@@ -303,10 +354,31 @@ body.theme-light .theme-bg {
   padding: 0 calc(var(--base) * 80 / 1440);
 }
 
+/* Without JS: plain CSS columns, which balance on their own. */
 .clients-list {
+  --clients-cols: 3;
+  --clients-gap: max(16px, calc(var(--base) * 32 / 1440));
   list-style: none;
-  columns: 3;
-  column-gap: max(16px, calc(var(--base) * 32 / 1440));
+  columns: var(--clients-cols);
+  column-gap: var(--clients-gap);
+}
+
+/* With JS: a column-wrapping flexbox whose height the script sets to the
+   one CSS columns would balance to (see the Clients script near </body>).
+   Safari mis-paints animated items inside CSS columns — the name at the
+   top of a column (Rutgers) vanished or jumped to the foot of the previous
+   column while it faded in, on hover and on the theme flip. Flexbox has no
+   such bug, and the names land in the same places. */
+.clients-list.is-balanced {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  columns: auto;
+}
+
+.clients-list.is-balanced > .client {
+  width: calc((100% - (var(--clients-cols) - 1) * var(--clients-gap)) / var(--clients-cols));
 }
 
 /* The gap under a name is padding inside its unbreakable box, so a column
@@ -337,6 +409,15 @@ body.theme-light .theme-bg {
      .client that would beat these rules. */
   opacity: 0.6;
   transition: opacity 0.3s ease;
+}
+
+/* The dark clone inside each name (.theme-overlay-text) stays on its own
+   compositor layer for good, not only while it fades. When the layer
+   appeared just for the theme flip, the browser moved the names onto new
+   layers mid-flip and back after it: the letters shifted a pixel and back,
+   and names still rising in moved in whole-pixel steps. */
+.client-name > .theme-overlay-text {
+  will-change: opacity;
 }
 
 /* Mouse/trackpad only — on touch a tap would leave the name lit. The ">"
@@ -1083,6 +1164,19 @@ body.theme-light .theme-bg {
   }
 }
 
+/* The opposite: a break that only holds on phones (< 640px), e.g. "We
+   treat them accordingly." starting its own line under "Media budgets are
+   investment capital." */
+.phone-break {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .phone-break {
+    display: inline;
+  }
+}
+
 .our-method-item:hover .our-method-item-title,
 .our-method-item:focus-within .our-method-item-title {
   opacity: 0;
@@ -1578,7 +1672,7 @@ button:focus-visible,
   }
 
   .clients-list {
-    columns: 2;
+    --clients-cols: 2;
   }
 
   .venn {
@@ -1671,7 +1765,9 @@ button:focus-visible,
     display: grid;
     grid-template-columns: 44px 1fr 44px;
     align-items: center;
-    padding: 20px calc(var(--gutter) - 11px) 0;
+    /* 36px: the logo sits lower than the 20px it had, with more air above.
+       The header's 80px total (36 + the 44px row) is used by .hero below. */
+    padding: 36px calc(var(--gutter) - 11px) 0;
   }
 
   header.container > .logo,
@@ -1777,10 +1873,24 @@ button:focus-visible,
     overflow: hidden;
   }
 
-  /* --- Hero --- */
+  /* --- Hero: the whole first screen under the header. The CONTACT button
+     sits at its foot, 48px above the screen's bottom edge — where the thumb
+     is — and the title and subtitle centre in the space above it (the two
+     auto margins share the extra height). The ticker starts just below the
+     screen and rises into view with the first scroll; the Clients heading
+     is further down still. On a phone too short for all this, the subtitle's
+     44px bottom margin keeps the button clear of it and the hero simply
+     grows. --hero-above: see the .hero rule at the top. --- */
   .hero {
-    margin-top: 48px;
-    padding: 0 var(--gutter);
+    margin-top: 0;
+    padding: 40px var(--gutter) calc(48px + env(safe-area-inset-bottom, 0px));
+    min-height: calc(100vh - var(--hero-above, 100vh));
+    min-height: calc(100svh - var(--hero-above, 100svh));
+    justify-content: flex-start;
+  }
+
+  .hero-title {
+    margin-top: auto;
   }
 
   /* 35px on a 393 phone: five lines instead of six-to-eight at 64px. */
@@ -1790,13 +1900,15 @@ button:focus-visible,
   }
 
   .hero-subtitle {
-    margin-top: 24px;
+    margin-top: 32px;
+    margin-bottom: 44px;
     font-size: 16px;
   }
 
-  /* 46px tall — a comfortable touch target (it was 30px). */
+  /* 46px tall — a comfortable touch target (it was 30px). The auto margin
+     pushes it to the foot of the hero. */
   .contact-btn {
-    margin-top: 32px;
+    margin-top: auto;
     padding: 16px 32px;
   }
 
@@ -2248,14 +2360,10 @@ button:focus-visible,
 
   /* --- Hero: 64px made the headline three or four lines filling the whole
      screen, the button below the fold. 44px on an 852 phone — about the
-     share of the screen the desktop headline takes. Balanced, so a wrapped
-     line doesn't leave one word behind. --- */
+     share of the screen the desktop headline takes. (Where it breaks is
+     fixed — see .hero-chunk.) --- */
   .hero-title {
     font-size: clamp(36px, 5.2vw, 48px);
-  }
-
-  .hero-line {
-    text-wrap: balance;
   }
 
   /* --- Insights: each card becomes a row — picture on the left, title and
@@ -2370,7 +2478,7 @@ button:focus-visible,
    colour and opacity stay — they are not motion. */
 @media (prefers-reduced-motion: reduce) {
   .logo,
-  .hero-line,
+  .hero-chunk,
   .hero-subtitle,
   .contact-btn,
   .ticker {
